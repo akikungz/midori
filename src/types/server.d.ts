@@ -1,5 +1,5 @@
-import { Elysia } from "elysia";
-declare const app: Elysia<"", {
+import { Elysia, redirect } from "elysia";
+export declare const app: Elysia<"", {
     decorator: {};
     store: {};
     derive: {};
@@ -24,7 +24,7 @@ declare const app: Elysia<"", {
                 headers: Record<string, string | undefined>;
                 cookie: Record<string, import("elysia").Cookie<string | undefined>>;
                 server: import("elysia/dist/universal/server").Server | null;
-                redirect: import("elysia").redirect;
+                redirect: redirect;
                 set: {
                     headers: import("elysia").HTTPHeaders;
                     status?: number | keyof import("elysia").StatusMap;
@@ -35,7 +35,7 @@ declare const app: Elysia<"", {
                 route: string;
                 request: Request;
                 store: {};
-                status: <const Code extends number | keyof import("elysia").StatusMap, const T = Code extends 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 300 | 301 | 302 | 303 | 304 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 ? {
+                status: <const Code extends number | keyof import("elysia").StatusMap, const T = Code extends 200 | 400 | 100 | 101 | 102 | 103 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 300 | 301 | 302 | 303 | 304 | 307 | 308 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 ? {
                     readonly 100: "Continue";
                     readonly 101: "Switching Protocols";
                     readonly 102: "Processing";
@@ -158,7 +158,7 @@ declare const app: Elysia<"", {
                     readonly "Not Extended": 510;
                     readonly "Network Authentication Required": 511;
                 }[Code] : Code>;
-                error: <const Code extends number | keyof import("elysia").StatusMap, const T = Code extends 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 300 | 301 | 302 | 303 | 304 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 ? {
+                error: <const Code extends number | keyof import("elysia").StatusMap, const T = Code extends 200 | 400 | 100 | 101 | 102 | 103 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 300 | 301 | 302 | 303 | 304 | 307 | 308 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 ? {
                     readonly 100: "Continue";
                     readonly 101: "Switching Protocols";
                     readonly 102: "Processing";
@@ -288,10 +288,7 @@ declare const app: Elysia<"", {
                     role: import("./utils/role").Role;
                     id: string;
                     name: string;
-                    emailVerified: boolean;
                     email: string;
-                    createdAt: Date;
-                    updatedAt: Date;
                     image?: string | null | undefined | undefined;
                 };
             }>;
@@ -311,15 +308,32 @@ declare const app: Elysia<"", {
                     headers: unknown;
                     response: {
                         200: {
-                            readonly user: {
-                                readonly id: string;
-                                readonly name: string;
-                                readonly email: string;
-                                readonly role: import("./utils/role").Role;
-                            };
+                            id: string;
+                            name: string;
+                            email: string;
+                            role: string;
+                        } & {
+                            readonly id: string;
+                            readonly email: string;
+                            readonly name: string;
+                            readonly role: import("./utils/role").Role;
                         };
-                        401: {
-                            readonly message: "Unauthorized";
+                        500: {
+                            readonly message: "Internal Server Error";
+                        } & {
+                            message: string;
+                        };
+                        readonly 401: {
+                            message: string;
+                        };
+                        422: {
+                            type: "validation";
+                            on: string;
+                            summary?: string;
+                            message?: string;
+                            found?: unknown;
+                            property?: string;
+                            expected?: string;
                         };
                     };
                 };
@@ -327,7 +341,19 @@ declare const app: Elysia<"", {
         };
     } & {
         v1: {
-            instance: {};
+            instance: {
+                get: {
+                    body: unknown;
+                    params: {};
+                    query: unknown;
+                    headers: unknown;
+                    response: {
+                        200: {
+                            message: string;
+                        };
+                    };
+                };
+            };
         } & {
             instance: {
                 request: {};
@@ -362,8 +388,8 @@ declare const app: Elysia<"", {
                 request: {
                     post: {
                         body: {
-                            description: string;
                             title: string;
+                            description: string;
                             templateId: number;
                         };
                         params: {};
@@ -508,6 +534,16 @@ declare const app: Elysia<"", {
             };
         };
     };
+} & {
+    get: {
+        body: unknown;
+        params: {};
+        query: unknown;
+        headers: unknown;
+        response: {
+            200: Response;
+        };
+    };
 }, {
     derive: {};
     resolve: {};
@@ -520,4 +556,3 @@ declare const app: Elysia<"", {
     standaloneSchema: {};
 }>;
 export type App = typeof app;
-export {};

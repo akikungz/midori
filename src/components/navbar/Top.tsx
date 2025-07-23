@@ -17,11 +17,11 @@ export const TopNavbar: React.FC = () => {
       <nav className="bg-[#8AC5E4] shadow-md rounded-lg p-2">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center space-x-2 relative">
-            <button className="lg:hidden text-white bg-orange-500/60 rounded absolute p-1.5 -ml-2 cursor-pointer" onClick={toggleSidebar}>
+            <button className="lg:hidden text-white bg-kmutnb-500/80 rounded absolute p-1 -ml-2 cursor-pointer" onClick={toggleSidebar}>
               <MenuIcon />
             </button>
             <h1 className="text-2xl font-bold pl-8 lg:pl-0">FITM Cloud</h1>
-            <div className="h-8 w-1 bg-orange-500 rounded hidden lg:block" />
+            <div className="h-8 w-1 bg-kmutnb-500 rounded hidden lg:block" />
             <span className="font-medium hidden lg:inline">Home</span>
           </div>
           <div className="flex space-x-4 justify-end items-center lg:w-3xs">
