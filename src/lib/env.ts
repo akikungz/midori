@@ -15,6 +15,6 @@ export const getEnv = (): Env => {
   }
 
   return parsed.data;
-}
+};
 
 export const env = getEnv();

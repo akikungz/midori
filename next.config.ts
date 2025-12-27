@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       {
         source: "/api/auth/:path*",
         destination: `${env.API_URL}/auth/:path*`,
-      }
+      },
     ];
   },
 };
