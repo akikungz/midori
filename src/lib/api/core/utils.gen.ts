@@ -3,7 +3,7 @@
 import type { BodySerializer, QuerySerializer } from './bodySerializer.gen';
 import {
   ArraySeparatorStyle, serializeArrayParam, serializeObjectParam, serializePrimitiveParam, type
-} from './pathSerializer.gen';
+} from "./pathSerializer.gen";
 
 export interface PathSerializer {
   path: Record<string, unknown>;

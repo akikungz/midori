@@ -1,22 +1,22 @@
 "use client"
 
-import { cva, type, VariantProps } from 'class-variance-authority';
-import { PanelLeftIcon } from 'lucide-react';
-import * as React from 'react';
+import { cva, type, VariantProps } from "class-variance-authority";
+import { PanelLeftIcon } from "lucide-react";
+import * as React from "react";
 
-import { Button } from '@midori/components/ui/button';
-import { Input } from '@midori/components/ui/input';
-import { Separator } from '@midori/components/ui/separator';
+import { Button } from "@midori/components/ui/button";
+import { Input } from "@midori/components/ui/input";
+import { Separator } from "@midori/components/ui/separator";
 import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle
-} from '@midori/components/ui/sheet';
-import { Skeleton } from '@midori/components/ui/skeleton';
+} from "@midori/components/ui/sheet";
+import { Skeleton } from "@midori/components/ui/skeleton";
 import {
   Tooltip, TooltipContent, TooltipProvider, TooltipTrigger
-} from '@midori/components/ui/tooltip';
-import { useIsMobile } from '@midori/hooks/use-mobile';
-import { cn } from '@midori/lib/utils';
-import { Slot } from '@radix-ui/react-slot';
+} from "@midori/components/ui/tooltip";
+import { useIsMobile } from "@midori/hooks/use-mobile";
+import { cn } from "@midori/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

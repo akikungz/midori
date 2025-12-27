@@ -1,9 +1,9 @@
-import { cva, type, VariantProps } from 'class-variance-authority';
-import * as React from 'react';
+import { cva, type, VariantProps } from "class-variance-authority";
+import * as React from "react";
 
-import { Separator } from '@midori/components/ui/separator';
-import { cn } from '@midori/lib/utils';
-import { Slot } from '@radix-ui/react-slot';
+import { Separator } from "@midori/components/ui/separator";
+import { cn } from "@midori/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

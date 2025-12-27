@@ -1,8 +1,7 @@
 "use client";
 
-import { PropsWithChildren, type, useRef } from 'react';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { type PropsWithChildren, useRef } from "react";
 
 export const QueryProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useRef(new QueryClient());

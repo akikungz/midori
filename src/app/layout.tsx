@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import '@midori/styles/globals.css';
+import "@midori/styles/globals.css";
 
-import { Geist, Geist_Mono } from 'next/font/google';
-
-import { QueryProvider } from '@midori/components/QueryProvider';
-import { ThemeProvider } from '@midori/components/ThemeProvider';
-import { cn } from '@midori/lib/utils';
+import { QueryProvider } from "@midori/components/QueryProvider";
+import { ThemeProvider } from "@midori/components/ThemeProvider";
+import { cn } from "@midori/lib/utils";
+import { Geist, Geist_Mono } from "next/font/google";
 
 import type { PropsWithChildren } from "react";
 

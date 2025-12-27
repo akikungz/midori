@@ -1,10 +1,10 @@
 "use client"
 
-import * as React from 'react';
+import * as React from "react";
 
-import { buttonVariants } from '@midori/components/ui/button';
-import { cn } from '@midori/lib/utils';
-import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
+import { buttonVariants } from "@midori/components/ui/button";
+import { cn } from "@midori/lib/utils";
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 function AlertDialog({
   ...props
