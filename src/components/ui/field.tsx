@@ -1,11 +1,11 @@
 "use client"
 
-import { useMemo } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva, type, VariantProps } from 'class-variance-authority';
+import { useMemo } from 'react';
 
-import { cn } from "@midori/lib/utils"
-import { Label } from "@midori/components/ui/label"
-import { Separator } from "@midori/components/ui/separator"
+import { Label } from '@midori/components/ui/label';
+import { Separator } from '@midori/components/ui/separator';
+import { cn } from '@midori/lib/utils';
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (

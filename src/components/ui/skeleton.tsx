@@ -1,4 +1,4 @@
-import { cn } from "@midori/lib/utils"
+import { cn } from '@midori/lib/utils';
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (

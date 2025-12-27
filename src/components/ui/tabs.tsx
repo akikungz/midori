@@ -1,9 +1,9 @@
 "use client"
 
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from 'react';
 
-import { cn } from "@midori/lib/utils"
+import { cn } from '@midori/lib/utils';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
 
 function Tabs({
   className,

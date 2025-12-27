@@ -2,10 +2,7 @@
 
 import type { BodySerializer, QuerySerializer } from './bodySerializer.gen';
 import {
-  type ArraySeparatorStyle,
-  serializeArrayParam,
-  serializeObjectParam,
-  serializePrimitiveParam,
+  ArraySeparatorStyle, serializeArrayParam, serializeObjectParam, serializePrimitiveParam, type
 } from './pathSerializer.gen';
 
 export interface PathSerializer {

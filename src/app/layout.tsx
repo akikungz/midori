@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import '@midori/styles/globals.css';
+
+import { Geist, Geist_Mono } from 'next/font/google';
+
+import { QueryProvider } from '@midori/components/QueryProvider';
+import { ThemeProvider } from '@midori/components/ThemeProvider';
+import { cn } from '@midori/lib/utils';
+
 import type { PropsWithChildren } from "react";
-
-import "@midori/styles/globals.css";
-
-import { QueryProvider } from "@midori/components/QueryProvider";
-import { ThemeProvider } from "@midori/components/ThemeProvider";
-import { cn } from "@midori/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

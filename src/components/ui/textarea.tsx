@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from 'react';
 
-import { cn } from "@midori/lib/utils"
+import { cn } from '@midori/lib/utils';
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (

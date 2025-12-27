@@ -1,6 +1,6 @@
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva, type, VariantProps } from 'class-variance-authority';
 
-import { cn } from "@midori/lib/utils"
+import { cn } from '@midori/lib/utils';
 
 function Empty({ className, ...props }: React.ComponentProps<"div">) {
   return (
