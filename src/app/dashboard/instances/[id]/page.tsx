@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -12,6 +13,7 @@ import {
   Terminal,
   Activity,
   ExternalLink,
+  Clock,
 } from "lucide-react";
 
 import { api } from "@midori/lib/api";
@@ -33,6 +35,17 @@ import {
   TabsTrigger,
 } from "@midori/components/ui/tabs";
 import { Separator } from "@midori/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@midori/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel, FieldDescription } from "@midori/components/ui/field";
+import { Input } from "@midori/components/ui/input";
+import { Textarea } from "@midori/components/ui/textarea";
 
 const statusColors = {
   PENDING: "secondary",
@@ -46,6 +59,9 @@ export default function InstanceDetailPage() {
   const params = useParams();
   const _router = useRouter();
   const instanceId = Number(params.id);
+  const [extensionDays, setExtensionDays] = useState("7");
+  const [extensionReason, setExtensionReason] = useState("");
+  const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
 
   const { data: instance, isLoading } = api.useQuery(
     "get",
@@ -124,6 +140,70 @@ export default function InstanceDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          {/* Extension Request for Students */}
+          <RoleGuard permission="CREATE_EXTENDED_REQUEST">
+            <Dialog open={isExtensionDialogOpen} onOpenChange={setIsExtensionDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Clock className="mr-2 size-4" />
+                  Request Extension
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Request Instance Extension</DialogTitle>
+                  <DialogDescription>
+                    Request to extend this instance to the next semester
+                  </DialogDescription>
+                </DialogHeader>
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="extension-days">Extension Duration</FieldLabel>
+                    <FieldDescription>
+                      Number of additional days requested
+                    </FieldDescription>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        id="extension-days"
+                        type="number"
+                        min="1"
+                        max="90"
+                        value={extensionDays}
+                        onChange={(e) => setExtensionDays(e.target.value)}
+                        className="w-24"
+                      />
+                      <span className="text-sm text-muted-foreground">days</span>
+                    </div>
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="extension-reason">Reason</FieldLabel>
+                    <FieldDescription>
+                      Explain why you need this extension
+                    </FieldDescription>
+                    <Textarea
+                      id="extension-reason"
+                      placeholder="I need more time to complete my project because..."
+                      value={extensionReason}
+                      onChange={(e) => setExtensionReason(e.target.value)}
+                      rows={4}
+                    />
+                  </Field>
+                  <Button
+                    className="w-full"
+                    disabled={!extensionReason}
+                    onClick={() => {
+                      // TODO: Submit via POST /api/instances/{instanceId}/extended-request
+                      setIsExtensionDialogOpen(false);
+                      setExtensionDays("7");
+                      setExtensionReason("");
+                    }}
+                  >
+                    Submit Extension Request
+                  </Button>
+                </FieldGroup>
+              </DialogContent>
+            </Dialog>
+          </RoleGuard>
           <RoleGuard permission="PROMOTE_INSTANCE">
             <Button variant="outline">
               <ArrowUpCircle className="mr-2 size-4" />

@@ -10,6 +10,7 @@ import {
   CheckCircle,
   XCircle,
   Ban,
+  FilePlus,
 } from "lucide-react";
 
 import { api } from "@midori/lib/api";
@@ -26,7 +27,12 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@midori/components/ui/tabs";
 import {
   Empty,
   EmptyContent,
@@ -60,29 +66,67 @@ const statusConfig = {
 };
 
 export default function RequestsPage() {
+  const [requestType, setRequestType] = useState<"instance" | "extended">(
+    "instance",
+  );
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const { isStudent } = useRole();
+  const { isStudent, can } = useRole();
 
-  const { data, isLoading } = api.useQuery("get", "/api/requests/", {
-    params: {
-      query: {
-        page,
-        pageSize,
-        ...(statusFilter !== "all" && {
-          status: statusFilter as
-            | "PENDING"
-            | "APPROVED"
-            | "REJECTED"
-            | "CANCELLED",
-        }),
+  // Fetch instance requests
+  const { data: instanceData, isLoading: instanceLoading } = api.useQuery(
+    "get",
+    "/api/requests/",
+    {
+      params: {
+        query: {
+          page,
+          pageSize,
+          ...(statusFilter !== "all" && {
+            status: statusFilter as
+              | "PENDING"
+              | "APPROVED"
+              | "REJECTED"
+              | "CANCELLED",
+          }),
+        },
       },
     },
-  });
+  );
 
-  const requests = data?.values || [];
-  const totalPages = data?.totalPages || 1;
+  // Fetch extended requests
+  const { data: extendedData, isLoading: extendedLoading } = api.useQuery(
+    "get",
+    "/api/extended-requests/",
+    {
+      params: {
+        query: {
+          page,
+          pageSize,
+          ...(statusFilter !== "all" && {
+            status: statusFilter as
+              | "PENDING"
+              | "APPROVED"
+              | "REJECTED"
+              | "CANCELLED",
+          }),
+        },
+      },
+    },
+  );
+
+  const instanceRequests = instanceData?.values || [];
+  const extendedRequests = extendedData?.values || [];
+  const instanceTotalPages = instanceData?.totalPages || 1;
+  const extendedTotalPages = extendedData?.totalPages || 1;
+
+  const isLoading =
+    requestType === "instance" ? instanceLoading : extendedLoading;
+  const totalPages =
+    requestType === "instance" ? instanceTotalPages : extendedTotalPages;
+
+  const canReview = can("REVIEW_REQUEST") || can("REVIEW_EXTENDED_REQUEST");
 
   if (isLoading) {
     return (
@@ -123,130 +167,256 @@ export default function RequestsPage() {
         </RoleGuard>
       </div>
 
-      {/* Tabs for status filtering */}
-      <Tabs defaultValue="all" onValueChange={setStatusFilter}>
+      {/* Request Type Tabs */}
+      <Tabs
+        value={requestType}
+        onValueChange={(v) => {
+          setRequestType(v as "instance" | "extended");
+          setPage(1);
+          setStatusFilter("all");
+        }}
+      >
         <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="PENDING">
-            <Clock className="mr-1.5 size-3.5" />
-            Pending
+          <TabsTrigger value="instance">
+            <FileText className="mr-1.5 size-4" />
+            Instance Requests
           </TabsTrigger>
-          <TabsTrigger value="APPROVED">
-            <CheckCircle className="mr-1.5 size-3.5" />
-            Approved
-          </TabsTrigger>
-          <TabsTrigger value="REJECTED">
-            <XCircle className="mr-1.5 size-3.5" />
-            Rejected
+          <TabsTrigger value="extended">
+            <FilePlus className="mr-1.5 size-4" />
+            Extended Requests
           </TabsTrigger>
         </TabsList>
-      </Tabs>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search requests..." className="pl-9" />
-      </div>
-
-      {/* Requests List */}
-      {requests.length === 0 ? (
-        <Empty>
-          <EmptyMedia variant="icon">
-            <FileText />
-          </EmptyMedia>
-          <EmptyHeader>
-            <EmptyTitle>No Requests</EmptyTitle>
-            <EmptyDescription>
-              {isStudent
-                ? "You haven't made any requests yet."
-                : "No requests to review."}
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <RoleGuard permission="CREATE_REQUEST">
-              <Button asChild>
-                <Link href="/dashboard/requests/new">
-                  <Plus className="mr-2 size-4" />
-                  Create Request
-                </Link>
-              </Button>
-            </RoleGuard>
-          </EmptyContent>
-        </Empty>
-      ) : (
-        <div className="space-y-4">
-          {requests.map((request) => {
-            const StatusIcon = statusConfig[request.status].icon;
-            return (
-              <Card
-                key={request.id}
-                className="transition-colors hover:border-primary/50"
+        {/* Status Filters */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {["all", "PENDING", "APPROVED", "REJECTED", "CANCELLED"].map(
+            (status) => (
+              <Button
+                key={status}
+                variant={statusFilter === status ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setStatusFilter(status);
+                  setPage(1);
+                }}
               >
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <CardTitle className="text-base">
-                          {request.title}
-                        </CardTitle>
-                        <Badge variant={statusConfig[request.status].variant}>
-                          <StatusIcon className="mr-1 size-3" />
-                          {statusConfig[request.status].label}
-                        </Badge>
-                      </div>
-                      <CardDescription>
-                        {request.courseOffering
-                          ? `${request.courseOffering.courseCode} - ${request.courseOffering.semester}`
-                          : "No course assigned"}
-                      </CardDescription>
-                    </div>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/dashboard/requests/${request.id}`}>
-                        View
-                      </Link>
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <div>
-                      <span className="font-medium text-foreground">
-                        {request.specs.cpus}
-                      </span>{" "}
-                      vCPU
-                    </div>
-                    <div>
-                      <span className="font-medium text-foreground">
-                        {request.specs.memoryMB / 1024}
-                      </span>{" "}
-                      GB RAM
-                    </div>
-                    <div>
-                      <span className="font-medium text-foreground">
-                        {request.specs.diskGB}
-                      </span>{" "}
-                      GB Disk
-                    </div>
-                    {request.templateName && (
-                      <div>
-                        Template:{" "}
-                        <span className="font-medium text-foreground">
-                          {request.templateName}
-                        </span>
-                      </div>
+                {status === "all" ? (
+                  "All"
+                ) : (
+                  <>
+                    {status === "PENDING" && (
+                      <Clock className="mr-1.5 size-3.5" />
                     )}
-                  </div>
-                  {request.description && (
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                      {request.description}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
+                    {status === "APPROVED" && (
+                      <CheckCircle className="mr-1.5 size-3.5" />
+                    )}
+                    {status === "REJECTED" && (
+                      <XCircle className="mr-1.5 size-3.5" />
+                    )}
+                    {status === "CANCELLED" && (
+                      <Ban className="mr-1.5 size-3.5" />
+                    )}
+                    {statusConfig[status as keyof typeof statusConfig].label}
+                  </>
+                )}
+              </Button>
+            ),
+          )}
         </div>
-      )}
+
+        {/* Search */}
+        <div className="relative mt-4">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input placeholder="Search requests..." className="pl-9" />
+        </div>
+
+        {/* Instance Requests Tab Content */}
+        <TabsContent value="instance" className="mt-4">
+          {instanceRequests.length === 0 ? (
+            <Empty>
+              <EmptyMedia variant="icon">
+                <FileText />
+              </EmptyMedia>
+              <EmptyHeader>
+                <EmptyTitle>No Instance Requests</EmptyTitle>
+                <EmptyDescription>
+                  {isStudent
+                    ? "You haven't made any requests yet."
+                    : "No requests to review."}
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <RoleGuard permission="CREATE_REQUEST">
+                  <Button asChild>
+                    <Link href="/dashboard/requests/new">
+                      <Plus className="mr-2 size-4" />
+                      Create Request
+                    </Link>
+                  </Button>
+                </RoleGuard>
+              </EmptyContent>
+            </Empty>
+          ) : (
+            <div className="space-y-4">
+              {instanceRequests.map((request) => {
+                const StatusIcon = statusConfig[request.status].icon;
+                return (
+                  <Card
+                    key={request.id}
+                    className="transition-colors hover:border-primary/50"
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <CardTitle className="text-base">
+                              {request.title}
+                            </CardTitle>
+                            <Badge
+                              variant={statusConfig[request.status].variant}
+                            >
+                              <StatusIcon className="mr-1 size-3" />
+                              {statusConfig[request.status].label}
+                            </Badge>
+                          </div>
+                          <CardDescription>
+                            {request.courseOffering
+                              ? `${request.courseOffering.courseCode} - ${request.courseOffering.semester}`
+                              : "No course assigned"}
+                          </CardDescription>
+                        </div>
+                        {canReview && request.status === "PENDING" && (
+                          <div className="flex gap-2">
+                            <Button variant="default" size="sm">
+                              <CheckCircle className="mr-1.5 size-3.5" />
+                              Approve
+                            </Button>
+                            <Button variant="destructive" size="sm">
+                              <XCircle className="mr-1.5 size-3.5" />
+                              Reject
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        <div>
+                          <span className="font-medium text-foreground">
+                            {request.specs.cpus}
+                          </span>{" "}
+                          vCPU
+                        </div>
+                        <div>
+                          <span className="font-medium text-foreground">
+                            {request.specs.memoryMB / 1024}
+                          </span>{" "}
+                          GB RAM
+                        </div>
+                        <div>
+                          <span className="font-medium text-foreground">
+                            {request.specs.diskGB}
+                          </span>{" "}
+                          GB Disk
+                        </div>
+                        {request.templateName && (
+                          <div>
+                            Template:{" "}
+                            <span className="font-medium text-foreground">
+                              {request.templateName}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      {request.description && (
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                          {request.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Extended Requests Tab Content */}
+        <TabsContent value="extended" className="mt-4">
+          {extendedRequests.length === 0 ? (
+            <Empty>
+              <EmptyMedia variant="icon">
+                <FilePlus />
+              </EmptyMedia>
+              <EmptyHeader>
+                <EmptyTitle>No Extension Requests</EmptyTitle>
+                <EmptyDescription>
+                  {isStudent
+                    ? "You haven't made any extension requests yet."
+                    : "No extension requests to review."}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          ) : (
+            <div className="space-y-4">
+              {extendedRequests.map((request) => {
+                const StatusIcon = statusConfig[request.status].icon;
+                return (
+                  <Card
+                    key={request.id}
+                    className="transition-colors hover:border-primary/50"
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <CardTitle className="text-base">
+                              {request.title}
+                            </CardTitle>
+                            <Badge
+                              variant={statusConfig[request.status].variant}
+                            >
+                              <StatusIcon className="mr-1 size-3" />
+                              {statusConfig[request.status].label}
+                            </Badge>
+                          </div>
+                          <CardDescription>
+                            Instance: #{request.targetInstanceId}
+                          </CardDescription>
+                        </div>
+                        {canReview && request.status === "PENDING" && (
+                          <div className="flex gap-2">
+                            <Button variant="default" size="sm">
+                              <CheckCircle className="mr-1.5 size-3.5" />
+                              Approve
+                            </Button>
+                            <Button variant="destructive" size="sm">
+                              <XCircle className="mr-1.5 size-3.5" />
+                              Reject
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {request.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {request.description}
+                        </p>
+                      )}
+                      {request.reason && (
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">Reason:</span> {request.reason}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
       {/* Pagination */}
       {totalPages > 1 && (

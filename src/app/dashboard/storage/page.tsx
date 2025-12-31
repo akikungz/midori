@@ -51,15 +51,17 @@ import { Tabs, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
 
 export default function StoragePage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [currentPath, setCurrentPath] = useState("/");
+  const [currentParentId, setCurrentParentId] = useState<string | null>(null);
 
   const { data, isLoading } = api.useQuery("get", "/api/storage/files", {
     params: {
-      query: { path: currentPath },
+      query: {
+        parentId: currentParentId,
+      },
     },
   });
 
-  const files = data?.files || [];
+  const files = data?.values || [];
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 B";
@@ -151,15 +153,15 @@ export default function StoragePage() {
       <div className="flex items-center gap-2 text-sm">
         <button
           type="button"
-          onClick={() => setCurrentPath("/")}
+          onClick={() => setCurrentParentId(null)}
           className="text-primary hover:underline"
         >
           Home
         </button>
-        {currentPath !== "/" && (
+        {currentParentId && (
           <>
             <span className="text-muted-foreground">/</span>
-            <span>{currentPath.split("/").filter(Boolean).pop()}</span>
+            <span>Current Folder</span>
           </>
         )}
       </div>
@@ -187,11 +189,16 @@ export default function StoragePage() {
             <Card
               key={file.id}
               className="group cursor-pointer transition-colors hover:border-primary/50"
+              onClick={() => {
+                if (file.type === "FOLDER") {
+                  setCurrentParentId(file.id);
+                }
+              }}
             >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    {file.type === "directory" ? (
+                    {file.type === "FOLDER" ? (
                       <FolderOpen className="size-8 text-primary" />
                     ) : (
                       <File className="size-8 text-muted-foreground" />
@@ -203,6 +210,7 @@ export default function StoragePage() {
                         variant="ghost"
                         size="icon"
                         className="size-8 opacity-0 group-hover:opacity-100"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <MoreVertical className="size-4" />
                       </Button>
@@ -224,9 +232,9 @@ export default function StoragePage() {
               <CardContent>
                 <CardTitle className="truncate text-sm">{file.name}</CardTitle>
                 <p className="text-xs text-muted-foreground">
-                  {file.type === "directory"
-                    ? `${file.childCount || 0} items`
-                    : formatFileSize(file.size || 0)}
+                  {file.type === "FOLDER"
+                    ? "Folder"
+                    : formatFileSize(file.sizeBytes)}
                 </p>
               </CardContent>
             </Card>
@@ -235,12 +243,19 @@ export default function StoragePage() {
       ) : (
         <div className="space-y-2">
           {files.map((file) => (
+            // biome-ignore lint/a11y/noStaticElementInteractions: false positive
+            // biome-ignore lint/a11y/useKeyWithClickEvents: false positive
             <div
               key={file.id}
-              className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:border-primary/50"
+              className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:border-primary/50 cursor-pointer"
+              onClick={() => {
+                if (file.type === "FOLDER") {
+                  setCurrentParentId(file.id);
+                }
+              }}
             >
               <div className="flex items-center gap-3">
-                {file.type === "directory" ? (
+                {file.type === "FOLDER" ? (
                   <FolderOpen className="size-5 text-primary" />
                 ) : (
                   <File className="size-5 text-muted-foreground" />
@@ -248,15 +263,20 @@ export default function StoragePage() {
                 <div>
                   <p className="font-medium">{file.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {file.type === "directory"
-                      ? `${file.childCount || 0} items`
-                      : formatFileSize(file.size || 0)}
+                    {file.type === "FOLDER"
+                      ? "Folder"
+                      : formatFileSize(file.sizeBytes)}
                   </p>
                 </div>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="size-8">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <MoreVertical className="size-4" />
                   </Button>
                 </DropdownMenuTrigger>
