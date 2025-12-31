@@ -19,7 +19,14 @@ import {
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
-import { Empty } from "@midori/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@midori/components/ui/empty";
 
 const statusConfig = {
   PENDING: {
@@ -133,23 +140,28 @@ export default function RequestsPage() {
 
       {/* Requests List */}
       {requests.length === 0 ? (
-        <Empty
-          icon={FileText}
-          title="No Requests"
-          description={
-            isStudent
-              ? "You haven't made any requests yet."
-              : "No requests to review."
-          }
-        >
-          <RoleGuard permission="CREATE_REQUEST">
-            <Button asChild>
-              <Link href="/dashboard/requests/new">
-                <Plus className="mr-2 size-4" />
-                Create Request
-              </Link>
-            </Button>
-          </RoleGuard>
+        <Empty>
+          <EmptyMedia variant="icon">
+            <FileText />
+          </EmptyMedia>
+          <EmptyHeader>
+            <EmptyTitle>No Requests</EmptyTitle>
+            <EmptyDescription>
+              {isStudent
+                ? "You haven't made any requests yet."
+                : "No requests to review."}
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <RoleGuard permission="CREATE_REQUEST">
+              <Button asChild>
+                <Link href="/dashboard/requests/new">
+                  <Plus className="mr-2 size-4" />
+                  Create Request
+                </Link>
+              </Button>
+            </RoleGuard>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="space-y-4">

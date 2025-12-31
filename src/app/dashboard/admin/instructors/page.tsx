@@ -14,7 +14,13 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Empty } from "@midori/components/ui/empty";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@midori/components/ui/empty";
 import { Avatar, AvatarFallback } from "@midori/components/ui/avatar";
 import { getRoleDisplayName, getRoleBadgeVariant, type Role } from "@midori/lib/roles";
 
@@ -77,11 +83,17 @@ function InstructorsPage() {
 
       {/* Instructors List */}
       {instructors.length === 0 ? (
-        <Empty
-          icon={Users}
-          title="No Instructors"
-          description="No instructors found in the system."
-        />
+        <Empty>
+          <EmptyMedia variant="icon">
+            <Users />
+          </EmptyMedia>
+          <EmptyHeader>
+            <EmptyTitle>No Instructors</EmptyTitle>
+            <EmptyDescription>
+              No instructors found in the system.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <div className="space-y-4">
           {instructors.map((instructor) => (

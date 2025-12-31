@@ -29,7 +29,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const isDevMode = process.env.NODE_ENV !== "production";
+  const isDevMode = process.env.APP_ENV !== "production";
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);

@@ -32,7 +32,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@midori/components/ui/select";
-import { Empty } from "@midori/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@midori/components/ui/empty";
 
 const statusColors = {
   PENDING: "secondary",
@@ -120,27 +127,32 @@ export default function InstancesPage() {
 
       {/* Instances Grid */}
       {instances.length === 0 ? (
-        <Empty
-          icon={Server}
-          title="No Instances"
-          description="You don't have any instances yet."
-        >
-          <RoleGuard permission="CREATE_INSTANCE">
-            <Button asChild>
-              <Link href="/dashboard/instances/new">
-                <Plus className="mr-2 size-4" />
-                Create Instance
-              </Link>
-            </Button>
-          </RoleGuard>
-          <RoleGuard permission="CREATE_REQUEST">
-            <Button asChild>
-              <Link href="/dashboard/requests/new">
-                <Plus className="mr-2 size-4" />
-                Request Instance
-              </Link>
-            </Button>
-          </RoleGuard>
+        <Empty>
+          <EmptyMedia variant="icon">
+            <Server />
+          </EmptyMedia>
+          <EmptyHeader>
+            <EmptyTitle>No Instances</EmptyTitle>
+            <EmptyDescription>You don't have any instances yet.</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <RoleGuard permission="CREATE_INSTANCE">
+              <Button asChild>
+                <Link href="/dashboard/instances/new">
+                  <Plus className="mr-2 size-4" />
+                  Create Instance
+                </Link>
+              </Button>
+            </RoleGuard>
+            <RoleGuard permission="CREATE_REQUEST">
+              <Button asChild>
+                <Link href="/dashboard/requests/new">
+                  <Plus className="mr-2 size-4" />
+                  Request Instance
+                </Link>
+              </Button>
+            </RoleGuard>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

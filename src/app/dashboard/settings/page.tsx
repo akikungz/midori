@@ -33,7 +33,13 @@ import {
   FieldLabel,
 } from "@midori/components/ui/field";
 import { Textarea } from "@midori/components/ui/textarea";
-import { Empty } from "@midori/components/ui/empty";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@midori/components/ui/empty";
 
 export default function SettingsPage() {
   const { user, role, isLoading: userLoading } = useSession();
@@ -180,11 +186,17 @@ export default function SettingsPage() {
                   ))}
                 </div>
               ) : sshKeys.length === 0 ? (
-                <Empty
-                  icon={Key}
-                  title="No SSH Keys"
-                  description="Add an SSH key to connect to your instances securely."
-                />
+                <Empty>
+                  <EmptyMedia variant="icon">
+                    <Key />
+                  </EmptyMedia>
+                  <EmptyHeader>
+                    <EmptyTitle>No SSH Keys</EmptyTitle>
+                    <EmptyDescription>
+                      Add an SSH key to connect to your instances securely.
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               ) : (
                 <div className="space-y-3">
                   {sshKeys.map((key) => (

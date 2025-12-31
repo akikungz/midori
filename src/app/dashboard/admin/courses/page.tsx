@@ -16,7 +16,14 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Empty } from "@midori/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@midori/components/ui/empty";
 
 function CoursesPage() {
   const [page, setPage] = useState(1);
@@ -75,15 +82,20 @@ function CoursesPage() {
 
       {/* Courses Grid */}
       {courses.length === 0 ? (
-        <Empty
-          icon={GraduationCap}
-          title="No Courses"
-          description="No courses have been added yet."
-        >
-          <Button>
-            <Plus className="mr-2 size-4" />
-            Add Course
-          </Button>
+        <Empty>
+          <EmptyMedia variant="icon">
+            <GraduationCap />
+          </EmptyMedia>
+          <EmptyHeader>
+            <EmptyTitle>No Courses</EmptyTitle>
+            <EmptyDescription>No courses have been added yet.</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button>
+              <Plus className="mr-2 size-4" />
+              Add Course
+            </Button>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
