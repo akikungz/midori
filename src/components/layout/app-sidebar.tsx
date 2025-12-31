@@ -14,7 +14,6 @@ import {
   Users,
   CalendarDays,
   FileText,
-  FilePlus,
 } from "lucide-react";
 
 import { useSession } from "@midori/hooks/useSession";

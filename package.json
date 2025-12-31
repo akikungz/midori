@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "api:gen": "openapi-typescript http://localhost:3000/api/openapi/json --output ./src/types/api.d.ts"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",

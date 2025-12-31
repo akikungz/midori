@@ -224,6 +224,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/instances/{instanceId}/extended-request": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create an extended request for an instance
+     * @description Students request to extend their instance to the next semester
+     */
+    post: operations["postApiInstancesByInstanceIdExtended-request"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/academic/mailing-list": {
     parameters: {
       query?: never;
@@ -2628,6 +2648,496 @@ export interface components {
       /** @description Number of items per page */
       pageSize: number;
     };
+    /** @enum {string} */
+    ApprovalStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+    /** @description Request data */
+    RequestItem: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Extended request data */
+    ExtendedRequestItem: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    CreateRequestRequestBody: {
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @description Course offering ID */
+      courseOfferingId: number;
+      /** @description Template ID */
+      pveTemplateId: number;
+      /** @description Number of CPUs requested */
+      cpus: number;
+      /** @description Memory requested in MB */
+      memoryMB: number;
+      /** @description Disk size requested in GB */
+      diskGB: number;
+    };
+    /** @description Request data */
+    CreateRequestResponse: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetRequestsRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @enum {string} */
+      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Filter by course ID */
+      courseId?: number;
+      /** @description Filter by semester ID */
+      semesterId?: number;
+    };
+    GetRequestsResponse: {
+      values: {
+        /** @description Request ID */
+        id: number;
+        /** @description Request title */
+        title: string;
+        /** @description Request description */
+        description?: string;
+        /** @enum {string} */
+        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        /** @description Reviewer or requester note */
+        reason?: string;
+        /** @description Summary of a course offering */
+        courseOffering?: {
+          /** @description Course code */
+          courseCode: string;
+          /** @description Course title */
+          courseTitle: string;
+          /** @description Semester name */
+          semester: string;
+        };
+        specs: {
+          /** @description Number of CPUs requested */
+          cpus: number;
+          /** @description Memory requested in MB */
+          memoryMB: number;
+          /** @description Disk size requested in GB */
+          diskGB: number;
+        };
+        /** @description Chosen template name */
+        templateName?: string;
+        /** @description Requester platform user ID */
+        requesterId: number;
+        /** @description Reviewer platform user ID */
+        reviewerId?: number;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    UpdateRequestStatusRequestBody: {
+      /** @enum {string} */
+      status: "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reason for the action */
+      reason?: string;
+    };
+    /** @description Request data */
+    UpdateRequestStatusResponse: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    CreateExtendedRequestRequestBody: {
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @description Instance to be extended */
+      targetInstanceId: number;
+    };
+    CreateInstanceExtendedRequestBody: {
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+    };
+    /** @description Extended request data */
+    CreateExtendedRequestResponse: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetExtendedRequestsRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @enum {string} */
+      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Filter by course ID */
+      courseId?: number;
+      /** @description Filter by semester ID */
+      semesterId?: number;
+      /** @description Filter by instance ID */
+      instanceId?: number;
+    };
+    GetExtendedRequestsResponse: {
+      values: {
+        /** @description Extended request ID */
+        id: number;
+        /** @description Extended request title */
+        title: string;
+        /** @description Extended request description */
+        description?: string;
+        /** @enum {string} */
+        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        /** @description Reviewer or requester note */
+        reason?: string;
+        /** @description Target instance ID */
+        targetInstanceId: number;
+        /** @description Summary of a course offering */
+        courseOffering?: {
+          /** @description Course code */
+          courseCode: string;
+          /** @description Course title */
+          courseTitle: string;
+          /** @description Semester name */
+          semester: string;
+        };
+        /** @description Summary of a semester */
+        nextSemester?: {
+          /** @description Semester ID */
+          id: number;
+          /** @description Semester name */
+          name: string;
+          /** @description Semester start date */
+          startDate: Record<string, never> | string | number;
+          /** @description Semester end date */
+          endDate: Record<string, never> | string | number;
+        };
+        /** @description Requester platform user ID */
+        requesterId: number;
+        /** @description Reviewer platform user ID */
+        reviewerId?: number;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    UpdateExtendedRequestStatusRequestBody: {
+      /** @enum {string} */
+      status: "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reason for the action */
+      reason?: string;
+    };
+    /** @description Extended request data */
+    UpdateExtendedRequestStatusResponse: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetRequestAuditLogsResponse: {
+      /** @description List of request audit log entries */
+      values: {
+        /** @description Audit log entry ID */
+        id: number;
+        /** @enum {string} */
+        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        performedBy: {
+          /** @description Platform user ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+        /** @description When the action was performed */
+        timestamp: Record<string, never> | string | number;
+        /** @description Additional notes about the action */
+        notes?: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetExtendedRequestAuditLogsResponse: {
+      /** @description List of extended request audit log entries */
+      values: {
+        /** @description Audit log entry ID */
+        id: number;
+        /** @enum {string} */
+        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        performedBy: {
+          /** @description Platform user ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+        /** @description When the action was performed */
+        timestamp: Record<string, never> | string | number;
+        /** @description Additional notes about the action */
+        notes?: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
     /** @description Represents an entry in the instructor mailing list */
     InstructorMailingListValue: {
       /** @description Unique identifier for the mailing list value */
@@ -3258,490 +3768,6 @@ export interface components {
     DeleteSemesterByIdResponse: {
       /** @description Indicates if the deletion was successful */
       success: boolean;
-    };
-    /** @enum {string} */
-    ApprovalStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-    /** @description Request data */
-    RequestItem: {
-      /** @description Request ID */
-      id: number;
-      /** @description Request title */
-      title: string;
-      /** @description Request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      specs: {
-        /** @description Number of CPUs requested */
-        cpus: number;
-        /** @description Memory requested in MB */
-        memoryMB: number;
-        /** @description Disk size requested in GB */
-        diskGB: number;
-      };
-      /** @description Chosen template name */
-      templateName?: string;
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    /** @description Extended request data */
-    ExtendedRequestItem: {
-      /** @description Extended request ID */
-      id: number;
-      /** @description Extended request title */
-      title: string;
-      /** @description Extended request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      /** @description Summary of a semester */
-      nextSemester?: {
-        /** @description Semester ID */
-        id: number;
-        /** @description Semester name */
-        name: string;
-        /** @description Semester start date */
-        startDate: Record<string, never> | string | number;
-        /** @description Semester end date */
-        endDate: Record<string, never> | string | number;
-      };
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    CreateRequestRequestBody: {
-      /** @description Request title */
-      title: string;
-      /** @description Request description */
-      description?: string;
-      /** @description Course offering ID */
-      courseOfferingId: number;
-      /** @description Template ID */
-      pveTemplateId: number;
-      /** @description Number of CPUs requested */
-      cpus: number;
-      /** @description Memory requested in MB */
-      memoryMB: number;
-      /** @description Disk size requested in GB */
-      diskGB: number;
-    };
-    /** @description Request data */
-    CreateRequestResponse: {
-      /** @description Request ID */
-      id: number;
-      /** @description Request title */
-      title: string;
-      /** @description Request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      specs: {
-        /** @description Number of CPUs requested */
-        cpus: number;
-        /** @description Memory requested in MB */
-        memoryMB: number;
-        /** @description Disk size requested in GB */
-        diskGB: number;
-      };
-      /** @description Chosen template name */
-      templateName?: string;
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    GetRequestsRequestQuery: {
-      /**
-       * @description Page number for pagination
-       * @default 1
-       */
-      page: number;
-      /**
-       * @description Number of items per page
-       * @default 10
-       */
-      pageSize: number;
-      /** @enum {string} */
-      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Filter by course ID */
-      courseId?: number;
-      /** @description Filter by semester ID */
-      semesterId?: number;
-    };
-    GetRequestsResponse: {
-      values: {
-        /** @description Request ID */
-        id: number;
-        /** @description Request title */
-        title: string;
-        /** @description Request description */
-        description?: string;
-        /** @enum {string} */
-        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-        /** @description Reviewer or requester note */
-        reason?: string;
-        /** @description Summary of a course offering */
-        courseOffering?: {
-          /** @description Course code */
-          courseCode: string;
-          /** @description Course title */
-          courseTitle: string;
-          /** @description Semester name */
-          semester: string;
-        };
-        specs: {
-          /** @description Number of CPUs requested */
-          cpus: number;
-          /** @description Memory requested in MB */
-          memoryMB: number;
-          /** @description Disk size requested in GB */
-          diskGB: number;
-        };
-        /** @description Chosen template name */
-        templateName?: string;
-        /** @description Requester platform user ID */
-        requesterId: number;
-        /** @description Reviewer platform user ID */
-        reviewerId?: number;
-        /** @description Timestamp when the record was created */
-        createdAt?: Record<string, never> | string | number;
-        /** @description Timestamp when the record was last updated */
-        updatedAt?: Record<string, never> | string | number;
-      }[];
-      /** @description Total number of items available */
-      totalItems: number;
-      /** @description Total number of pages available */
-      totalPages: number;
-      /** @description Current page number */
-      currentPage: number;
-      /** @description Number of items per page */
-      pageSize: number;
-    };
-    UpdateRequestStatusRequestBody: {
-      /** @enum {string} */
-      status: "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reason for the action */
-      reason?: string;
-    };
-    /** @description Request data */
-    UpdateRequestStatusResponse: {
-      /** @description Request ID */
-      id: number;
-      /** @description Request title */
-      title: string;
-      /** @description Request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      specs: {
-        /** @description Number of CPUs requested */
-        cpus: number;
-        /** @description Memory requested in MB */
-        memoryMB: number;
-        /** @description Disk size requested in GB */
-        diskGB: number;
-      };
-      /** @description Chosen template name */
-      templateName?: string;
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    CreateExtendedRequestRequestBody: {
-      /** @description Extended request title */
-      title: string;
-      /** @description Extended request description */
-      description?: string;
-      /** @description Instance to be extended */
-      targetInstanceId: number;
-    };
-    /** @description Extended request data */
-    CreateExtendedRequestResponse: {
-      /** @description Extended request ID */
-      id: number;
-      /** @description Extended request title */
-      title: string;
-      /** @description Extended request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      /** @description Summary of a semester */
-      nextSemester?: {
-        /** @description Semester ID */
-        id: number;
-        /** @description Semester name */
-        name: string;
-        /** @description Semester start date */
-        startDate: Record<string, never> | string | number;
-        /** @description Semester end date */
-        endDate: Record<string, never> | string | number;
-      };
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    GetExtendedRequestsRequestQuery: {
-      /**
-       * @description Page number for pagination
-       * @default 1
-       */
-      page: number;
-      /**
-       * @description Number of items per page
-       * @default 10
-       */
-      pageSize: number;
-      /** @enum {string} */
-      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Filter by course ID */
-      courseId?: number;
-      /** @description Filter by semester ID */
-      semesterId?: number;
-      /** @description Filter by instance ID */
-      instanceId?: number;
-    };
-    GetExtendedRequestsResponse: {
-      values: {
-        /** @description Extended request ID */
-        id: number;
-        /** @description Extended request title */
-        title: string;
-        /** @description Extended request description */
-        description?: string;
-        /** @enum {string} */
-        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-        /** @description Reviewer or requester note */
-        reason?: string;
-        /** @description Target instance ID */
-        targetInstanceId: number;
-        /** @description Summary of a course offering */
-        courseOffering?: {
-          /** @description Course code */
-          courseCode: string;
-          /** @description Course title */
-          courseTitle: string;
-          /** @description Semester name */
-          semester: string;
-        };
-        /** @description Summary of a semester */
-        nextSemester?: {
-          /** @description Semester ID */
-          id: number;
-          /** @description Semester name */
-          name: string;
-          /** @description Semester start date */
-          startDate: Record<string, never> | string | number;
-          /** @description Semester end date */
-          endDate: Record<string, never> | string | number;
-        };
-        /** @description Requester platform user ID */
-        requesterId: number;
-        /** @description Reviewer platform user ID */
-        reviewerId?: number;
-        /** @description Timestamp when the record was created */
-        createdAt?: Record<string, never> | string | number;
-        /** @description Timestamp when the record was last updated */
-        updatedAt?: Record<string, never> | string | number;
-      }[];
-      /** @description Total number of items available */
-      totalItems: number;
-      /** @description Total number of pages available */
-      totalPages: number;
-      /** @description Current page number */
-      currentPage: number;
-      /** @description Number of items per page */
-      pageSize: number;
-    };
-    UpdateExtendedRequestStatusRequestBody: {
-      /** @enum {string} */
-      status: "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reason for the action */
-      reason?: string;
-    };
-    /** @description Extended request data */
-    UpdateExtendedRequestStatusResponse: {
-      /** @description Extended request ID */
-      id: number;
-      /** @description Extended request title */
-      title: string;
-      /** @description Extended request description */
-      description?: string;
-      /** @enum {string} */
-      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-      /** @description Reviewer or requester note */
-      reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
-      /** @description Summary of a course offering */
-      courseOffering?: {
-        /** @description Course code */
-        courseCode: string;
-        /** @description Course title */
-        courseTitle: string;
-        /** @description Semester name */
-        semester: string;
-      };
-      /** @description Summary of a semester */
-      nextSemester?: {
-        /** @description Semester ID */
-        id: number;
-        /** @description Semester name */
-        name: string;
-        /** @description Semester start date */
-        startDate: Record<string, never> | string | number;
-        /** @description Semester end date */
-        endDate: Record<string, never> | string | number;
-      };
-      /** @description Requester platform user ID */
-      requesterId: number;
-      /** @description Reviewer platform user ID */
-      reviewerId?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    GetRequestAuditLogsResponse: {
-      /** @description List of request audit log entries */
-      values: {
-        /** @description Audit log entry ID */
-        id: number;
-        /** @enum {string} */
-        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-        performedBy: {
-          /** @description Platform user ID */
-          id: number;
-          /** @description User name */
-          name: string;
-          /** @description User email */
-          email: string;
-        };
-        /** @description When the action was performed */
-        timestamp: Record<string, never> | string | number;
-        /** @description Additional notes about the action */
-        notes?: string;
-      }[];
-      /** @description Total number of items available */
-      totalItems: number;
-      /** @description Total number of pages available */
-      totalPages: number;
-      /** @description Current page number */
-      currentPage: number;
-      /** @description Number of items per page */
-      pageSize: number;
-    };
-    GetExtendedRequestAuditLogsResponse: {
-      /** @description List of extended request audit log entries */
-      values: {
-        /** @description Audit log entry ID */
-        id: number;
-        /** @enum {string} */
-        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-        performedBy: {
-          /** @description Platform user ID */
-          id: number;
-          /** @description User name */
-          name: string;
-          /** @description User email */
-          email: string;
-        };
-        /** @description When the action was performed */
-        timestamp: Record<string, never> | string | number;
-        /** @description Additional notes about the action */
-        notes?: string;
-      }[];
-      /** @description Total number of items available */
-      totalItems: number;
-      /** @description Total number of pages available */
-      totalPages: number;
-      /** @description Current page number */
-      currentPage: number;
-      /** @description Number of items per page */
-      pageSize: number;
     };
     /** @enum {string} */
     PlatformFileType: "FILE" | "FOLDER";
@@ -4735,6 +4761,48 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GetInstanceAuditLogsResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "postApiInstancesByInstanceIdExtended-request": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateInstanceExtendedRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateInstanceExtendedRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateInstanceExtendedRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Extended request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateExtendedRequestResponse"];
         };
       };
       /** @description Response for status 403 */
