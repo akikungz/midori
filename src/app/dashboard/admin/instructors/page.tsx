@@ -7,11 +7,7 @@ import { api } from "@midori/lib/api";
 import { withRoleCheck } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@midori/components/ui/card";
+import { Card, CardHeader } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
 import {
@@ -22,21 +18,21 @@ import {
   EmptyTitle,
 } from "@midori/components/ui/empty";
 import { Avatar, AvatarFallback } from "@midori/components/ui/avatar";
-import { getRoleDisplayName, getRoleBadgeVariant, type Role } from "@midori/lib/roles";
+import {
+  getRoleDisplayName,
+  getRoleBadgeVariant,
+  type Role,
+} from "@midori/lib/roles";
 
 function InstructorsPage() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/api/academic/instructors",
-    {
-      params: {
-        query: { page, pageSize },
-      },
-    }
-  );
+  const { data, isLoading } = api.useQuery("get", "/api/academic/instructors", {
+    params: {
+      query: { page, pageSize },
+    },
+  });
 
   const instructors = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -97,7 +93,10 @@ function InstructorsPage() {
       ) : (
         <div className="space-y-4">
           {instructors.map((instructor) => (
-            <Card key={instructor.id} className="transition-colors hover:border-primary/50">
+            <Card
+              key={instructor.id}
+              className="transition-colors hover:border-primary/50"
+            >
               <CardHeader className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -114,7 +113,9 @@ function InstructorsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge variant={getRoleBadgeVariant(instructor.role as Role)}>
+                    <Badge
+                      variant={getRoleBadgeVariant(instructor.role as Role)}
+                    >
                       {getRoleDisplayName(instructor.role as Role)}
                     </Badge>
                     <Button variant="outline" size="sm">

@@ -4,8068 +4,8068 @@
  */
 
 export interface paths {
-    "/api/user/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get current user
-         * @description Retrieve the profile information of the currently authenticated user
-         */
-        get: operations["getApiUserMe"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/api/user/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/user/ssh-keys": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get user SSH keys
-         * @description Retrieve a paginated list of SSH keys for the current user
-         */
-        get: operations["getApiUserSsh-keys"];
-        put?: never;
-        /**
-         * Add SSH key
-         * @description Add a new SSH public key to the current user's account
-         */
-        post: operations["postApiUserSsh-keys"];
-        /**
-         * Remove SSH keys
-         * @description Remove one or more SSH keys from the current user's account
-         */
-        delete: operations["deleteApiUserSsh-keys"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get current user
+     * @description Retrieve the profile information of the currently authenticated user
+     */
+    get: operations["getApiUserMe"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/user/ssh-keys": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get instances for the current user
-         * @description Retrieve all instances created by the current user
-         */
-        get: operations["getApiInstances"];
-        put?: never;
-        /**
-         * Create a new instance
-         * @description Create a new instance as an instructor
-         */
-        post: operations["postApiInstances"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get user SSH keys
+     * @description Retrieve a paginated list of SSH keys for the current user
+     */
+    get: operations["getApiUserSsh-keys"];
+    put?: never;
+    /**
+     * Add SSH key
+     * @description Add a new SSH public key to the current user's account
+     */
+    post: operations["postApiUserSsh-keys"];
+    /**
+     * Remove SSH keys
+     * @description Remove one or more SSH keys from the current user's account
+     */
+    delete: operations["deleteApiUserSsh-keys"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/admin": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all instances (admin)
-         * @description Retrieve all instances in the system
-         */
-        get: operations["getApiInstancesAdmin"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get instances for the current user
+     * @description Retrieve all instances created by the current user
+     */
+    get: operations["getApiInstances"];
+    put?: never;
+    /**
+     * Create a new instance
+     * @description Create a new instance as an instructor
+     */
+    post: operations["postApiInstances"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/admin": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/instructor": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get instances for a specific instructor
-         * @description Retrieve all instances created by a specific instructor
-         */
-        get: operations["getApiInstancesInstructor"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get all instances (admin)
+     * @description Retrieve all instances in the system
+     */
+    get: operations["getApiInstancesAdmin"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/instructor": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/{instanceId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get a specific instance
-         * @description Retrieve details of a specific instance by ID
-         */
-        get: operations["getApiInstancesByInstanceId"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete an instance
-         * @description Delete a specific instance by ID
-         */
-        delete: operations["deleteApiInstancesByInstanceId"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get instances for a specific instructor
+     * @description Retrieve all instances created by a specific instructor
+     */
+    get: operations["getApiInstancesInstructor"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/{instanceId}/reverse-proxies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get reverse proxies
-         * @description Retrieve all reverse proxy configurations for the instance
-         */
-        get: operations["getApiInstancesByInstanceIdReverse-proxies"];
-        put?: never;
-        /**
-         * Create a reverse proxy
-         * @description Create a reverse proxy configuration for the instance
-         */
-        post: operations["postApiInstancesByInstanceIdReverse-proxies"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get a specific instance
+     * @description Retrieve details of a specific instance by ID
+     */
+    get: operations["getApiInstancesByInstanceId"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete an instance
+     * @description Delete a specific instance by ID
+     */
+    delete: operations["deleteApiInstancesByInstanceId"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/reverse-proxies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/{instanceId}/reverse-proxies/{proxyId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete a reverse proxy
-         * @description Delete a specific reverse proxy configuration from the instance
-         */
-        delete: operations["deleteApiInstancesByInstanceIdReverse-proxiesByProxyId"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get reverse proxies
+     * @description Retrieve all reverse proxy configurations for the instance
+     */
+    get: operations["getApiInstancesByInstanceIdReverse-proxies"];
+    put?: never;
+    /**
+     * Create a reverse proxy
+     * @description Create a reverse proxy configuration for the instance
+     */
+    post: operations["postApiInstancesByInstanceIdReverse-proxies"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/reverse-proxies/{proxyId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/{instanceId}/promote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Promote instance
-         * @description Promote an instance to long-term/production status
-         */
-        patch: operations["patchApiInstancesByInstanceIdPromote"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete a reverse proxy
+     * @description Delete a specific reverse proxy configuration from the instance
+     */
+    delete: operations["deleteApiInstancesByInstanceIdReverse-proxiesByProxyId"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/promote": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/instances/{instanceId}/audit-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get instance audit logs
-         * @description Retrieve audit log entries for the instance
-         */
-        get: operations["getApiInstancesByInstanceIdAudit-logs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Promote instance
+     * @description Promote an instance to long-term/production status
+     */
+    patch: operations["patchApiInstancesByInstanceIdPromote"];
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/audit-logs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/mailing-list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get instructor mailing list
-         * @description Retrieve the list of instructor email addresses for mailing purposes
-         */
-        get: operations["getApiAcademicMailing-list"];
-        put?: never;
-        /**
-         * Add instructor to mailing list
-         * @description Add a new instructor email address to the mailing list
-         */
-        post: operations["postApiAcademicMailing-list"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get instance audit logs
+     * @description Retrieve audit log entries for the instance
+     */
+    get: operations["getApiInstancesByInstanceIdAudit-logs"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/mailing-list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/mailing-list/{mailingId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Remove instructor from mailing list
-         * @description Remove an instructor email address from the mailing list by ID
-         */
-        delete: operations["deleteApiAcademicMailing-listByMailingId"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get instructor mailing list
+     * @description Retrieve the list of instructor email addresses for mailing purposes
+     */
+    get: operations["getApiAcademicMailing-list"];
+    put?: never;
+    /**
+     * Add instructor to mailing list
+     * @description Add a new instructor email address to the mailing list
+     */
+    post: operations["postApiAcademicMailing-list"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/mailing-list/{mailingId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/instructors": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all instructors
-         * @description Retrieve a paginated list of all instructors in the system
-         */
-        get: operations["getApiAcademicInstructors"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Remove instructor from mailing list
+     * @description Remove an instructor email address from the mailing list by ID
+     */
+    delete: operations["deleteApiAcademicMailing-listByMailingId"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/instructors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/instructors/{instructorId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get instructor by ID
-         * @description Retrieve detailed information about a specific instructor
-         */
-        get: operations["getApiAcademicInstructorsByInstructorId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update instructor
-         * @description Update the information of a specific instructor by ID
-         */
-        patch: operations["patchApiAcademicInstructorsByInstructorId"];
-        trace?: never;
+    /**
+     * Get all instructors
+     * @description Retrieve a paginated list of all instructors in the system
+     */
+    get: operations["getApiAcademicInstructors"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/instructors/{instructorId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/courses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all courses
-         * @description Retrieve a paginated list of all courses in the system
-         */
-        get: operations["getApiAcademicCourses"];
-        put?: never;
-        /**
-         * Create a new course
-         * @description Add a new course to the system
-         */
-        post: operations["postApiAcademicCourses"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get instructor by ID
+     * @description Retrieve detailed information about a specific instructor
+     */
+    get: operations["getApiAcademicInstructorsByInstructorId"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update instructor
+     * @description Update the information of a specific instructor by ID
+     */
+    patch: operations["patchApiAcademicInstructorsByInstructorId"];
+    trace?: never;
+  };
+  "/api/academic/courses": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/courses/{courseId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get course by ID
-         * @description Retrieve detailed information about a specific course
-         */
-        get: operations["getApiAcademicCoursesByCourseId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update course
-         * @description Update the information of a specific course by ID
-         */
-        patch: operations["patchApiAcademicCoursesByCourseId"];
-        trace?: never;
+    /**
+     * Get all courses
+     * @description Retrieve a paginated list of all courses in the system
+     */
+    get: operations["getApiAcademicCourses"];
+    put?: never;
+    /**
+     * Create a new course
+     * @description Add a new course to the system
+     */
+    post: operations["postApiAcademicCourses"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/courses/{courseId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/courses/{courseId}/instructors": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update course instructors
-         * @description Assign or update instructors for a specific course
-         */
-        patch: operations["patchApiAcademicCoursesByCourseIdInstructors"];
-        trace?: never;
+    /**
+     * Get course by ID
+     * @description Retrieve detailed information about a specific course
+     */
+    get: operations["getApiAcademicCoursesByCourseId"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update course
+     * @description Update the information of a specific course by ID
+     */
+    patch: operations["patchApiAcademicCoursesByCourseId"];
+    trace?: never;
+  };
+  "/api/academic/courses/{courseId}/instructors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/courses/{courseId}/semesters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update course semesters
-         * @description Assign or update semesters for a specific course
-         */
-        patch: operations["patchApiAcademicCoursesByCourseIdSemesters"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update course instructors
+     * @description Assign or update instructors for a specific course
+     */
+    patch: operations["patchApiAcademicCoursesByCourseIdInstructors"];
+    trace?: never;
+  };
+  "/api/academic/courses/{courseId}/semesters": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/semesters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all semesters
-         * @description Retrieve a paginated list of all semesters in the system
-         */
-        get: operations["getApiAcademicSemesters"];
-        put?: never;
-        /**
-         * Create a new semester
-         * @description Add a new semester to the system
-         */
-        post: operations["postApiAcademicSemesters"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update course semesters
+     * @description Assign or update semesters for a specific course
+     */
+    patch: operations["patchApiAcademicCoursesByCourseIdSemesters"];
+    trace?: never;
+  };
+  "/api/academic/semesters": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/semesters/{semesterId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get semester by ID
-         * @description Retrieve detailed information about a specific semester
-         */
-        get: operations["getApiAcademicSemestersBySemesterId"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete semester
-         * @description Delete a specific semester from the system by ID
-         */
-        delete: operations["deleteApiAcademicSemestersBySemesterId"];
-        options?: never;
-        head?: never;
-        /**
-         * Update semester
-         * @description Update the information of a specific semester by ID
-         */
-        patch: operations["patchApiAcademicSemestersBySemesterId"];
-        trace?: never;
+    /**
+     * Get all semesters
+     * @description Retrieve a paginated list of all semesters in the system
+     */
+    get: operations["getApiAcademicSemesters"];
+    put?: never;
+    /**
+     * Create a new semester
+     * @description Add a new semester to the system
+     */
+    post: operations["postApiAcademicSemesters"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/semesters/{semesterId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/academic/semesters/{semesterId}/courses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update semester courses
-         * @description Assign or update courses for a specific semester
-         */
-        patch: operations["patchApiAcademicSemestersBySemesterIdCourses"];
-        trace?: never;
+    /**
+     * Get semester by ID
+     * @description Retrieve detailed information about a specific semester
+     */
+    get: operations["getApiAcademicSemestersBySemesterId"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete semester
+     * @description Delete a specific semester from the system by ID
+     */
+    delete: operations["deleteApiAcademicSemestersBySemesterId"];
+    options?: never;
+    head?: never;
+    /**
+     * Update semester
+     * @description Update the information of a specific semester by ID
+     */
+    patch: operations["patchApiAcademicSemestersBySemesterId"];
+    trace?: never;
+  };
+  "/api/academic/semesters/{semesterId}/courses": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/requests/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List requests
-         * @description List requests visible to the current user
-         */
-        get: operations["getApiRequests"];
-        put?: never;
-        /**
-         * Create a new request
-         * @description Students submit an instance request for instructor/admin review
-         */
-        post: operations["postApiRequests"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update semester courses
+     * @description Assign or update courses for a specific semester
+     */
+    patch: operations["patchApiAcademicSemestersBySemesterIdCourses"];
+    trace?: never;
+  };
+  "/api/requests/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/requests/{requestId}/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Act on a request
-         * @description Approve, reject, or cancel a request depending on role
-         */
-        patch: operations["patchApiRequestsByRequestIdStatus"];
-        trace?: never;
+    /**
+     * List requests
+     * @description List requests visible to the current user
+     */
+    get: operations["getApiRequests"];
+    put?: never;
+    /**
+     * Create a new request
+     * @description Students submit an instance request for instructor/admin review
+     */
+    post: operations["postApiRequests"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests/{requestId}/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/requests/{requestId}/audit-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get request audit logs
-         * @description Retrieve audit log entries for the request
-         */
-        get: operations["getApiRequestsByRequestIdAudit-logs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Act on a request
+     * @description Approve, reject, or cancel a request depending on role
+     */
+    patch: operations["patchApiRequestsByRequestIdStatus"];
+    trace?: never;
+  };
+  "/api/requests/{requestId}/audit-logs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/extended-requests/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List extended requests
-         * @description List extended requests visible to the current user
-         */
-        get: operations["getApiExtended-requests"];
-        put?: never;
-        /**
-         * Create an extended request
-         * @description Students request changes related to an existing instance
-         */
-        post: operations["postApiExtended-requests"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get request audit logs
+     * @description Retrieve audit log entries for the request
+     */
+    get: operations["getApiRequestsByRequestIdAudit-logs"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/extended-requests/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/extended-requests/{extendedRequestId}/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Act on an extended request
-         * @description Approve, reject, or cancel an extended request depending on role
-         */
-        patch: operations["patchApiExtended-requestsByExtendedRequestIdStatus"];
-        trace?: never;
+    /**
+     * List extended requests
+     * @description List extended requests visible to the current user
+     */
+    get: operations["getApiExtended-requests"];
+    put?: never;
+    /**
+     * Create an extended request
+     * @description Students request changes related to an existing instance
+     */
+    post: operations["postApiExtended-requests"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/extended-requests/{extendedRequestId}/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/extended-requests/{extendedRequestId}/audit-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get extended request audit logs
-         * @description Retrieve audit log entries for the extended request
-         */
-        get: operations["getApiExtended-requestsByExtendedRequestIdAudit-logs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Act on an extended request
+     * @description Approve, reject, or cancel an extended request depending on role
+     */
+    patch: operations["patchApiExtended-requestsByExtendedRequestIdStatus"];
+    trace?: never;
+  };
+  "/api/extended-requests/{extendedRequestId}/audit-logs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List files and folders
-         * @description Retrieve a paginated list of files and folders for the current user
-         */
-        get: operations["getApiStorageFiles"];
-        put?: never;
-        /**
-         * Create file or folder
-         * @description Create a new file or folder
-         */
-        post: operations["postApiStorageFiles"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get extended request audit logs
+     * @description Retrieve audit log entries for the extended request
+     */
+    get: operations["getApiExtended-requestsByExtendedRequestIdAudit-logs"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Search files and folders
-         * @description Search for files and folders by name
-         */
-        get: operations["getApiStorageFilesSearch"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List files and folders
+     * @description Retrieve a paginated list of files and folders for the current user
+     */
+    get: operations["getApiStorageFiles"];
+    put?: never;
+    /**
+     * Create file or folder
+     * @description Create a new file or folder
+     */
+    post: operations["postApiStorageFiles"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get file or folder details
-         * @description Retrieve detailed information about a specific file or folder
-         */
-        get: operations["getApiStorageFilesByFileId"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete file or folder
-         * @description Delete a file or folder and all its children
-         */
-        delete: operations["deleteApiStorageFilesByFileId"];
-        options?: never;
-        head?: never;
-        /**
-         * Update file or folder
-         * @description Update metadata of a file or folder
-         */
-        patch: operations["patchApiStorageFilesByFileId"];
-        trace?: never;
+    /**
+     * Search files and folders
+     * @description Search for files and folders by name
+     */
+    get: operations["getApiStorageFilesSearch"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/move": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Move file or folder
-         * @description Move a file or folder to a new location
-         */
-        post: operations["postApiStorageFilesByFileIdMove"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get file or folder details
+     * @description Retrieve detailed information about a specific file or folder
+     */
+    get: operations["getApiStorageFilesByFileId"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete file or folder
+     * @description Delete a file or folder and all its children
+     */
+    delete: operations["deleteApiStorageFilesByFileId"];
+    options?: never;
+    head?: never;
+    /**
+     * Update file or folder
+     * @description Update metadata of a file or folder
+     */
+    patch: operations["patchApiStorageFilesByFileId"];
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/move": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/copy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Copy file or folder
-         * @description Copy a file or folder to a new location
-         */
-        post: operations["postApiStorageFilesByFileIdCopy"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Move file or folder
+     * @description Move a file or folder to a new location
+     */
+    post: operations["postApiStorageFilesByFileIdMove"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/copy": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/versions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get file versions
-         * @description Retrieve version history for a file
-         */
-        get: operations["getApiStorageFilesByFileIdVersions"];
-        put?: never;
-        /**
-         * Create file version
-         * @description Create a new version of a file
-         */
-        post: operations["postApiStorageFilesByFileIdVersions"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Copy file or folder
+     * @description Copy a file or folder to a new location
+     */
+    post: operations["postApiStorageFilesByFileIdCopy"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/versions/{versionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete file version
-         * @description Delete a specific version of a file
-         */
-        delete: operations["deleteApiStorageFilesByFileIdVersionsByVersionId"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get file versions
+     * @description Retrieve version history for a file
+     */
+    get: operations["getApiStorageFilesByFileIdVersions"];
+    put?: never;
+    /**
+     * Create file version
+     * @description Create a new version of a file
+     */
+    post: operations["postApiStorageFilesByFileIdVersions"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions/{versionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/permissions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get file permissions
-         * @description Retrieve permissions for a file (owner only)
-         */
-        get: operations["getApiStorageFilesByFileIdPermissions"];
-        put?: never;
-        /**
-         * Add file permission
-         * @description Grant a user permission to access a file
-         */
-        post: operations["postApiStorageFilesByFileIdPermissions"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete file version
+     * @description Delete a specific version of a file
+     */
+    delete: operations["deleteApiStorageFilesByFileIdVersionsByVersionId"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/storage/files/{fileId}/permissions/{permissionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Remove file permission
-         * @description Remove a user's permission to access a file
-         */
-        delete: operations["deleteApiStorageFilesByFileIdPermissionsByPermissionId"];
-        options?: never;
-        head?: never;
-        /**
-         * Update file permission
-         * @description Update a user's permission level for a file
-         */
-        patch: operations["patchApiStorageFilesByFileIdPermissionsByPermissionId"];
-        trace?: never;
+    /**
+     * Get file permissions
+     * @description Retrieve permissions for a file (owner only)
+     */
+    get: operations["getApiStorageFilesByFileIdPermissions"];
+    put?: never;
+    /**
+     * Add file permission
+     * @description Grant a user permission to access a file
+     */
+    post: operations["postApiStorageFilesByFileIdPermissions"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/permissions/{permissionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/sign-in/social": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Sign in with a social provider */
-        post: operations["socialSignIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Remove file permission
+     * @description Remove a user's permission to access a file
+     */
+    delete: operations["deleteApiStorageFilesByFileIdPermissionsByPermissionId"];
+    options?: never;
+    head?: never;
+    /**
+     * Update file permission
+     * @description Update a user's permission level for a file
+     */
+    patch: operations["patchApiStorageFilesByFileIdPermissionsByPermissionId"];
+    trace?: never;
+  };
+  "/api/auth/sign-in/social": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/get-session": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Get the current session */
-        get: operations["getSession"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Sign in with a social provider */
+    post: operations["socialSignIn"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/get-session": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/sign-out": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Sign out the current user */
-        post: operations["signOut"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** @description Get the current session */
+    get: operations["getSession"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/sign-out": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/sign-up/email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Sign up a user using email and password */
-        post: operations["signUpWithEmailAndPassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Sign out the current user */
+    post: operations["signOut"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/sign-up/email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/sign-in/email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Sign in with email and password */
-        post: operations["signInEmail"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Sign up a user using email and password */
+    post: operations["signUpWithEmailAndPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/sign-in/email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/reset-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Reset the password for a user */
-        post: operations["resetPassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Sign in with email and password */
+    post: operations["signInEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/reset-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/verify-email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** @description Reset the password for a user */
+    post: operations["resetPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/verify-email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Verify the email of the user */
+    get: {
+      parameters: {
+        query: {
+          /** @description The token to verify the email */
+          token: string;
+          /** @description The URL to redirect to after email verification */
+          callbackURL?: string;
         };
-        /** @description Verify the email of the user */
-        get: {
-            parameters: {
-                query: {
-                    /** @description The token to verify the email */
-                    token: string;
-                    /** @description The URL to redirect to after email verification */
-                    callbackURL?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              user: components["schemas"]["User"];
+              /** @description Indicates if the email was verified successfully */
+              status: boolean;
             };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            user: components["schemas"]["User"];
-                            /** @description Indicates if the email was verified successfully */
-                            status: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
-    "/api/auth/send-verification-email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Send a verification email to the user */
-        post: operations["sendVerificationEmail"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/send-verification-email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/change-email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["changeEmail"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Send a verification email to the user */
+    post: operations["sendVerificationEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/change-email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/change-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Change the password of the user */
-        post: operations["changePassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post: operations["changeEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/change-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/update-user": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Update the current user */
-        post: operations["updateUser"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Change the password of the user */
+    post: operations["changePassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/update-user": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/delete-user": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Delete the user */
-        post: operations["deleteUser"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Update the current user */
+    post: operations["updateUser"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/delete-user": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/request-password-reset": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Send a password reset email to the user */
-        post: operations["requestPasswordReset"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Delete the user */
+    post: operations["deleteUser"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/request-password-reset": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/reset-password/{token}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Redirects the user to the callback URL with the token */
-        get: operations["resetPasswordCallback"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Send a password reset email to the user */
+    post: operations["requestPasswordReset"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/reset-password/{token}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/list-sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description List all active sessions for the user */
-        get: operations["listUserSessions"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** @description Redirects the user to the callback URL with the token */
+    get: operations["resetPasswordCallback"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/list-sessions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/revoke-session": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Revoke a single session */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": {
-                        /** @description The token to revoke */
-                        token: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates if the session was revoked successfully */
-                            status: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** @description List all active sessions for the user */
+    get: operations["listUserSessions"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/revoke-session": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/revoke-sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** @description Revoke a single session */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": {
+            /** @description The token to revoke */
+            token: string;
+          };
         };
-        get?: never;
-        put?: never;
-        /** @description Revoke all sessions for the user */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @description Indicates if the session was revoked successfully */
+              status: boolean;
             };
-            requestBody?: {
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates if all sessions were revoked successfully */
-                            status: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
-    "/api/auth/revoke-other-sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Revoke all other sessions for the user except the current one */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates if all other sessions were revoked successfully */
-                            status: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/revoke-sessions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/link-social": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** @description Revoke all sessions for the user */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": Record<string, never>;
         };
-        get?: never;
-        put?: never;
-        /** @description Link a social account to the user */
-        post: operations["linkSocialAccount"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @description Indicates if all sessions were revoked successfully */
+              status: boolean;
+            };
+          };
+        };
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
-    "/api/auth/list-accounts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description List all accounts linked to the user */
-        get: operations["listUserAccounts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/revoke-other-sessions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/delete-user/callback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** @description Revoke all other sessions for the user except the current one */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": Record<string, never>;
         };
-        /** @description Callback to complete user deletion with verification token */
-        get: {
-            parameters: {
-                query?: {
-                    token?: string;
-                    callbackURL?: string | null;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @description Indicates if all other sessions were revoked successfully */
+              status: boolean;
             };
-            requestBody?: never;
-            responses: {
-                /** @description User successfully deleted */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates if the deletion was successful */
-                            success: boolean;
-                            /**
-                             * @description Confirmation message
-                             * @enum {string}
-                             */
-                            message: "User deleted";
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
-    "/api/auth/unlink-account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Unlink an account */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        providerId: string;
-                        accountId?: string | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            status?: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/link-social": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/refresh-token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Refresh the access token using a refresh token */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @description The provider ID for the OAuth provider */
-                        providerId: string;
-                        /** @description The account ID associated with the refresh token */
-                        accountId?: string | null;
-                        /** @description The user ID associated with the account */
-                        userId?: string | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description Access token refreshed successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            tokenType?: string;
-                            idToken?: string;
-                            accessToken?: string;
-                            refreshToken?: string;
-                            /** Format: date-time */
-                            accessTokenExpiresAt?: string;
-                            /** Format: date-time */
-                            refreshTokenExpiresAt?: string;
-                        };
-                    };
-                };
-                /** @description Invalid refresh token or provider configuration */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** @description Link a social account to the user */
+    post: operations["linkSocialAccount"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/list-accounts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/get-access-token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Get a valid access token, doing a refresh if needed */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @description The provider ID for the OAuth provider */
-                        providerId: string;
-                        /** @description The account ID associated with the refresh token */
-                        accountId?: string | null;
-                        /** @description The user ID associated with the account */
-                        userId?: string | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description A Valid access token */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            tokenType?: string;
-                            idToken?: string;
-                            accessToken?: string;
-                            refreshToken?: string;
-                            /** Format: date-time */
-                            accessTokenExpiresAt?: string;
-                            /** Format: date-time */
-                            refreshTokenExpiresAt?: string;
-                        };
-                    };
-                };
-                /** @description Invalid refresh token or provider configuration */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** @description List all accounts linked to the user */
+    get: operations["listUserAccounts"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/delete-user/callback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/account-info": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** @description Callback to complete user deletion with verification token */
+    get: {
+      parameters: {
+        query?: {
+          token?: string;
+          callbackURL?: string | null;
         };
-        /** @description Get the account info provided by the provider */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description User successfully deleted */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @description Indicates if the deletion was successful */
+              success: boolean;
+              /**
+               * @description Confirmation message
+               * @enum {string}
+               */
+              message: "User deleted";
             };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            user: {
-                                id: string;
-                                name?: string;
-                                email?: string;
-                                image?: string;
-                                emailVerified: boolean;
-                            };
-                            data: {
-                                [key: string]: unknown;
-                            };
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
-    "/api/auth/ok": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Check if the API is working */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description API is working */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates if the API is working */
-                            ok: boolean;
-                        };
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/unlink-account": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/error": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** @description Unlink an account */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            providerId: string;
+            accountId?: string | null;
+          };
         };
-        /** @description Displays an error page */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              status?: boolean;
             };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/html": string;
-                    };
-                };
-                /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized. Due to missing or invalid authentication. */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Not Found. The requested resource was not found. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            message?: string;
-                        };
-                    };
-                };
-            };
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/refresh-token": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** @description Refresh the access token using a refresh token */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @description The provider ID for the OAuth provider */
+            providerId: string;
+            /** @description The account ID associated with the refresh token */
+            accountId?: string | null;
+            /** @description The user ID associated with the account */
+            userId?: string | null;
+          };
+        };
+      };
+      responses: {
+        /** @description Access token refreshed successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              tokenType?: string;
+              idToken?: string;
+              accessToken?: string;
+              refreshToken?: string;
+              /** Format: date-time */
+              accessTokenExpiresAt?: string;
+              /** Format: date-time */
+              refreshTokenExpiresAt?: string;
+            };
+          };
+        };
+        /** @description Invalid refresh token or provider configuration */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/get-access-token": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** @description Get a valid access token, doing a refresh if needed */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @description The provider ID for the OAuth provider */
+            providerId: string;
+            /** @description The account ID associated with the refresh token */
+            accountId?: string | null;
+            /** @description The user ID associated with the account */
+            userId?: string | null;
+          };
+        };
+      };
+      responses: {
+        /** @description A Valid access token */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              tokenType?: string;
+              idToken?: string;
+              accessToken?: string;
+              refreshToken?: string;
+              /** Format: date-time */
+              accessTokenExpiresAt?: string;
+              /** Format: date-time */
+              refreshTokenExpiresAt?: string;
+            };
+          };
+        };
+        /** @description Invalid refresh token or provider configuration */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/account-info": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Get the account info provided by the provider */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              user: {
+                id: string;
+                name?: string;
+                email?: string;
+                image?: string;
+                emailVerified: boolean;
+              };
+              data: {
+                [key: string]: unknown;
+              };
+            };
+          };
+        };
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/ok": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Check if the API is working */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description API is working */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @description Indicates if the API is working */
+              ok: boolean;
+            };
+          };
+        };
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/error": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Displays an error page */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Success */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/html": string;
+          };
+        };
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        GetMeResponse: {
-            /** @description Unique identifier for the user */
-            id: number;
-            /** @description Full name of the user */
-            name: string;
-            /** @description Email address of the user */
-            email: string;
-            /** @enum {string} */
-            role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-        };
-        GetSSHKeyData: {
-            /** @description Unique identifier for the SSH key */
-            id: number;
-            /** @description Name of the SSH key */
-            name: string;
-            /** @description Public key string */
-            publicKey: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        GetSSHKeyResponse: {
-            /** @description List of SSH keys */
-            values: {
-                /** @description Unique identifier for the SSH key */
-                id: number;
-                /** @description Name of the SSH key */
-                name: string;
-                /** @description Public key string */
-                publicKey: string;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        GetSSHKeyRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-        };
-        AddSSHKeyRequestBody: {
-            /** @description Name of the SSH key */
-            name: string;
-            /** @description Public key string */
-            publicKey: string;
-        };
-        AddSSHKeyResponse: {
-            /** @description Unique identifier for the SSH key */
-            id: number;
-            /** @description Name of the SSH key */
-            name: string;
-            /** @description Public key string */
-            publicKey: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        RemoveSSHKeyRequestBody: {
-            /** @description Unique identifiers for the SSH keys to be removed */
-            keyIds: number[];
-        };
-        GetInstancesRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-            /** @description Filter instances by course ID */
-            courseId?: number;
-            /** @description Filter instances by semester ID */
-            semesterId?: number;
-        };
-        GetInstancesResponse: {
-            /** @description List of instances */
-            values: {
-                /** @description Unique identifier for the instance */
-                id: number;
-                /** @description Details of the course offering associated with the instance */
-                courseOffering?: {
-                    /** @description Course code associated with the offering */
-                    courseCode: string;
-                    /** @description Title of the course */
-                    courseTitle: string;
-                    /** @description Semester in which the course is offered */
-                    semester: string;
-                };
-                /** @enum {string} */
-                status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
-                /** @description Details about the virtual machine hosting the instance if available */
-                vmDetails?: {
-                    /** @description Hostname of the virtual machine */
-                    hostname: string;
-                    /** @description Operating system installed on the virtual machine */
-                    os: string;
-                    /** @description IP address of the virtual machine */
-                    ip: string;
-                    /** @description Number of CPUs allocated to the virtual machine */
-                    cpus: number;
-                    /** @description Amount of memory (in MB) allocated to the virtual machine */
-                    memoryMB: number;
-                    /** @description Disk size (in GB) of the virtual machine */
-                    diskGB: number;
-                };
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        GetInstanceRequestParams: {
-            /** @description Unique identifier for the instance */
-            instanceId: number;
-        };
-        GetInstanceResponse: {
-            /** @description Unique identifier for the instance */
-            id: number;
-            /** @description Details of the course offering associated with the instance */
-            courseOffering?: {
-                /** @description Course code associated with the offering */
-                courseCode: string;
-                /** @description Title of the course */
-                courseTitle: string;
-                /** @description Semester in which the course is offered */
-                semester: string;
-            };
-            /** @enum {string} */
-            status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
-            /** @description Details about the virtual machine hosting the instance if available */
-            vmDetails?: {
-                /** @description Hostname of the virtual machine */
-                hostname: string;
-                /** @description Operating system installed on the virtual machine */
-                os: string;
-                /** @description IP address of the virtual machine */
-                ip: string;
-                /** @description Number of CPUs allocated to the virtual machine */
-                cpus: number;
-                /** @description Amount of memory (in MB) allocated to the virtual machine */
-                memoryMB: number;
-                /** @description Disk size (in GB) of the virtual machine */
-                diskGB: number;
-            };
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description List of reverse proxy configurations associated with the instance */
-            reverseProxy: {
-                /** @description Unique identifier for the reverse proxy configuration */
-                id: number;
-                /** @description Target port on the instance */
-                targetPort: number;
-            }[];
-        };
-        CreateInstanceRequestBody: {
-            /** @description Unique identifier for the PVE template to be used */
-            pveTemplateId: number;
-            /** @description Unique identifier for the course offering associated with the instance */
-            courseOfferingId?: number;
-            /** @description Number of CPUs to allocate to the instance */
-            cpus: number;
-            /** @description Amount of memory (in MB) to allocate to the instance */
-            memoryMB: number;
-            /** @description Disk size (in GB) to allocate to the instance */
-            diskGB: number;
-        };
-        CreateInstanceResponse: {
-            /** @description Unique identifier for the newly created instance */
-            id: number;
-            /** @description Details of the course offering associated with the instance */
-            courseOffering?: {
-                /** @description Course code associated with the offering */
-                courseCode: string;
-                /** @description Title of the course */
-                courseTitle: string;
-                /** @description Semester in which the course is offered */
-                semester: string;
-            };
-            /** @enum {string} */
-            status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
-            /** @description Details about the virtual machine hosting the instance if available */
-            vmDetails?: {
-                /** @description Hostname of the virtual machine */
-                hostname: string;
-                /** @description Operating system installed on the virtual machine */
-                os: string;
-                /** @description IP address of the virtual machine */
-                ip: string;
-                /** @description Number of CPUs allocated to the virtual machine */
-                cpus: number;
-                /** @description Amount of memory (in MB) allocated to the virtual machine */
-                memoryMB: number;
-                /** @description Disk size (in GB) of the virtual machine */
-                diskGB: number;
-            };
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        DeleteInstanceRequestParams: {
-            /** @description Unique identifier for the instance to be deleted */
-            instanceId: number;
-        };
-        DeleteInstanceResponse: {
-            /** @description Indicates whether the deletion was successful */
-            success: boolean;
-        };
-        CreateReverseProxyRequestBody: {
-            /** @description Target port on the instance */
-            targetPort: number;
-            /** @enum {string} */
-            type: "HTTPS" | "HTTP";
-            /** @description Description of the reverse proxy */
-            description?: string;
-        };
-        /** @description Reverse proxy configuration */
-        CreateReverseProxyResponse: {
-            /** @description Unique identifier for the reverse proxy */
-            id: number;
-            /** @description Target port on the instance */
-            targetPort: number;
-            /** @enum {string} */
-            type: "HTTPS" | "HTTP";
-            /** @description Description of the reverse proxy */
-            description?: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description List of reverse proxy configurations */
-        GetReverseProxiesResponse: {
-            /** @description Unique identifier for the reverse proxy */
-            id: number;
-            /** @description Target port on the instance */
-            targetPort: number;
-            /** @enum {string} */
-            type: "HTTPS" | "HTTP";
-            /** @description Description of the reverse proxy */
-            description?: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        }[];
-        DeleteReverseProxyRequestParams: {
-            /** @description Unique identifier for the instance */
-            instanceId: number;
-            /** @description Unique identifier for the reverse proxy to delete */
-            proxyId: number;
-        };
-        DeleteReverseProxyResponse: {
-            /** @description Indicates whether the deletion was successful */
-            success: boolean;
-        };
-        PromoteInstanceRequestParams: {
-            /** @description Unique identifier for the instance to promote */
-            instanceId: number;
-        };
-        PromoteInstanceResponse: {
-            /** @description Unique identifier for the promoted instance */
-            id: number;
-            /** @enum {string} */
-            status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
-            /** @description Success message */
-            message: string;
-        };
-        GetInstanceAuditLogsResponse: {
-            /** @description List of audit log entries */
-            values: {
-                /** @description Unique identifier for the audit log entry */
-                id: number;
-                /** @description Action performed on the instance */
-                action: string;
-                performedBy: {
-                    /** @description Platform user ID */
-                    id: number;
-                    /** @description User name */
-                    name: string;
-                    /** @description User email */
-                    email: string;
-                };
-                /** @description When the action was performed */
-                timestamp: Record<string, never> | string | number;
-                /** @description Additional notes about the action */
-                notes?: string;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @description Represents an entry in the instructor mailing list */
-        InstructorMailingListValue: {
-            /** @description Unique identifier for the mailing list value */
-            id: number;
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Represents an entry in the instructor listing */
-        InstructorValue: {
-            /** @description Unique identifier for the instructor listing */
-            id: number;
-            /** @description Full name of the instructor */
-            name: string;
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-            /** @enum {string} */
-            role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Represents a course offered in the academic system */
-        CourseValue: {
-            /** @description Unique identifier for the course */
-            id: number;
-            /** @description Course code */
-            code: string;
-            /** @description Title of the course */
-            title: string;
-            /** @description Description of the course */
-            description?: string;
-            /** @description Indicates if the course is currently active */
-            isActive: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Represents a semester in the academic system */
-        SemesterValue: {
-            /** @description Unique identifier for the semester */
-            id: number;
-            /** @description Name of the semester */
-            name: string;
-            /** @description Start date of the semester */
-            startDate: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate: Record<string, never> | string | number;
-            /** @description Indicates if this semester is the current active semester */
-            isCurrent: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Query parameters for fetching instructor mailing list */
-        GetInstructorMailingListQuery: {
-            /** @description Filter by email address with partial match */
-            email?: string;
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-        };
-        /** @description Response structure for instructor mailing list */
-        GetInstructorMailingListResponse: {
-            /** @description List of instructor mailing list entries */
-            values: {
-                /** @description Unique identifier for the mailing list value */
-                id: number;
-                /**
-                 * Format: email
-                 * @description Email address of the instructor
-                 */
-                email: string;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @description Request parameters for fetching instructor mailing list by ID */
-        InstructorMailingListByIdRequestParams: {
-            /** @description Unique identifier for the mailing list entry */
-            mailingId: number;
-        };
-        /** @description Request body for adding an instructor to the mailing list */
-        AddInstructorMailingListRequestBody: {
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-        };
-        /** @description Response structure after adding an instructor to the mailing list */
-        AddInstructorMailingListResponse: {
-            /** @description Unique identifier for the mailing list value */
-            id: number;
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Response structure after removing an instructor from the mailing list */
-        RemoveInstructorMailingListResponse: {
-            /** @description Indicates if the removal was successful */
-            success: boolean;
-        };
-        /** @description Query parameters for fetching instructor listing */
-        GetInstructorsRequestQuery: {
-            /** @description Filter by instructor name with partial match */
-            name?: string;
-            /** @description Filter by email address with partial match */
-            email?: string;
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-        };
-        /** @description Response structure for instructor listing */
-        GetInstructorsResponse: {
-            /** @description List of instructors */
-            values: {
-                /** @description Unique identifier for the instructor listing */
-                id: number;
-                /** @description Full name of the instructor */
-                name: string;
-                /**
-                 * Format: email
-                 * @description Email address of the instructor
-                 */
-                email: string;
-                /** @enum {string} */
-                role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @description Request parameters for fetching instructor by ID */
-        InstructorByIdRequestParams: {
-            /** @description Unique identifier for the instructor */
-            instructorId: number;
-        };
-        /** @description Response structure for fetching instructor by ID */
-        GetInstructorByIdResponse: {
-            /** @description Unique identifier for the instructor listing */
-            id: number;
-            /** @description Full name of the instructor */
-            name: string;
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-            /** @enum {string} */
-            role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description List of courses taught by the instructor */
-            courses: {
-                /** @description Unique identifier for the course */
-                id: number;
-                /** @description Course code */
-                code: string;
-                /** @description Title of the course */
-                title: string;
-                /** @description Description of the course */
-                description?: string;
-                /** @description Indicates if the course is currently active */
-                isActive: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Request body for editing instructor details */
-        EditInstructorByIdRequestBody: {
-            /** @enum {string} */
-            role?: "ADMIN" | "INSTRUCTOR";
-            /** @description List of course IDs to be associated with the instructor */
-            courseIds?: number[];
-        };
-        /** @description Response structure after editing instructor details */
-        EditInstructorByIdResponse: {
-            /** @description Unique identifier for the instructor listing */
-            id: number;
-            /** @description Full name of the instructor */
-            name: string;
-            /**
-             * Format: email
-             * @description Email address of the instructor
-             */
-            email: string;
-            /** @enum {string} */
-            role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description List of courses taught by the instructor */
-            courses: {
-                /** @description Unique identifier for the course */
-                id: number;
-                /** @description Course code */
-                code: string;
-                /** @description Title of the course */
-                title: string;
-                /** @description Description of the course */
-                description?: string;
-                /** @description Indicates if the course is currently active */
-                isActive: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Response structure after deleting an instructor by ID */
-        DeleteInstructorByIdResponse: {
-            /** @description Indicates if the deletion was successful */
-            success: boolean;
-        };
-        /** @description Query parameters for fetching course listing */
-        GetCoursesRequestQuery: {
-            /** @description Filter by course code with partial match */
-            code?: string;
-            /** @description Filter by course title with partial match */
-            title?: string;
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-        };
-        /** @description Response structure for course listing */
-        GetCoursesResponse: {
-            /** @description List of courses */
-            values: {
-                /** @description Unique identifier for the course */
-                id: number;
-                /** @description Course code */
-                code: string;
-                /** @description Title of the course */
-                title: string;
-                /** @description Description of the course */
-                description?: string;
-                /** @description Indicates if the course is currently active */
-                isActive: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @description Request parameters for fetching course by ID */
-        CourseByIdRequestParams: {
-            /** @description Unique identifier for the course */
-            courseId: number;
-        };
-        /** @description Response structure for fetching course by ID */
-        GetCourseByIdResponse: {
-            /** @description Unique identifier for the course */
-            id: number;
-            /** @description Course code */
-            code: string;
-            /** @description Title of the course */
-            title: string;
-            /** @description Description of the course */
-            description?: string;
-            /** @description Indicates if the course is currently active */
-            isActive: boolean;
-            /** @description List of instructors teaching the course */
-            instructors: {
-                /** @description Unique identifier for the instructor listing */
-                id: number;
-                /** @description Full name of the instructor */
-                name: string;
-                /**
-                 * Format: email
-                 * @description Email address of the instructor
-                 */
-                email: string;
-                /** @enum {string} */
-                role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description List of semesters when the course is offered */
-            semesters: {
-                /** @description Unique identifier for the semester */
-                id: number;
-                /** @description Name of the semester */
-                name: string;
-                /** @description Start date of the semester */
-                startDate: Record<string, never> | string | number;
-                /** @description End date of the semester */
-                endDate: Record<string, never> | string | number;
-                /** @description Indicates if this semester is the current active semester */
-                isCurrent: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Request body for adding a new course */
-        AddCourseRequestBody: {
-            /** @description Course code */
-            code: string;
-            /** @description Title of the course */
-            title: string;
-            /** @description Description of the course */
-            description?: string;
-        };
-        /** @description Response structure after adding a new course */
-        AddCourseResponse: {
-            /** @description Unique identifier for the course */
-            id: number;
-            /** @description Course code */
-            code: string;
-            /** @description Title of the course */
-            title: string;
-            /** @description Description of the course */
-            description?: string;
-            /** @description Indicates if the course is currently active */
-            isActive: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Request body for editing course details */
-        EditCourseByIdRequestBody: {
-            /** @description Course code */
-            code?: string;
-            /** @description Title of the course */
-            title?: string;
-            /** @description Description of the course */
-            description?: string;
-            /** @description Indicates if the course is currently active */
-            isActive?: boolean;
-        };
-        /** @description Request body for associating an instructor with a course */
-        EditCourseInstructorRequestBody: {
-            /** @description List of instructor IDs to be associated with the course */
-            instructorIds: number[];
-        };
-        /** @description Response structure after associating an instructor with a course */
-        EditCourseInstructorResponse: {
-            /** @description List of instructors associated with the course */
-            instructors: {
-                /** @description Unique identifier for the instructor listing */
-                id: number;
-                /** @description Full name of the instructor */
-                name: string;
-                /**
-                 * Format: email
-                 * @description Email address of the instructor
-                 */
-                email: string;
-                /** @enum {string} */
-                role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Request body for associating a semester with a course */
-        EditCourseSemesterRequestBody: {
-            /** @description List of semester IDs to be associated with the course */
-            semesterIds: number[];
-        };
-        /** @description Response structure after associating a semester with a course */
-        EditCourseSemesterResponse: {
-            /** @description List of semesters associated with the course */
-            semesters: {
-                /** @description Unique identifier for the semester */
-                id: number;
-                /** @description Name of the semester */
-                name: string;
-                /** @description Start date of the semester */
-                startDate: Record<string, never> | string | number;
-                /** @description End date of the semester */
-                endDate: Record<string, never> | string | number;
-                /** @description Indicates if this semester is the current active semester */
-                isCurrent: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Query parameters for fetching semester listing */
-        GetSemestersRequestQuery: {
-            /** @description Filter by semester name with partial match */
-            name?: string;
-            /** @description Filter semesters starting from this date */
-            dateFrom?: Record<string, never> | string | number;
-            /** @description Filter semesters ending by this date */
-            dateTo?: Record<string, never> | string | number;
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-        };
-        /** @description Response structure for semester listing */
-        GetSemestersResponse: {
-            /** @description List of semesters */
-            values: {
-                /** @description Unique identifier for the semester */
-                id: number;
-                /** @description Name of the semester */
-                name: string;
-                /** @description Start date of the semester */
-                startDate: Record<string, never> | string | number;
-                /** @description End date of the semester */
-                endDate: Record<string, never> | string | number;
-                /** @description Indicates if this semester is the current active semester */
-                isCurrent: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @description Request parameters for fetching semester by ID */
-        SemesterByIdRequestParams: {
-            /** @description Unique identifier for the semester */
-            semesterId: number;
-        };
-        /** @description Response structure for fetching semester by ID */
-        GetSemesterByIdResponse: {
-            /** @description Unique identifier for the semester */
-            id: number;
-            /** @description Name of the semester */
-            name: string;
-            /** @description Start date of the semester */
-            startDate: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate: Record<string, never> | string | number;
-            /** @description Indicates if this semester is the current active semester */
-            isCurrent: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description List of courses offered in the semester */
-            courses: {
-                /** @description Unique identifier for the course */
-                id: number;
-                /** @description Course code */
-                code: string;
-                /** @description Title of the course */
-                title: string;
-                /** @description Description of the course */
-                description?: string;
-                /** @description Indicates if the course is currently active */
-                isActive: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Request body for adding a new semester */
-        AddSemesterRequestBody: {
-            /** @description Name of the semester */
-            name: string;
-            /** @description Start date of the semester */
-            startDate: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate: Record<string, never> | string | number;
-        };
-        /** @description Response structure after adding a new semester */
-        AddSemesterResponse: {
-            /** @description Unique identifier for the semester */
-            id: number;
-            /** @description Name of the semester */
-            name: string;
-            /** @description Start date of the semester */
-            startDate: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate: Record<string, never> | string | number;
-            /** @description Indicates if this semester is the current active semester */
-            isCurrent: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Request body for editing semester details */
-        EditSemesterByIdRequestBody: {
-            /** @description Name of the semester */
-            name?: string;
-            /** @description Start date of the semester */
-            startDate?: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate?: Record<string, never> | string | number;
-            /** @description Indicates if this semester is the current active semester */
-            isCurrent?: boolean;
-        };
-        /** @description Response structure after editing semester details */
-        EditSemesterByIdResponse: {
-            /** @description Unique identifier for the semester */
-            id: number;
-            /** @description Name of the semester */
-            name: string;
-            /** @description Start date of the semester */
-            startDate: Record<string, never> | string | number;
-            /** @description End date of the semester */
-            endDate: Record<string, never> | string | number;
-            /** @description Indicates if this semester is the current active semester */
-            isCurrent: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Request body for associating a course with a semester */
-        EditSemesterCourseRequestBody: {
-            /** @description List of course IDs to be associated with the semester */
-            courseIds: number[];
-        };
-        /** @description Response structure after associating a course with a semester */
-        EditSemesterCourseResponse: {
-            /** @description List of courses associated with the semester */
-            courses: {
-                /** @description Unique identifier for the course */
-                id: number;
-                /** @description Course code */
-                code: string;
-                /** @description Title of the course */
-                title: string;
-                /** @description Description of the course */
-                description?: string;
-                /** @description Indicates if the course is currently active */
-                isActive: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-        };
-        /** @description Response structure after deleting a semester by ID */
-        DeleteSemesterByIdResponse: {
-            /** @description Indicates if the deletion was successful */
-            success: boolean;
-        };
-        /** @enum {string} */
-        ApprovalStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-        /** @description Request data */
-        RequestItem: {
-            /** @description Request ID */
-            id: number;
-            /** @description Request title */
-            title: string;
-            /** @description Request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            specs: {
-                /** @description Number of CPUs requested */
-                cpus: number;
-                /** @description Memory requested in MB */
-                memoryMB: number;
-                /** @description Disk size requested in GB */
-                diskGB: number;
-            };
-            /** @description Chosen template name */
-            templateName?: string;
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description Extended request data */
-        ExtendedRequestItem: {
-            /** @description Extended request ID */
-            id: number;
-            /** @description Extended request title */
-            title: string;
-            /** @description Extended request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Target instance ID */
-            targetInstanceId: number;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            /** @description Summary of a semester */
-            nextSemester?: {
-                /** @description Semester ID */
-                id: number;
-                /** @description Semester name */
-                name: string;
-                /** @description Semester start date */
-                startDate: Record<string, never> | string | number;
-                /** @description Semester end date */
-                endDate: Record<string, never> | string | number;
-            };
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        CreateRequestRequestBody: {
-            /** @description Request title */
-            title: string;
-            /** @description Request description */
-            description?: string;
-            /** @description Course offering ID */
-            courseOfferingId: number;
-            /** @description Template ID */
-            pveTemplateId: number;
-            /** @description Number of CPUs requested */
-            cpus: number;
-            /** @description Memory requested in MB */
-            memoryMB: number;
-            /** @description Disk size requested in GB */
-            diskGB: number;
-        };
-        /** @description Request data */
-        CreateRequestResponse: {
-            /** @description Request ID */
-            id: number;
-            /** @description Request title */
-            title: string;
-            /** @description Request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            specs: {
-                /** @description Number of CPUs requested */
-                cpus: number;
-                /** @description Memory requested in MB */
-                memoryMB: number;
-                /** @description Disk size requested in GB */
-                diskGB: number;
-            };
-            /** @description Chosen template name */
-            templateName?: string;
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        GetRequestsRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-            /** @enum {string} */
-            status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Filter by course ID */
-            courseId?: number;
-            /** @description Filter by semester ID */
-            semesterId?: number;
-        };
-        GetRequestsResponse: {
-            values: {
-                /** @description Request ID */
-                id: number;
-                /** @description Request title */
-                title: string;
-                /** @description Request description */
-                description?: string;
-                /** @enum {string} */
-                status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                /** @description Reviewer or requester note */
-                reason?: string;
-                /** @description Summary of a course offering */
-                courseOffering?: {
-                    /** @description Course code */
-                    courseCode: string;
-                    /** @description Course title */
-                    courseTitle: string;
-                    /** @description Semester name */
-                    semester: string;
-                };
-                specs: {
-                    /** @description Number of CPUs requested */
-                    cpus: number;
-                    /** @description Memory requested in MB */
-                    memoryMB: number;
-                    /** @description Disk size requested in GB */
-                    diskGB: number;
-                };
-                /** @description Chosen template name */
-                templateName?: string;
-                /** @description Requester platform user ID */
-                requesterId: number;
-                /** @description Reviewer platform user ID */
-                reviewerId?: number;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        UpdateRequestStatusRequestBody: {
-            /** @enum {string} */
-            status: "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reason for the action */
-            reason?: string;
-        };
-        /** @description Request data */
-        UpdateRequestStatusResponse: {
-            /** @description Request ID */
-            id: number;
-            /** @description Request title */
-            title: string;
-            /** @description Request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            specs: {
-                /** @description Number of CPUs requested */
-                cpus: number;
-                /** @description Memory requested in MB */
-                memoryMB: number;
-                /** @description Disk size requested in GB */
-                diskGB: number;
-            };
-            /** @description Chosen template name */
-            templateName?: string;
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        CreateExtendedRequestRequestBody: {
-            /** @description Extended request title */
-            title: string;
-            /** @description Extended request description */
-            description?: string;
-            /** @description Instance to be extended */
-            targetInstanceId: number;
-        };
-        /** @description Extended request data */
-        CreateExtendedRequestResponse: {
-            /** @description Extended request ID */
-            id: number;
-            /** @description Extended request title */
-            title: string;
-            /** @description Extended request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Target instance ID */
-            targetInstanceId: number;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            /** @description Summary of a semester */
-            nextSemester?: {
-                /** @description Semester ID */
-                id: number;
-                /** @description Semester name */
-                name: string;
-                /** @description Semester start date */
-                startDate: Record<string, never> | string | number;
-                /** @description Semester end date */
-                endDate: Record<string, never> | string | number;
-            };
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        GetExtendedRequestsRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-            /** @enum {string} */
-            status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Filter by course ID */
-            courseId?: number;
-            /** @description Filter by semester ID */
-            semesterId?: number;
-            /** @description Filter by instance ID */
-            instanceId?: number;
-        };
-        GetExtendedRequestsResponse: {
-            values: {
-                /** @description Extended request ID */
-                id: number;
-                /** @description Extended request title */
-                title: string;
-                /** @description Extended request description */
-                description?: string;
-                /** @enum {string} */
-                status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                /** @description Reviewer or requester note */
-                reason?: string;
-                /** @description Target instance ID */
-                targetInstanceId: number;
-                /** @description Summary of a course offering */
-                courseOffering?: {
-                    /** @description Course code */
-                    courseCode: string;
-                    /** @description Course title */
-                    courseTitle: string;
-                    /** @description Semester name */
-                    semester: string;
-                };
-                /** @description Summary of a semester */
-                nextSemester?: {
-                    /** @description Semester ID */
-                    id: number;
-                    /** @description Semester name */
-                    name: string;
-                    /** @description Semester start date */
-                    startDate: Record<string, never> | string | number;
-                    /** @description Semester end date */
-                    endDate: Record<string, never> | string | number;
-                };
-                /** @description Requester platform user ID */
-                requesterId: number;
-                /** @description Reviewer platform user ID */
-                reviewerId?: number;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        UpdateExtendedRequestStatusRequestBody: {
-            /** @enum {string} */
-            status: "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reason for the action */
-            reason?: string;
-        };
-        /** @description Extended request data */
-        UpdateExtendedRequestStatusResponse: {
-            /** @description Extended request ID */
-            id: number;
-            /** @description Extended request title */
-            title: string;
-            /** @description Extended request description */
-            description?: string;
-            /** @enum {string} */
-            status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-            /** @description Reviewer or requester note */
-            reason?: string;
-            /** @description Target instance ID */
-            targetInstanceId: number;
-            /** @description Summary of a course offering */
-            courseOffering?: {
-                /** @description Course code */
-                courseCode: string;
-                /** @description Course title */
-                courseTitle: string;
-                /** @description Semester name */
-                semester: string;
-            };
-            /** @description Summary of a semester */
-            nextSemester?: {
-                /** @description Semester ID */
-                id: number;
-                /** @description Semester name */
-                name: string;
-                /** @description Semester start date */
-                startDate: Record<string, never> | string | number;
-                /** @description Semester end date */
-                endDate: Record<string, never> | string | number;
-            };
-            /** @description Requester platform user ID */
-            requesterId: number;
-            /** @description Reviewer platform user ID */
-            reviewerId?: number;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        GetRequestAuditLogsResponse: {
-            /** @description List of request audit log entries */
-            values: {
-                /** @description Audit log entry ID */
-                id: number;
-                /** @enum {string} */
-                action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                performedBy: {
-                    /** @description Platform user ID */
-                    id: number;
-                    /** @description User name */
-                    name: string;
-                    /** @description User email */
-                    email: string;
-                };
-                /** @description When the action was performed */
-                timestamp: Record<string, never> | string | number;
-                /** @description Additional notes about the action */
-                notes?: string;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        GetExtendedRequestAuditLogsResponse: {
-            /** @description List of extended request audit log entries */
-            values: {
-                /** @description Audit log entry ID */
-                id: number;
-                /** @enum {string} */
-                action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                performedBy: {
-                    /** @description Platform user ID */
-                    id: number;
-                    /** @description User name */
-                    name: string;
-                    /** @description User email */
-                    email: string;
-                };
-                /** @description When the action was performed */
-                timestamp: Record<string, never> | string | number;
-                /** @description Additional notes about the action */
-                notes?: string;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        /** @enum {string} */
-        PlatformFileType: "FILE" | "FOLDER";
-        /** @enum {string} */
-        PlatformFileViewerRole: "VIEWER" | "EDITOR" | "OWNER";
-        /** @description File or folder data structure */
-        FileData: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        /** @description File or folder data with full path */
-        FileDataWithPath: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description Full path of the file/folder */
-            path: string;
-        };
-        /** @description File version data */
-        FileVersionData: {
-            /** @description Unique identifier for the version */
-            id: number;
-            /** @description Version number */
-            versionNumber: number;
-            /** @description Size of the version in bytes */
-            sizeBytes: number;
-            /** @description When this version was created */
-            createdAt: Record<string, never> | string | number;
-        };
-        /** @description File permission data */
-        FilePermissionData: {
-            /** @description Unique identifier for the permission */
-            id: number;
-            /** @description User ID with permission */
-            platformUserId: number;
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-            user?: {
-                /** @description User ID */
-                id: number;
-                /** @description User name */
-                name: string;
-                /** @description User email */
-                email: string;
-            };
-        };
-        ListFilesRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-            parentId?: (string | null) | null;
-            /** @enum {string} */
-            type?: "FILE" | "FOLDER";
-        };
-        ListFilesResponse: {
-            /** @description List of files/folders */
-            values: {
-                /** @description Unique identifier for the file/folder */
-                id: string;
-                /** @description Name of the file/folder */
-                name: string;
-                /** @enum {string} */
-                type: "FILE" | "FOLDER";
-                /** @description Size of the file in bytes (0 for folders) */
-                sizeBytes: number;
-                /** @enum {string} */
-                visibility: "VIEWER" | "EDITOR" | "OWNER";
-                parentId?: (string | null) | null;
-                /** @description Whether the file is publicly accessible */
-                isPublic: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        GetFileRequestParams: {
-            /** @description Unique identifier for the file/folder */
-            fileId: string;
-        };
-        GetFileResponse: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-            /** @description Full path of the file/folder */
-            path: string;
-            /** @description Child files/folders (for folders) */
-            children?: {
-                /** @description Unique identifier for the file/folder */
-                id: string;
-                /** @description Name of the file/folder */
-                name: string;
-                /** @enum {string} */
-                type: "FILE" | "FOLDER";
-                /** @description Size of the file in bytes (0 for folders) */
-                sizeBytes: number;
-                /** @enum {string} */
-                visibility: "VIEWER" | "EDITOR" | "OWNER";
-                parentId?: (string | null) | null;
-                /** @description Whether the file is publicly accessible */
-                isPublic: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-            }[];
-            /** @description File versions (for files) */
-            versions?: {
-                /** @description Unique identifier for the version */
-                id: number;
-                /** @description Version number */
-                versionNumber: number;
-                /** @description Size of the version in bytes */
-                sizeBytes: number;
-                /** @description When this version was created */
-                createdAt: Record<string, never> | string | number;
-            }[];
-            /** @description File permissions */
-            permissions?: {
-                /** @description Unique identifier for the permission */
-                id: number;
-                /** @description User ID with permission */
-                platformUserId: number;
-                /** @enum {string} */
-                permission: "VIEWER" | "EDITOR" | "OWNER";
-                user?: {
-                    /** @description User ID */
-                    id: number;
-                    /** @description User name */
-                    name: string;
-                    /** @description User email */
-                    email: string;
-                };
-            }[];
-        };
-        CreateFileRequestBody: {
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            parentId?: (string | null) | null;
-            /**
-             * @description Whether the file is publicly accessible
-             * @default false
-             */
-            isPublic: boolean;
-        };
-        /** @description File or folder data structure */
-        CreateFileResponse: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        UpdateFileRequestParams: {
-            /** @description Unique identifier for the file/folder */
-            fileId: string;
-        };
-        UpdateFileRequestBody: {
-            /** @description New name for the file/folder */
-            name?: string;
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic?: boolean;
-            /** @enum {string} */
-            visibility?: "VIEWER" | "EDITOR" | "OWNER";
-        };
-        /** @description File or folder data structure */
-        UpdateFileResponse: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        DeleteFileRequestParams: {
-            /** @description Unique identifier for the file/folder */
-            fileId: string;
-        };
-        DeleteFileResponse: {
-            /** @description Whether the deletion was successful */
-            success: boolean;
-            /** @description Number of files/folders deleted (including children) */
-            deletedCount: number;
-        };
-        MoveFileRequestParams: {
-            /** @description Unique identifier for the file/folder to move */
-            fileId: string;
-        };
-        MoveFileRequestBody: {
-            targetParentId: (string | null) | null;
-        };
-        /** @description File or folder data structure */
-        MoveFileResponse: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        CopyFileRequestParams: {
-            /** @description Unique identifier for the file/folder to copy */
-            fileId: string;
-        };
-        CopyFileRequestBody: {
-            targetParentId: (string | null) | null;
-            /** @description New name for the copied file/folder */
-            newName?: string;
-        };
-        /** @description File or folder data structure */
-        CopyFileResponse: {
-            /** @description Unique identifier for the file/folder */
-            id: string;
-            /** @description Name of the file/folder */
-            name: string;
-            /** @enum {string} */
-            type: "FILE" | "FOLDER";
-            /** @description Size of the file in bytes (0 for folders) */
-            sizeBytes: number;
-            /** @enum {string} */
-            visibility: "VIEWER" | "EDITOR" | "OWNER";
-            parentId?: (string | null) | null;
-            /** @description Whether the file is publicly accessible */
-            isPublic: boolean;
-            /** @description Timestamp when the record was created */
-            createdAt?: Record<string, never> | string | number;
-            /** @description Timestamp when the record was last updated */
-            updatedAt?: Record<string, never> | string | number;
-        };
-        GetFileVersionsRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-        };
-        GetFileVersionsResponse: {
-            /** @description List of file versions */
-            values: {
-                /** @description Unique identifier for the version */
-                id: number;
-                /** @description Version number */
-                versionNumber: number;
-                /** @description Size of the version in bytes */
-                sizeBytes: number;
-                /** @description When this version was created */
-                createdAt: Record<string, never> | string | number;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        CreateFileVersionRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-        };
-        CreateFileVersionRequestBody: {
-            /** @description Size of the new version in bytes */
-            sizeBytes: number;
-            /** @description Storage path for the new version */
-            storagePath: string;
-        };
-        /** @description File version data */
-        CreateFileVersionResponse: {
-            /** @description Unique identifier for the version */
-            id: number;
-            /** @description Version number */
-            versionNumber: number;
-            /** @description Size of the version in bytes */
-            sizeBytes: number;
-            /** @description When this version was created */
-            createdAt: Record<string, never> | string | number;
-        };
-        DeleteFileVersionRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-            /** @description Unique identifier for the version */
-            versionId: number;
-        };
-        DeleteFileVersionResponse: {
-            /** @description Whether the deletion was successful */
-            success: boolean;
-        };
-        GetFilePermissionsRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-        };
-        /** @description List of file permissions */
-        GetFilePermissionsResponse: {
-            /** @description Unique identifier for the permission */
-            id: number;
-            /** @description User ID with permission */
-            platformUserId: number;
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-            user?: {
-                /** @description User ID */
-                id: number;
-                /** @description User name */
-                name: string;
-                /** @description User email */
-                email: string;
-            };
-        }[];
-        AddFilePermissionRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-        };
-        AddFilePermissionRequestBody: {
-            /** @description User ID to grant permission to */
-            platformUserId: number;
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-        };
-        /** @description File permission data */
-        AddFilePermissionResponse: {
-            /** @description Unique identifier for the permission */
-            id: number;
-            /** @description User ID with permission */
-            platformUserId: number;
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-            user?: {
-                /** @description User ID */
-                id: number;
-                /** @description User name */
-                name: string;
-                /** @description User email */
-                email: string;
-            };
-        };
-        UpdateFilePermissionRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-            /** @description Unique identifier for the permission */
-            permissionId: number;
-        };
-        UpdateFilePermissionRequestBody: {
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-        };
-        /** @description File permission data */
-        UpdateFilePermissionResponse: {
-            /** @description Unique identifier for the permission */
-            id: number;
-            /** @description User ID with permission */
-            platformUserId: number;
-            /** @enum {string} */
-            permission: "VIEWER" | "EDITOR" | "OWNER";
-            user?: {
-                /** @description User ID */
-                id: number;
-                /** @description User name */
-                name: string;
-                /** @description User email */
-                email: string;
-            };
-        };
-        RemoveFilePermissionRequestParams: {
-            /** @description Unique identifier for the file */
-            fileId: string;
-            /** @description Unique identifier for the permission */
-            permissionId: number;
-        };
-        RemoveFilePermissionResponse: {
-            /** @description Whether the removal was successful */
-            success: boolean;
-        };
-        SearchFilesRequestQuery: {
-            /**
-             * @description Page number for pagination
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Number of items per page
-             * @default 10
-             */
-            pageSize: number;
-            /** @description Search query string */
-            query: string;
-            /** @enum {string} */
-            type?: "FILE" | "FOLDER";
-        };
-        SearchFilesResponse: {
-            /** @description List of matching files/folders */
-            values: {
-                /** @description Unique identifier for the file/folder */
-                id: string;
-                /** @description Name of the file/folder */
-                name: string;
-                /** @enum {string} */
-                type: "FILE" | "FOLDER";
-                /** @description Size of the file in bytes (0 for folders) */
-                sizeBytes: number;
-                /** @enum {string} */
-                visibility: "VIEWER" | "EDITOR" | "OWNER";
-                parentId?: (string | null) | null;
-                /** @description Whether the file is publicly accessible */
-                isPublic: boolean;
-                /** @description Timestamp when the record was created */
-                createdAt?: Record<string, never> | string | number;
-                /** @description Timestamp when the record was last updated */
-                updatedAt?: Record<string, never> | string | number;
-                /** @description Full path of the file/folder */
-                path: string;
-            }[];
-            /** @description Total number of items available */
-            totalItems: number;
-            /** @description Total number of pages available */
-            totalPages: number;
-            /** @description Current page number */
-            currentPage: number;
-            /** @description Number of items per page */
-            pageSize: number;
-        };
-        User: {
-            id?: string;
-            name: string;
-            email: string;
-            /** @default false */
-            readonly emailVerified: boolean;
-            image?: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            updatedAt: string;
-        };
-        Session: {
-            id?: string;
-            /** Format: date-time */
-            expiresAt: string;
-            token: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-            ipAddress?: string;
-            userAgent?: string;
-            userId: string;
-        };
-        Account: {
-            id?: string;
-            accountId: string;
-            providerId: string;
-            userId: string;
-            accessToken?: string;
-            refreshToken?: string;
-            idToken?: string;
-            /** Format: date-time */
-            accessTokenExpiresAt?: string;
-            /** Format: date-time */
-            refreshTokenExpiresAt?: string;
-            scope?: string;
-            password?: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        Verification: {
-            id?: string;
-            identifier: string;
-            value: string;
-            /** Format: date-time */
-            expiresAt: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @default Generated at runtime
-             */
-            updatedAt: string;
-        };
+  schemas: {
+    GetMeResponse: {
+      /** @description Unique identifier for the user */
+      id: number;
+      /** @description Full name of the user */
+      name: string;
+      /** @description Email address of the user */
+      email: string;
+      /** @enum {string} */
+      role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    GetSSHKeyData: {
+      /** @description Unique identifier for the SSH key */
+      id: number;
+      /** @description Name of the SSH key */
+      name: string;
+      /** @description Public key string */
+      publicKey: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetSSHKeyResponse: {
+      /** @description List of SSH keys */
+      values: {
+        /** @description Unique identifier for the SSH key */
+        id: number;
+        /** @description Name of the SSH key */
+        name: string;
+        /** @description Public key string */
+        publicKey: string;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetSSHKeyRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+    };
+    AddSSHKeyRequestBody: {
+      /** @description Name of the SSH key */
+      name: string;
+      /** @description Public key string */
+      publicKey: string;
+    };
+    AddSSHKeyResponse: {
+      /** @description Unique identifier for the SSH key */
+      id: number;
+      /** @description Name of the SSH key */
+      name: string;
+      /** @description Public key string */
+      publicKey: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    RemoveSSHKeyRequestBody: {
+      /** @description Unique identifiers for the SSH keys to be removed */
+      keyIds: number[];
+    };
+    GetInstancesRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @description Filter instances by course ID */
+      courseId?: number;
+      /** @description Filter instances by semester ID */
+      semesterId?: number;
+    };
+    GetInstancesResponse: {
+      /** @description List of instances */
+      values: {
+        /** @description Unique identifier for the instance */
+        id: number;
+        /** @description Details of the course offering associated with the instance */
+        courseOffering?: {
+          /** @description Course code associated with the offering */
+          courseCode: string;
+          /** @description Title of the course */
+          courseTitle: string;
+          /** @description Semester in which the course is offered */
+          semester: string;
+        };
+        /** @enum {string} */
+        status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+        /** @description Details about the virtual machine hosting the instance if available */
+        vmDetails?: {
+          /** @description Hostname of the virtual machine */
+          hostname: string;
+          /** @description Operating system installed on the virtual machine */
+          os: string;
+          /** @description IP address of the virtual machine */
+          ip: string;
+          /** @description Number of CPUs allocated to the virtual machine */
+          cpus: number;
+          /** @description Amount of memory (in MB) allocated to the virtual machine */
+          memoryMB: number;
+          /** @description Disk size (in GB) of the virtual machine */
+          diskGB: number;
+        };
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetInstanceRequestParams: {
+      /** @description Unique identifier for the instance */
+      instanceId: number;
+    };
+    GetInstanceResponse: {
+      /** @description Unique identifier for the instance */
+      id: number;
+      /** @description Details of the course offering associated with the instance */
+      courseOffering?: {
+        /** @description Course code associated with the offering */
+        courseCode: string;
+        /** @description Title of the course */
+        courseTitle: string;
+        /** @description Semester in which the course is offered */
+        semester: string;
+      };
+      /** @enum {string} */
+      status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+      /** @description Details about the virtual machine hosting the instance if available */
+      vmDetails?: {
+        /** @description Hostname of the virtual machine */
+        hostname: string;
+        /** @description Operating system installed on the virtual machine */
+        os: string;
+        /** @description IP address of the virtual machine */
+        ip: string;
+        /** @description Number of CPUs allocated to the virtual machine */
+        cpus: number;
+        /** @description Amount of memory (in MB) allocated to the virtual machine */
+        memoryMB: number;
+        /** @description Disk size (in GB) of the virtual machine */
+        diskGB: number;
+      };
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description List of reverse proxy configurations associated with the instance */
+      reverseProxy: {
+        /** @description Unique identifier for the reverse proxy configuration */
+        id: number;
+        /** @description Target port on the instance */
+        targetPort: number;
+      }[];
+    };
+    CreateInstanceRequestBody: {
+      /** @description Unique identifier for the PVE template to be used */
+      pveTemplateId: number;
+      /** @description Unique identifier for the course offering associated with the instance */
+      courseOfferingId?: number;
+      /** @description Number of CPUs to allocate to the instance */
+      cpus: number;
+      /** @description Amount of memory (in MB) to allocate to the instance */
+      memoryMB: number;
+      /** @description Disk size (in GB) to allocate to the instance */
+      diskGB: number;
+    };
+    CreateInstanceResponse: {
+      /** @description Unique identifier for the newly created instance */
+      id: number;
+      /** @description Details of the course offering associated with the instance */
+      courseOffering?: {
+        /** @description Course code associated with the offering */
+        courseCode: string;
+        /** @description Title of the course */
+        courseTitle: string;
+        /** @description Semester in which the course is offered */
+        semester: string;
+      };
+      /** @enum {string} */
+      status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+      /** @description Details about the virtual machine hosting the instance if available */
+      vmDetails?: {
+        /** @description Hostname of the virtual machine */
+        hostname: string;
+        /** @description Operating system installed on the virtual machine */
+        os: string;
+        /** @description IP address of the virtual machine */
+        ip: string;
+        /** @description Number of CPUs allocated to the virtual machine */
+        cpus: number;
+        /** @description Amount of memory (in MB) allocated to the virtual machine */
+        memoryMB: number;
+        /** @description Disk size (in GB) of the virtual machine */
+        diskGB: number;
+      };
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    DeleteInstanceRequestParams: {
+      /** @description Unique identifier for the instance to be deleted */
+      instanceId: number;
+    };
+    DeleteInstanceResponse: {
+      /** @description Indicates whether the deletion was successful */
+      success: boolean;
+    };
+    CreateReverseProxyRequestBody: {
+      /** @description Target port on the instance */
+      targetPort: number;
+      /** @enum {string} */
+      type: "HTTPS" | "HTTP";
+      /** @description Description of the reverse proxy */
+      description?: string;
+    };
+    /** @description Reverse proxy configuration */
+    CreateReverseProxyResponse: {
+      /** @description Unique identifier for the reverse proxy */
+      id: number;
+      /** @description Target port on the instance */
+      targetPort: number;
+      /** @enum {string} */
+      type: "HTTPS" | "HTTP";
+      /** @description Description of the reverse proxy */
+      description?: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description List of reverse proxy configurations */
+    GetReverseProxiesResponse: {
+      /** @description Unique identifier for the reverse proxy */
+      id: number;
+      /** @description Target port on the instance */
+      targetPort: number;
+      /** @enum {string} */
+      type: "HTTPS" | "HTTP";
+      /** @description Description of the reverse proxy */
+      description?: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    }[];
+    DeleteReverseProxyRequestParams: {
+      /** @description Unique identifier for the instance */
+      instanceId: number;
+      /** @description Unique identifier for the reverse proxy to delete */
+      proxyId: number;
+    };
+    DeleteReverseProxyResponse: {
+      /** @description Indicates whether the deletion was successful */
+      success: boolean;
+    };
+    PromoteInstanceRequestParams: {
+      /** @description Unique identifier for the instance to promote */
+      instanceId: number;
+    };
+    PromoteInstanceResponse: {
+      /** @description Unique identifier for the promoted instance */
+      id: number;
+      /** @enum {string} */
+      status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+      /** @description Success message */
+      message: string;
+    };
+    GetInstanceAuditLogsResponse: {
+      /** @description List of audit log entries */
+      values: {
+        /** @description Unique identifier for the audit log entry */
+        id: number;
+        /** @description Action performed on the instance */
+        action: string;
+        performedBy: {
+          /** @description Platform user ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+        /** @description When the action was performed */
+        timestamp: Record<string, never> | string | number;
+        /** @description Additional notes about the action */
+        notes?: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @description Represents an entry in the instructor mailing list */
+    InstructorMailingListValue: {
+      /** @description Unique identifier for the mailing list value */
+      id: number;
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Represents an entry in the instructor listing */
+    InstructorValue: {
+      /** @description Unique identifier for the instructor listing */
+      id: number;
+      /** @description Full name of the instructor */
+      name: string;
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+      /** @enum {string} */
+      role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Represents a course offered in the academic system */
+    CourseValue: {
+      /** @description Unique identifier for the course */
+      id: number;
+      /** @description Course code */
+      code: string;
+      /** @description Title of the course */
+      title: string;
+      /** @description Description of the course */
+      description?: string;
+      /** @description Indicates if the course is currently active */
+      isActive: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Represents a semester in the academic system */
+    SemesterValue: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Query parameters for fetching instructor mailing list */
+    GetInstructorMailingListQuery: {
+      /** @description Filter by email address with partial match */
+      email?: string;
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+    };
+    /** @description Response structure for instructor mailing list */
+    GetInstructorMailingListResponse: {
+      /** @description List of instructor mailing list entries */
+      values: {
+        /** @description Unique identifier for the mailing list value */
+        id: number;
+        /**
+         * Format: email
+         * @description Email address of the instructor
+         */
+        email: string;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @description Request parameters for fetching instructor mailing list by ID */
+    InstructorMailingListByIdRequestParams: {
+      /** @description Unique identifier for the mailing list entry */
+      mailingId: number;
+    };
+    /** @description Request body for adding an instructor to the mailing list */
+    AddInstructorMailingListRequestBody: {
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+    };
+    /** @description Response structure after adding an instructor to the mailing list */
+    AddInstructorMailingListResponse: {
+      /** @description Unique identifier for the mailing list value */
+      id: number;
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Response structure after removing an instructor from the mailing list */
+    RemoveInstructorMailingListResponse: {
+      /** @description Indicates if the removal was successful */
+      success: boolean;
+    };
+    /** @description Query parameters for fetching instructor listing */
+    GetInstructorsRequestQuery: {
+      /** @description Filter by instructor name with partial match */
+      name?: string;
+      /** @description Filter by email address with partial match */
+      email?: string;
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+    };
+    /** @description Response structure for instructor listing */
+    GetInstructorsResponse: {
+      /** @description List of instructors */
+      values: {
+        /** @description Unique identifier for the instructor listing */
+        id: number;
+        /** @description Full name of the instructor */
+        name: string;
+        /**
+         * Format: email
+         * @description Email address of the instructor
+         */
+        email: string;
+        /** @enum {string} */
+        role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @description Request parameters for fetching instructor by ID */
+    InstructorByIdRequestParams: {
+      /** @description Unique identifier for the instructor */
+      instructorId: number;
+    };
+    /** @description Response structure for fetching instructor by ID */
+    GetInstructorByIdResponse: {
+      /** @description Unique identifier for the instructor listing */
+      id: number;
+      /** @description Full name of the instructor */
+      name: string;
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+      /** @enum {string} */
+      role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description List of courses taught by the instructor */
+      courses: {
+        /** @description Unique identifier for the course */
+        id: number;
+        /** @description Course code */
+        code: string;
+        /** @description Title of the course */
+        title: string;
+        /** @description Description of the course */
+        description?: string;
+        /** @description Indicates if the course is currently active */
+        isActive: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Request body for editing instructor details */
+    EditInstructorByIdRequestBody: {
+      /** @enum {string} */
+      role?: "ADMIN" | "INSTRUCTOR";
+      /** @description List of course IDs to be associated with the instructor */
+      courseIds?: number[];
+    };
+    /** @description Response structure after editing instructor details */
+    EditInstructorByIdResponse: {
+      /** @description Unique identifier for the instructor listing */
+      id: number;
+      /** @description Full name of the instructor */
+      name: string;
+      /**
+       * Format: email
+       * @description Email address of the instructor
+       */
+      email: string;
+      /** @enum {string} */
+      role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description List of courses taught by the instructor */
+      courses: {
+        /** @description Unique identifier for the course */
+        id: number;
+        /** @description Course code */
+        code: string;
+        /** @description Title of the course */
+        title: string;
+        /** @description Description of the course */
+        description?: string;
+        /** @description Indicates if the course is currently active */
+        isActive: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Response structure after deleting an instructor by ID */
+    DeleteInstructorByIdResponse: {
+      /** @description Indicates if the deletion was successful */
+      success: boolean;
+    };
+    /** @description Query parameters for fetching course listing */
+    GetCoursesRequestQuery: {
+      /** @description Filter by course code with partial match */
+      code?: string;
+      /** @description Filter by course title with partial match */
+      title?: string;
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+    };
+    /** @description Response structure for course listing */
+    GetCoursesResponse: {
+      /** @description List of courses */
+      values: {
+        /** @description Unique identifier for the course */
+        id: number;
+        /** @description Course code */
+        code: string;
+        /** @description Title of the course */
+        title: string;
+        /** @description Description of the course */
+        description?: string;
+        /** @description Indicates if the course is currently active */
+        isActive: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @description Request parameters for fetching course by ID */
+    CourseByIdRequestParams: {
+      /** @description Unique identifier for the course */
+      courseId: number;
+    };
+    /** @description Response structure for fetching course by ID */
+    GetCourseByIdResponse: {
+      /** @description Unique identifier for the course */
+      id: number;
+      /** @description Course code */
+      code: string;
+      /** @description Title of the course */
+      title: string;
+      /** @description Description of the course */
+      description?: string;
+      /** @description Indicates if the course is currently active */
+      isActive: boolean;
+      /** @description List of instructors teaching the course */
+      instructors: {
+        /** @description Unique identifier for the instructor listing */
+        id: number;
+        /** @description Full name of the instructor */
+        name: string;
+        /**
+         * Format: email
+         * @description Email address of the instructor
+         */
+        email: string;
+        /** @enum {string} */
+        role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description List of semesters when the course is offered */
+      semesters: {
+        /** @description Unique identifier for the semester */
+        id: number;
+        /** @description Name of the semester */
+        name: string;
+        /** @description Start date of the semester */
+        startDate: Record<string, never> | string | number;
+        /** @description End date of the semester */
+        endDate: Record<string, never> | string | number;
+        /** @description Indicates if this semester is the current active semester */
+        isCurrent: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Request body for adding a new course */
+    AddCourseRequestBody: {
+      /** @description Course code */
+      code: string;
+      /** @description Title of the course */
+      title: string;
+      /** @description Description of the course */
+      description?: string;
+    };
+    /** @description Response structure after adding a new course */
+    AddCourseResponse: {
+      /** @description Unique identifier for the course */
+      id: number;
+      /** @description Course code */
+      code: string;
+      /** @description Title of the course */
+      title: string;
+      /** @description Description of the course */
+      description?: string;
+      /** @description Indicates if the course is currently active */
+      isActive: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Request body for editing course details */
+    EditCourseByIdRequestBody: {
+      /** @description Course code */
+      code?: string;
+      /** @description Title of the course */
+      title?: string;
+      /** @description Description of the course */
+      description?: string;
+      /** @description Indicates if the course is currently active */
+      isActive?: boolean;
+    };
+    /** @description Request body for associating an instructor with a course */
+    EditCourseInstructorRequestBody: {
+      /** @description List of instructor IDs to be associated with the course */
+      instructorIds: number[];
+    };
+    /** @description Response structure after associating an instructor with a course */
+    EditCourseInstructorResponse: {
+      /** @description List of instructors associated with the course */
+      instructors: {
+        /** @description Unique identifier for the instructor listing */
+        id: number;
+        /** @description Full name of the instructor */
+        name: string;
+        /**
+         * Format: email
+         * @description Email address of the instructor
+         */
+        email: string;
+        /** @enum {string} */
+        role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Request body for associating a semester with a course */
+    EditCourseSemesterRequestBody: {
+      /** @description List of semester IDs to be associated with the course */
+      semesterIds: number[];
+    };
+    /** @description Response structure after associating a semester with a course */
+    EditCourseSemesterResponse: {
+      /** @description List of semesters associated with the course */
+      semesters: {
+        /** @description Unique identifier for the semester */
+        id: number;
+        /** @description Name of the semester */
+        name: string;
+        /** @description Start date of the semester */
+        startDate: Record<string, never> | string | number;
+        /** @description End date of the semester */
+        endDate: Record<string, never> | string | number;
+        /** @description Indicates if this semester is the current active semester */
+        isCurrent: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Query parameters for fetching semester listing */
+    GetSemestersRequestQuery: {
+      /** @description Filter by semester name with partial match */
+      name?: string;
+      /** @description Filter semesters starting from this date */
+      dateFrom?: Record<string, never> | string | number;
+      /** @description Filter semesters ending by this date */
+      dateTo?: Record<string, never> | string | number;
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+    };
+    /** @description Response structure for semester listing */
+    GetSemestersResponse: {
+      /** @description List of semesters */
+      values: {
+        /** @description Unique identifier for the semester */
+        id: number;
+        /** @description Name of the semester */
+        name: string;
+        /** @description Start date of the semester */
+        startDate: Record<string, never> | string | number;
+        /** @description End date of the semester */
+        endDate: Record<string, never> | string | number;
+        /** @description Indicates if this semester is the current active semester */
+        isCurrent: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @description Request parameters for fetching semester by ID */
+    SemesterByIdRequestParams: {
+      /** @description Unique identifier for the semester */
+      semesterId: number;
+    };
+    /** @description Response structure for fetching semester by ID */
+    GetSemesterByIdResponse: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description List of courses offered in the semester */
+      courses: {
+        /** @description Unique identifier for the course */
+        id: number;
+        /** @description Course code */
+        code: string;
+        /** @description Title of the course */
+        title: string;
+        /** @description Description of the course */
+        description?: string;
+        /** @description Indicates if the course is currently active */
+        isActive: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Request body for adding a new semester */
+    AddSemesterRequestBody: {
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+    };
+    /** @description Response structure after adding a new semester */
+    AddSemesterResponse: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Request body for editing semester details */
+    EditSemesterByIdRequestBody: {
+      /** @description Name of the semester */
+      name?: string;
+      /** @description Start date of the semester */
+      startDate?: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate?: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent?: boolean;
+    };
+    /** @description Response structure after editing semester details */
+    EditSemesterByIdResponse: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Request body for associating a course with a semester */
+    EditSemesterCourseRequestBody: {
+      /** @description List of course IDs to be associated with the semester */
+      courseIds: number[];
+    };
+    /** @description Response structure after associating a course with a semester */
+    EditSemesterCourseResponse: {
+      /** @description List of courses associated with the semester */
+      courses: {
+        /** @description Unique identifier for the course */
+        id: number;
+        /** @description Course code */
+        code: string;
+        /** @description Title of the course */
+        title: string;
+        /** @description Description of the course */
+        description?: string;
+        /** @description Indicates if the course is currently active */
+        isActive: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    /** @description Response structure after deleting a semester by ID */
+    DeleteSemesterByIdResponse: {
+      /** @description Indicates if the deletion was successful */
+      success: boolean;
+    };
+    /** @enum {string} */
+    ApprovalStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+    /** @description Request data */
+    RequestItem: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description Extended request data */
+    ExtendedRequestItem: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    CreateRequestRequestBody: {
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @description Course offering ID */
+      courseOfferingId: number;
+      /** @description Template ID */
+      pveTemplateId: number;
+      /** @description Number of CPUs requested */
+      cpus: number;
+      /** @description Memory requested in MB */
+      memoryMB: number;
+      /** @description Disk size requested in GB */
+      diskGB: number;
+    };
+    /** @description Request data */
+    CreateRequestResponse: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetRequestsRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @enum {string} */
+      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Filter by course ID */
+      courseId?: number;
+      /** @description Filter by semester ID */
+      semesterId?: number;
+    };
+    GetRequestsResponse: {
+      values: {
+        /** @description Request ID */
+        id: number;
+        /** @description Request title */
+        title: string;
+        /** @description Request description */
+        description?: string;
+        /** @enum {string} */
+        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        /** @description Reviewer or requester note */
+        reason?: string;
+        /** @description Summary of a course offering */
+        courseOffering?: {
+          /** @description Course code */
+          courseCode: string;
+          /** @description Course title */
+          courseTitle: string;
+          /** @description Semester name */
+          semester: string;
+        };
+        specs: {
+          /** @description Number of CPUs requested */
+          cpus: number;
+          /** @description Memory requested in MB */
+          memoryMB: number;
+          /** @description Disk size requested in GB */
+          diskGB: number;
+        };
+        /** @description Chosen template name */
+        templateName?: string;
+        /** @description Requester platform user ID */
+        requesterId: number;
+        /** @description Reviewer platform user ID */
+        reviewerId?: number;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    UpdateRequestStatusRequestBody: {
+      /** @enum {string} */
+      status: "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reason for the action */
+      reason?: string;
+    };
+    /** @description Request data */
+    UpdateRequestStatusResponse: {
+      /** @description Request ID */
+      id: number;
+      /** @description Request title */
+      title: string;
+      /** @description Request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      specs: {
+        /** @description Number of CPUs requested */
+        cpus: number;
+        /** @description Memory requested in MB */
+        memoryMB: number;
+        /** @description Disk size requested in GB */
+        diskGB: number;
+      };
+      /** @description Chosen template name */
+      templateName?: string;
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    CreateExtendedRequestRequestBody: {
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @description Instance to be extended */
+      targetInstanceId: number;
+    };
+    /** @description Extended request data */
+    CreateExtendedRequestResponse: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetExtendedRequestsRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @enum {string} */
+      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Filter by course ID */
+      courseId?: number;
+      /** @description Filter by semester ID */
+      semesterId?: number;
+      /** @description Filter by instance ID */
+      instanceId?: number;
+    };
+    GetExtendedRequestsResponse: {
+      values: {
+        /** @description Extended request ID */
+        id: number;
+        /** @description Extended request title */
+        title: string;
+        /** @description Extended request description */
+        description?: string;
+        /** @enum {string} */
+        status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        /** @description Reviewer or requester note */
+        reason?: string;
+        /** @description Target instance ID */
+        targetInstanceId: number;
+        /** @description Summary of a course offering */
+        courseOffering?: {
+          /** @description Course code */
+          courseCode: string;
+          /** @description Course title */
+          courseTitle: string;
+          /** @description Semester name */
+          semester: string;
+        };
+        /** @description Summary of a semester */
+        nextSemester?: {
+          /** @description Semester ID */
+          id: number;
+          /** @description Semester name */
+          name: string;
+          /** @description Semester start date */
+          startDate: Record<string, never> | string | number;
+          /** @description Semester end date */
+          endDate: Record<string, never> | string | number;
+        };
+        /** @description Requester platform user ID */
+        requesterId: number;
+        /** @description Reviewer platform user ID */
+        reviewerId?: number;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    UpdateExtendedRequestStatusRequestBody: {
+      /** @enum {string} */
+      status: "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reason for the action */
+      reason?: string;
+    };
+    /** @description Extended request data */
+    UpdateExtendedRequestStatusResponse: {
+      /** @description Extended request ID */
+      id: number;
+      /** @description Extended request title */
+      title: string;
+      /** @description Extended request description */
+      description?: string;
+      /** @enum {string} */
+      status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      /** @description Reviewer or requester note */
+      reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
+      /** @description Summary of a course offering */
+      courseOffering?: {
+        /** @description Course code */
+        courseCode: string;
+        /** @description Course title */
+        courseTitle: string;
+        /** @description Semester name */
+        semester: string;
+      };
+      /** @description Summary of a semester */
+      nextSemester?: {
+        /** @description Semester ID */
+        id: number;
+        /** @description Semester name */
+        name: string;
+        /** @description Semester start date */
+        startDate: Record<string, never> | string | number;
+        /** @description Semester end date */
+        endDate: Record<string, never> | string | number;
+      };
+      /** @description Requester platform user ID */
+      requesterId: number;
+      /** @description Reviewer platform user ID */
+      reviewerId?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetRequestAuditLogsResponse: {
+      /** @description List of request audit log entries */
+      values: {
+        /** @description Audit log entry ID */
+        id: number;
+        /** @enum {string} */
+        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        performedBy: {
+          /** @description Platform user ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+        /** @description When the action was performed */
+        timestamp: Record<string, never> | string | number;
+        /** @description Additional notes about the action */
+        notes?: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetExtendedRequestAuditLogsResponse: {
+      /** @description List of extended request audit log entries */
+      values: {
+        /** @description Audit log entry ID */
+        id: number;
+        /** @enum {string} */
+        action: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        performedBy: {
+          /** @description Platform user ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+        /** @description When the action was performed */
+        timestamp: Record<string, never> | string | number;
+        /** @description Additional notes about the action */
+        notes?: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    /** @enum {string} */
+    PlatformFileType: "FILE" | "FOLDER";
+    /** @enum {string} */
+    PlatformFileViewerRole: "VIEWER" | "EDITOR" | "OWNER";
+    /** @description File or folder data structure */
+    FileData: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    /** @description File or folder data with full path */
+    FileDataWithPath: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description Full path of the file/folder */
+      path: string;
+    };
+    /** @description File version data */
+    FileVersionData: {
+      /** @description Unique identifier for the version */
+      id: number;
+      /** @description Version number */
+      versionNumber: number;
+      /** @description Size of the version in bytes */
+      sizeBytes: number;
+      /** @description When this version was created */
+      createdAt: Record<string, never> | string | number;
+    };
+    /** @description File permission data */
+    FilePermissionData: {
+      /** @description Unique identifier for the permission */
+      id: number;
+      /** @description User ID with permission */
+      platformUserId: number;
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+      user?: {
+        /** @description User ID */
+        id: number;
+        /** @description User name */
+        name: string;
+        /** @description User email */
+        email: string;
+      };
+    };
+    ListFilesRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      parentId?: (string | null) | null;
+      /** @enum {string} */
+      type?: "FILE" | "FOLDER";
+    };
+    ListFilesResponse: {
+      /** @description List of files/folders */
+      values: {
+        /** @description Unique identifier for the file/folder */
+        id: string;
+        /** @description Name of the file/folder */
+        name: string;
+        /** @enum {string} */
+        type: "FILE" | "FOLDER";
+        /** @description Size of the file in bytes (0 for folders) */
+        sizeBytes: number;
+        /** @enum {string} */
+        visibility: "VIEWER" | "EDITOR" | "OWNER";
+        parentId?: (string | null) | null;
+        /** @description Whether the file is publicly accessible */
+        isPublic: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetFileRequestParams: {
+      /** @description Unique identifier for the file/folder */
+      fileId: string;
+    };
+    GetFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description Full path of the file/folder */
+      path: string;
+      /** @description Child files/folders (for folders) */
+      children?: {
+        /** @description Unique identifier for the file/folder */
+        id: string;
+        /** @description Name of the file/folder */
+        name: string;
+        /** @enum {string} */
+        type: "FILE" | "FOLDER";
+        /** @description Size of the file in bytes (0 for folders) */
+        sizeBytes: number;
+        /** @enum {string} */
+        visibility: "VIEWER" | "EDITOR" | "OWNER";
+        parentId?: (string | null) | null;
+        /** @description Whether the file is publicly accessible */
+        isPublic: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description File versions (for files) */
+      versions?: {
+        /** @description Unique identifier for the version */
+        id: number;
+        /** @description Version number */
+        versionNumber: number;
+        /** @description Size of the version in bytes */
+        sizeBytes: number;
+        /** @description When this version was created */
+        createdAt: Record<string, never> | string | number;
+      }[];
+      /** @description File permissions */
+      permissions?: {
+        /** @description Unique identifier for the permission */
+        id: number;
+        /** @description User ID with permission */
+        platformUserId: number;
+        /** @enum {string} */
+        permission: "VIEWER" | "EDITOR" | "OWNER";
+        user?: {
+          /** @description User ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+      }[];
+    };
+    CreateFileRequestBody: {
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      parentId?: (string | null) | null;
+      /**
+       * @description Whether the file is publicly accessible
+       * @default false
+       */
+      isPublic: boolean;
+    };
+    /** @description File or folder data structure */
+    CreateFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    UpdateFileRequestParams: {
+      /** @description Unique identifier for the file/folder */
+      fileId: string;
+    };
+    UpdateFileRequestBody: {
+      /** @description New name for the file/folder */
+      name?: string;
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic?: boolean;
+      /** @enum {string} */
+      visibility?: "VIEWER" | "EDITOR" | "OWNER";
+    };
+    /** @description File or folder data structure */
+    UpdateFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    DeleteFileRequestParams: {
+      /** @description Unique identifier for the file/folder */
+      fileId: string;
+    };
+    DeleteFileResponse: {
+      /** @description Whether the deletion was successful */
+      success: boolean;
+      /** @description Number of files/folders deleted (including children) */
+      deletedCount: number;
+    };
+    MoveFileRequestParams: {
+      /** @description Unique identifier for the file/folder to move */
+      fileId: string;
+    };
+    MoveFileRequestBody: {
+      targetParentId: (string | null) | null;
+    };
+    /** @description File or folder data structure */
+    MoveFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    CopyFileRequestParams: {
+      /** @description Unique identifier for the file/folder to copy */
+      fileId: string;
+    };
+    CopyFileRequestBody: {
+      targetParentId: (string | null) | null;
+      /** @description New name for the copied file/folder */
+      newName?: string;
+    };
+    /** @description File or folder data structure */
+    CopyFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetFileVersionsRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    GetFileVersionsResponse: {
+      /** @description List of file versions */
+      values: {
+        /** @description Unique identifier for the version */
+        id: number;
+        /** @description Version number */
+        versionNumber: number;
+        /** @description Size of the version in bytes */
+        sizeBytes: number;
+        /** @description When this version was created */
+        createdAt: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    CreateFileVersionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    CreateFileVersionRequestBody: {
+      /** @description Size of the new version in bytes */
+      sizeBytes: number;
+      /** @description Storage path for the new version */
+      storagePath: string;
+    };
+    /** @description File version data */
+    CreateFileVersionResponse: {
+      /** @description Unique identifier for the version */
+      id: number;
+      /** @description Version number */
+      versionNumber: number;
+      /** @description Size of the version in bytes */
+      sizeBytes: number;
+      /** @description When this version was created */
+      createdAt: Record<string, never> | string | number;
+    };
+    DeleteFileVersionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+      /** @description Unique identifier for the version */
+      versionId: number;
+    };
+    DeleteFileVersionResponse: {
+      /** @description Whether the deletion was successful */
+      success: boolean;
+    };
+    GetFilePermissionsRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    /** @description List of file permissions */
+    GetFilePermissionsResponse: {
+      /** @description Unique identifier for the permission */
+      id: number;
+      /** @description User ID with permission */
+      platformUserId: number;
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+      user?: {
+        /** @description User ID */
+        id: number;
+        /** @description User name */
+        name: string;
+        /** @description User email */
+        email: string;
+      };
+    }[];
+    AddFilePermissionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    AddFilePermissionRequestBody: {
+      /** @description User ID to grant permission to */
+      platformUserId: number;
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+    };
+    /** @description File permission data */
+    AddFilePermissionResponse: {
+      /** @description Unique identifier for the permission */
+      id: number;
+      /** @description User ID with permission */
+      platformUserId: number;
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+      user?: {
+        /** @description User ID */
+        id: number;
+        /** @description User name */
+        name: string;
+        /** @description User email */
+        email: string;
+      };
+    };
+    UpdateFilePermissionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+      /** @description Unique identifier for the permission */
+      permissionId: number;
+    };
+    UpdateFilePermissionRequestBody: {
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+    };
+    /** @description File permission data */
+    UpdateFilePermissionResponse: {
+      /** @description Unique identifier for the permission */
+      id: number;
+      /** @description User ID with permission */
+      platformUserId: number;
+      /** @enum {string} */
+      permission: "VIEWER" | "EDITOR" | "OWNER";
+      user?: {
+        /** @description User ID */
+        id: number;
+        /** @description User name */
+        name: string;
+        /** @description User email */
+        email: string;
+      };
+    };
+    RemoveFilePermissionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+      /** @description Unique identifier for the permission */
+      permissionId: number;
+    };
+    RemoveFilePermissionResponse: {
+      /** @description Whether the removal was successful */
+      success: boolean;
+    };
+    SearchFilesRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      /** @description Search query string */
+      query: string;
+      /** @enum {string} */
+      type?: "FILE" | "FOLDER";
+    };
+    SearchFilesResponse: {
+      /** @description List of matching files/folders */
+      values: {
+        /** @description Unique identifier for the file/folder */
+        id: string;
+        /** @description Name of the file/folder */
+        name: string;
+        /** @enum {string} */
+        type: "FILE" | "FOLDER";
+        /** @description Size of the file in bytes (0 for folders) */
+        sizeBytes: number;
+        /** @enum {string} */
+        visibility: "VIEWER" | "EDITOR" | "OWNER";
+        parentId?: (string | null) | null;
+        /** @description Whether the file is publicly accessible */
+        isPublic: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+        /** @description Full path of the file/folder */
+        path: string;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    User: {
+      id?: string;
+      name: string;
+      email: string;
+      /** @default false */
+      readonly emailVerified: boolean;
+      image?: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      createdAt: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      updatedAt: string;
+    };
+    Session: {
+      id?: string;
+      /** Format: date-time */
+      expiresAt: string;
+      token: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      ipAddress?: string;
+      userAgent?: string;
+      userId: string;
+    };
+    Account: {
+      id?: string;
+      accountId: string;
+      providerId: string;
+      userId: string;
+      accessToken?: string;
+      refreshToken?: string;
+      idToken?: string;
+      /** Format: date-time */
+      accessTokenExpiresAt?: string;
+      /** Format: date-time */
+      refreshTokenExpiresAt?: string;
+      scope?: string;
+      password?: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    Verification: {
+      id?: string;
+      identifier: string;
+      value: string;
+      /** Format: date-time */
+      expiresAt: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      createdAt: string;
+      /**
+       * Format: date-time
+       * @default Generated at runtime
+       */
+      updatedAt: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getApiUserMe: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetMeResponse"];
-                };
-            };
-        };
-    };
-    "getApiUserSsh-keys": {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetSSHKeyResponse"];
-                };
-            };
-        };
-    };
-    "postApiUserSsh-keys": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddSSHKeyRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["AddSSHKeyRequestBody"];
-                "multipart/form-data": components["schemas"]["AddSSHKeyRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddSSHKeyResponse"];
-                };
-            };
-        };
-    };
-    "deleteApiUserSsh-keys": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RemoveSSHKeyRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["RemoveSSHKeyRequestBody"];
-                "multipart/form-data": components["schemas"]["RemoveSSHKeyRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Number of SSH keys removed */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": number;
-                };
-            };
-        };
-    };
-    getApiInstances: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                courseId?: number;
-                semesterId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstancesResponse"];
-                };
-            };
-        };
-    };
-    postApiInstances: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateInstanceRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateInstanceRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateInstanceRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateInstanceResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    getApiInstancesAdmin: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                courseId?: number;
-                semesterId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstancesResponse"];
-                };
-            };
-        };
-    };
-    getApiInstancesInstructor: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                courseId?: number;
-                semesterId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstancesResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    getApiInstancesByInstanceId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstanceResponse"];
-                };
-            };
-        };
-    };
-    deleteApiInstancesByInstanceId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeleteInstanceResponse"];
-                };
-            };
-        };
-    };
-    "getApiInstancesByInstanceIdReverse-proxies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of reverse proxy configurations */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetReverseProxiesResponse"];
-                };
-            };
-        };
-    };
-    "postApiInstancesByInstanceIdReverse-proxies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateReverseProxyRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateReverseProxyRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateReverseProxyRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Reverse proxy configuration */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateReverseProxyResponse"];
-                };
-            };
-        };
-    };
-    "deleteApiInstancesByInstanceIdReverse-proxiesByProxyId": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-                proxyId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeleteReverseProxyResponse"];
-                };
-            };
-        };
-    };
-    patchApiInstancesByInstanceIdPromote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PromoteInstanceResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    "getApiInstancesByInstanceIdAudit-logs": {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path: {
-                instanceId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstanceAuditLogsResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    "getApiAcademicMailing-list": {
-        parameters: {
-            query?: {
-                email?: string;
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for instructor mailing list */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstructorMailingListResponse"];
-                };
-            };
-        };
-    };
-    "postApiAcademicMailing-list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Request body for adding an instructor to the mailing list */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddInstructorMailingListRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["AddInstructorMailingListRequestBody"];
-                "multipart/form-data": components["schemas"]["AddInstructorMailingListRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after adding an instructor to the mailing list */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddInstructorMailingListResponse"];
-                };
-            };
-        };
-    };
-    "deleteApiAcademicMailing-listByMailingId": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                mailingId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure after removing an instructor from the mailing list */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RemoveInstructorMailingListResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicInstructors: {
-        parameters: {
-            query?: {
-                name?: string;
-                email?: string;
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for instructor listing */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstructorsResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicInstructorsByInstructorId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instructorId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for fetching instructor by ID */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetInstructorByIdResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicInstructorsByInstructorId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                instructorId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for editing instructor details */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditInstructorByIdRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditInstructorByIdRequestBody"];
-                "multipart/form-data": components["schemas"]["EditInstructorByIdRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after editing instructor details */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditInstructorByIdResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicCourses: {
-        parameters: {
-            query?: {
-                code?: string;
-                title?: string;
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for course listing */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetCoursesResponse"];
-                };
-            };
-        };
-    };
-    postApiAcademicCourses: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Request body for adding a new course */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddCourseRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["AddCourseRequestBody"];
-                "multipart/form-data": components["schemas"]["AddCourseRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after adding a new course */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddCourseResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicCoursesByCourseId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                courseId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for fetching course by ID */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetCourseByIdResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicCoursesByCourseId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                courseId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for editing course details */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditCourseByIdRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditCourseByIdRequestBody"];
-                "multipart/form-data": components["schemas"]["EditCourseByIdRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after adding a new course */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddCourseResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicCoursesByCourseIdInstructors: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                courseId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for associating an instructor with a course */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditCourseInstructorRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditCourseInstructorRequestBody"];
-                "multipart/form-data": components["schemas"]["EditCourseInstructorRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after associating an instructor with a course */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditCourseInstructorResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicCoursesByCourseIdSemesters: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                courseId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for associating a semester with a course */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditCourseSemesterRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditCourseSemesterRequestBody"];
-                "multipart/form-data": components["schemas"]["EditCourseSemesterRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after associating a semester with a course */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditCourseSemesterResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicSemesters: {
-        parameters: {
-            query?: {
-                name?: string;
-                dateFrom?: Record<string, never> | string | number;
-                dateTo?: Record<string, never> | string | number;
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for semester listing */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetSemestersResponse"];
-                };
-            };
-        };
-    };
-    postApiAcademicSemesters: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Request body for adding a new semester */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddSemesterRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["AddSemesterRequestBody"];
-                "multipart/form-data": components["schemas"]["AddSemesterRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after adding a new semester */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddSemesterResponse"];
-                };
-            };
-        };
-    };
-    getApiAcademicSemestersBySemesterId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                semesterId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure for fetching semester by ID */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetSemesterByIdResponse"];
-                };
-            };
-        };
-    };
-    deleteApiAcademicSemestersBySemesterId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                semesterId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response structure after deleting a semester by ID */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeleteSemesterByIdResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicSemestersBySemesterId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                semesterId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for editing semester details */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditSemesterByIdRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditSemesterByIdRequestBody"];
-                "multipart/form-data": components["schemas"]["EditSemesterByIdRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after editing semester details */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditSemesterByIdResponse"];
-                };
-            };
-        };
-    };
-    patchApiAcademicSemestersBySemesterIdCourses: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                semesterId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Request body for associating a course with a semester */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EditSemesterCourseRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["EditSemesterCourseRequestBody"];
-                "multipart/form-data": components["schemas"]["EditSemesterCourseRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Response structure after associating a course with a semester */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditSemesterCourseResponse"];
-                };
-            };
-        };
-    };
-    getApiRequests: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                courseId?: number;
-                semesterId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetRequestsResponse"];
-                };
-            };
-        };
-    };
-    postApiRequests: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateRequestRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateRequestRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateRequestRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Request data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateRequestResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    patchApiRequestsByRequestIdStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateRequestStatusRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["UpdateRequestStatusRequestBody"];
-                "multipart/form-data": components["schemas"]["UpdateRequestStatusRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Request data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UpdateRequestStatusResponse"];
-                };
-            };
-        };
-    };
-    "getApiRequestsByRequestIdAudit-logs": {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path: {
-                requestId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetRequestAuditLogsResponse"];
-                };
-            };
-        };
-    };
-    "getApiExtended-requests": {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-                courseId?: number;
-                semesterId?: number;
-                instanceId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetExtendedRequestsResponse"];
-                };
-            };
-        };
-    };
-    "postApiExtended-requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateExtendedRequestRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateExtendedRequestRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateExtendedRequestRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Extended request data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateExtendedRequestResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    "patchApiExtended-requestsByExtendedRequestIdStatus": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                extendedRequestId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
-                "multipart/form-data": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
-            };
-        };
-        responses: {
-            /** @description Extended request data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UpdateExtendedRequestStatusResponse"];
-                };
-            };
-        };
-    };
-    "getApiExtended-requestsByExtendedRequestIdAudit-logs": {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path: {
-                extendedRequestId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetExtendedRequestAuditLogsResponse"];
-                };
-            };
-        };
-    };
-    getApiStorageFiles: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-                parentId?: (string | null) | null;
-                type?: "FILE" | "FOLDER";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListFilesResponse"];
-                };
-            };
-        };
-    };
-    postApiStorageFiles: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateFileRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateFileRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateFileRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File or folder data structure */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateFileResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 409 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    getApiStorageFilesSearch: {
-        parameters: {
-            query: {
-                page?: number;
-                pageSize?: number;
-                query: string;
-                type?: "FILE" | "FOLDER";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SearchFilesResponse"];
-                };
-            };
-        };
-    };
-    getApiStorageFilesByFileId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetFileResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    deleteApiStorageFilesByFileId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeleteFileResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    patchApiStorageFilesByFileId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateFileRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["UpdateFileRequestBody"];
-                "multipart/form-data": components["schemas"]["UpdateFileRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File or folder data structure */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UpdateFileResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 409 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    postApiStorageFilesByFileIdMove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MoveFileRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["MoveFileRequestBody"];
-                "multipart/form-data": components["schemas"]["MoveFileRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File or folder data structure */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MoveFileResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 409 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    postApiStorageFilesByFileIdCopy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CopyFileRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CopyFileRequestBody"];
-                "multipart/form-data": components["schemas"]["CopyFileRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File or folder data structure */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CopyFileResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 409 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    getApiStorageFilesByFileIdVersions: {
-        parameters: {
-            query?: {
-                page?: number;
-                pageSize?: number;
-            };
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetFileVersionsResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    postApiStorageFilesByFileIdVersions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateFileVersionRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["CreateFileVersionRequestBody"];
-                "multipart/form-data": components["schemas"]["CreateFileVersionRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File version data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateFileVersionResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    deleteApiStorageFilesByFileIdVersionsByVersionId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-                versionId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeleteFileVersionResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    getApiStorageFilesByFileIdPermissions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of file permissions */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetFilePermissionsResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    postApiStorageFilesByFileIdPermissions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddFilePermissionRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["AddFilePermissionRequestBody"];
-                "multipart/form-data": components["schemas"]["AddFilePermissionRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File permission data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddFilePermissionResponse"];
-                };
-            };
-            /** @description Response for status 400 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 409 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    deleteApiStorageFilesByFileIdPermissionsByPermissionId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-                permissionId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Response for status 200 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RemoveFilePermissionResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    patchApiStorageFilesByFileIdPermissionsByPermissionId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                fileId: string;
-                permissionId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateFilePermissionRequestBody"];
-                "application/x-www-form-urlencoded": components["schemas"]["UpdateFilePermissionRequestBody"];
-                "multipart/form-data": components["schemas"]["UpdateFilePermissionRequestBody"];
-            };
-        };
-        responses: {
-            /** @description File permission data */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UpdateFilePermissionResponse"];
-                };
-            };
-            /** @description Response for status 403 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-            /** @description Response for status 404 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Error message */
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    socialSignIn: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description Callback URL to redirect to after the user has signed in */
-                    callbackURL?: string | null;
-                    newUserCallbackURL?: string | null;
-                    /** @description Callback URL to redirect to if an error happens */
-                    errorCallbackURL?: string | null;
-                    provider: string;
-                    /** @description Disable automatic redirection to the provider. Useful for handling the redirection yourself */
-                    disableRedirect?: boolean | null;
-                    idToken?: {
-                        /** @description ID token from the provider */
-                        token: string;
-                        /** @description Nonce used to generate the token */
-                        nonce?: string | null;
-                        /** @description Access token from the provider */
-                        accessToken?: string | null;
-                        /** @description Refresh token from the provider */
-                        refreshToken?: string | null;
-                        /** @description Expiry date of the token */
-                        expiresAt?: number | null;
-                    } | null;
-                    /** @description Array of scopes to request from the provider. This will override the default scopes passed. */
-                    scopes?: unknown[] | null;
-                    /** @description Explicitly request sign-up. Useful when disableImplicitSignUp is true for this provider */
-                    requestSignUp?: boolean | null;
-                    /** @description The login hint to use for the authorization code request */
-                    loginHint?: string | null;
-                    additionalData?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success - Returns either session details or redirect URL */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        token: string;
-                        user: components["schemas"]["User"];
-                        url?: string;
-                        /** @enum {boolean} */
-                        redirect: false;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    getSession: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        session: components["schemas"]["Session"];
-                        user: components["schemas"]["User"];
-                    } | null;
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    signOut: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": Record<string, never>;
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        success?: boolean;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    signUpWithEmailAndPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description The name of the user */
-                    name: string;
-                    /** @description The email of the user */
-                    email: string;
-                    /** @description The password of the user */
-                    password: string;
-                    /** @description The profile image URL of the user */
-                    image?: string;
-                    /** @description The URL to use for email verification callback */
-                    callbackURL?: string;
-                    /** @description If this is false, the session will not be remembered. Default is `true`. */
-                    rememberMe?: boolean;
-                };
-            };
-        };
-        responses: {
-            /** @description Successfully created user */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Authentication token for the session */
-                        token?: string | null;
-                        user: {
-                            /** @description The unique identifier of the user */
-                            id: string;
-                            /**
-                             * Format: email
-                             * @description The email address of the user
-                             */
-                            email: string;
-                            /** @description The name of the user */
-                            name: string;
-                            /**
-                             * Format: uri
-                             * @description The profile image URL of the user
-                             */
-                            image?: string | null;
-                            /** @description Whether the email has been verified */
-                            emailVerified: boolean;
-                            /**
-                             * Format: date-time
-                             * @description When the user was created
-                             */
-                            createdAt: string;
-                            /**
-                             * Format: date-time
-                             * @description When the user was last updated
-                             */
-                            updatedAt: string;
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Unprocessable Entity. User already exists or failed to create user. */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    signInEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description Email of the user */
-                    email: string;
-                    /** @description Password of the user */
-                    password: string;
-                    /** @description Callback URL to use as a redirect for email verification */
-                    callbackURL?: string | null;
-                    rememberMe?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success - Returns either session details or redirect URL */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @enum {boolean} */
-                        redirect: false;
-                        /** @description Session token */
-                        token: string;
-                        url?: string | null;
-                        user: components["schemas"]["User"];
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    resetPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The new password to set */
-                    newPassword: string;
-                    /** @description The token to reset the password */
-                    token?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status?: boolean;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    sendVerificationEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description The email to send the verification email to
-                     * @example user@example.com
-                     */
-                    email: string;
-                    /**
-                     * @description The URL to use for email verification callback
-                     * @example https://example.com/callback
-                     */
-                    callbackURL?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Indicates if the email was sent successfully
-                         * @example true
-                         */
-                        status?: boolean;
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Error message
-                         * @example Verification email isn't enabled
-                         */
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    changeEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The new email address to set must be a valid email address */
-                    newEmail: string;
-                    /** @description The URL to redirect to after email verification */
-                    callbackURL?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Email change request processed successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        user?: components["schemas"]["User"];
-                        /** @description Indicates if the request was successful */
-                        status: boolean;
-                        /**
-                         * @description Status message of the email change process
-                         * @enum {string|null}
-                         */
-                        message?: "Email updated" | "Verification email sent" | null;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Unprocessable Entity. Email already exists */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    changePassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The new password to set */
-                    newPassword: string;
-                    /** @description The current password is required */
-                    currentPassword: string;
-                    /** @description Must be a boolean value */
-                    revokeOtherSessions?: boolean | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Password successfully changed */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description New session token if other sessions were revoked */
-                        token?: string | null;
-                        user: {
-                            /** @description The unique identifier of the user */
-                            id: string;
-                            /**
-                             * Format: email
-                             * @description The email address of the user
-                             */
-                            email: string;
-                            /** @description The name of the user */
-                            name: string;
-                            /**
-                             * Format: uri
-                             * @description The profile image URL of the user
-                             */
-                            image?: string | null;
-                            /** @description Whether the email has been verified */
-                            emailVerified: boolean;
-                            /**
-                             * Format: date-time
-                             * @description When the user was created
-                             */
-                            createdAt: string;
-                            /**
-                             * Format: date-time
-                             * @description When the user was last updated
-                             */
-                            updatedAt: string;
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    updateUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description The name of the user */
-                    name?: string;
-                    /** @description The image of the user */
-                    image?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        user?: components["schemas"]["User"];
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    deleteUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description The callback URL to redirect to after the user is deleted */
-                    callbackURL?: string;
-                    /** @description The user's password. Required if session is not fresh */
-                    password?: string;
-                    /** @description The deletion verification token */
-                    token?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description User deletion processed successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Indicates if the operation was successful */
-                        success: boolean;
-                        /**
-                         * @description Status message of the deletion process
-                         * @enum {string}
-                         */
-                        message: "User deleted" | "Verification email sent";
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    requestPasswordReset: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The email address of the user to send a password reset email to */
-                    email: string;
-                    /** @description The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with a query parameter `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?token=VALID_TOKEN */
-                    redirectTo?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status?: boolean;
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    resetPasswordCallback: {
-        parameters: {
-            query: {
-                /** @description The URL to redirect the user to reset their password */
-                callbackURL: string;
-            };
-            header?: never;
-            path: {
-                /** @description The token to reset the password */
-                token: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        token?: string;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    listUserSessions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Session"][];
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    linkSocialAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The URL to redirect to after the user has signed in */
-                    callbackURL?: string | null;
-                    provider: string;
-                    idToken?: {
-                        token: string;
-                        nonce?: string | null;
-                        accessToken?: string | null;
-                        refreshToken?: string | null;
-                        scopes?: unknown[] | null;
-                    } | null;
-                    requestSignUp?: boolean | null;
-                    /** @description Additional scopes to request from the provider */
-                    scopes?: unknown[] | null;
-                    /** @description The URL to redirect to if there is an error during the link process */
-                    errorCallbackURL?: string | null;
-                    /** @description Disable automatic redirection to the provider. Useful for handling the redirection yourself */
-                    disableRedirect?: boolean | null;
-                    additionalData?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description The authorization URL to redirect the user to */
-                        url?: string;
-                        /** @description Indicates if the user should be redirected to the authorization URL */
-                        redirect: boolean;
-                        status?: boolean;
-                    };
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
-    listUserAccounts: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        id: string;
-                        providerId: string;
-                        /** Format: date-time */
-                        createdAt: string;
-                        /** Format: date-time */
-                        updatedAt: string;
-                        accountId: string;
-                        userId: string;
-                        scopes: string[];
-                    }[];
-                };
-            };
-            /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Unauthorized. Due to missing or invalid authentication. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message: string;
-                    };
-                };
-            };
-            /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Not Found. The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-            /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        message?: string;
-                    };
-                };
-            };
-        };
-    };
+  getApiUserMe: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetMeResponse"];
+        };
+      };
+    };
+  };
+  "getApiUserSsh-keys": {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetSSHKeyResponse"];
+        };
+      };
+    };
+  };
+  "postApiUserSsh-keys": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddSSHKeyRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["AddSSHKeyRequestBody"];
+        "multipart/form-data": components["schemas"]["AddSSHKeyRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddSSHKeyResponse"];
+        };
+      };
+    };
+  };
+  "deleteApiUserSsh-keys": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RemoveSSHKeyRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["RemoveSSHKeyRequestBody"];
+        "multipart/form-data": components["schemas"]["RemoveSSHKeyRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Number of SSH keys removed */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "text/plain": number;
+        };
+      };
+    };
+  };
+  getApiInstances: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        courseId?: number;
+        semesterId?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstancesResponse"];
+        };
+      };
+    };
+  };
+  postApiInstances: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateInstanceRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateInstanceRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateInstanceRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateInstanceResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiInstancesAdmin: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        courseId?: number;
+        semesterId?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstancesResponse"];
+        };
+      };
+    };
+  };
+  getApiInstancesInstructor: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        courseId?: number;
+        semesterId?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstancesResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiInstancesByInstanceId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstanceResponse"];
+        };
+      };
+    };
+  };
+  deleteApiInstancesByInstanceId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeleteInstanceResponse"];
+        };
+      };
+    };
+  };
+  "getApiInstancesByInstanceIdReverse-proxies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of reverse proxy configurations */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetReverseProxiesResponse"];
+        };
+      };
+    };
+  };
+  "postApiInstancesByInstanceIdReverse-proxies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateReverseProxyRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateReverseProxyRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateReverseProxyRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Reverse proxy configuration */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateReverseProxyResponse"];
+        };
+      };
+    };
+  };
+  "deleteApiInstancesByInstanceIdReverse-proxiesByProxyId": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+        proxyId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeleteReverseProxyResponse"];
+        };
+      };
+    };
+  };
+  patchApiInstancesByInstanceIdPromote: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PromoteInstanceResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "getApiInstancesByInstanceIdAudit-logs": {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstanceAuditLogsResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "getApiAcademicMailing-list": {
+    parameters: {
+      query?: {
+        email?: string;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for instructor mailing list */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstructorMailingListResponse"];
+        };
+      };
+    };
+  };
+  "postApiAcademicMailing-list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Request body for adding an instructor to the mailing list */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddInstructorMailingListRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["AddInstructorMailingListRequestBody"];
+        "multipart/form-data": components["schemas"]["AddInstructorMailingListRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after adding an instructor to the mailing list */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddInstructorMailingListResponse"];
+        };
+      };
+    };
+  };
+  "deleteApiAcademicMailing-listByMailingId": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        mailingId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure after removing an instructor from the mailing list */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RemoveInstructorMailingListResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicInstructors: {
+    parameters: {
+      query?: {
+        name?: string;
+        email?: string;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for instructor listing */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstructorsResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicInstructorsByInstructorId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instructorId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for fetching instructor by ID */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstructorByIdResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicInstructorsByInstructorId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instructorId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for editing instructor details */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditInstructorByIdRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditInstructorByIdRequestBody"];
+        "multipart/form-data": components["schemas"]["EditInstructorByIdRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after editing instructor details */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EditInstructorByIdResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicCourses: {
+    parameters: {
+      query?: {
+        code?: string;
+        title?: string;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for course listing */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetCoursesResponse"];
+        };
+      };
+    };
+  };
+  postApiAcademicCourses: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Request body for adding a new course */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddCourseRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["AddCourseRequestBody"];
+        "multipart/form-data": components["schemas"]["AddCourseRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after adding a new course */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddCourseResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicCoursesByCourseId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        courseId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for fetching course by ID */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetCourseByIdResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicCoursesByCourseId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        courseId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for editing course details */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditCourseByIdRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditCourseByIdRequestBody"];
+        "multipart/form-data": components["schemas"]["EditCourseByIdRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after adding a new course */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddCourseResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicCoursesByCourseIdInstructors: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        courseId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for associating an instructor with a course */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditCourseInstructorRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditCourseInstructorRequestBody"];
+        "multipart/form-data": components["schemas"]["EditCourseInstructorRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after associating an instructor with a course */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EditCourseInstructorResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicCoursesByCourseIdSemesters: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        courseId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for associating a semester with a course */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditCourseSemesterRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditCourseSemesterRequestBody"];
+        "multipart/form-data": components["schemas"]["EditCourseSemesterRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after associating a semester with a course */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EditCourseSemesterResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicSemesters: {
+    parameters: {
+      query?: {
+        name?: string;
+        dateFrom?: Record<string, never> | string | number;
+        dateTo?: Record<string, never> | string | number;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for semester listing */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetSemestersResponse"];
+        };
+      };
+    };
+  };
+  postApiAcademicSemesters: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Request body for adding a new semester */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddSemesterRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["AddSemesterRequestBody"];
+        "multipart/form-data": components["schemas"]["AddSemesterRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after adding a new semester */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddSemesterResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicSemestersBySemesterId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        semesterId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for fetching semester by ID */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetSemesterByIdResponse"];
+        };
+      };
+    };
+  };
+  deleteApiAcademicSemestersBySemesterId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        semesterId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure after deleting a semester by ID */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeleteSemesterByIdResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicSemestersBySemesterId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        semesterId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for editing semester details */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditSemesterByIdRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditSemesterByIdRequestBody"];
+        "multipart/form-data": components["schemas"]["EditSemesterByIdRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after editing semester details */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EditSemesterByIdResponse"];
+        };
+      };
+    };
+  };
+  patchApiAcademicSemestersBySemesterIdCourses: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        semesterId: number;
+      };
+      cookie?: never;
+    };
+    /** @description Request body for associating a course with a semester */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditSemesterCourseRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditSemesterCourseRequestBody"];
+        "multipart/form-data": components["schemas"]["EditSemesterCourseRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response structure after associating a course with a semester */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EditSemesterCourseResponse"];
+        };
+      };
+    };
+  };
+  getApiRequests: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        courseId?: number;
+        semesterId?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetRequestsResponse"];
+        };
+      };
+    };
+  };
+  postApiRequests: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequestRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateRequestRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateRequestRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateRequestResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  patchApiRequestsByRequestIdStatus: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        requestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateRequestStatusRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateRequestStatusRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateRequestStatusRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UpdateRequestStatusResponse"];
+        };
+      };
+    };
+  };
+  "getApiRequestsByRequestIdAudit-logs": {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path: {
+        requestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetRequestAuditLogsResponse"];
+        };
+      };
+    };
+  };
+  "getApiExtended-requests": {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+        courseId?: number;
+        semesterId?: number;
+        instanceId?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetExtendedRequestsResponse"];
+        };
+      };
+    };
+  };
+  "postApiExtended-requests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateExtendedRequestRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateExtendedRequestRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateExtendedRequestRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Extended request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateExtendedRequestResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "patchApiExtended-requestsByExtendedRequestIdStatus": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        extendedRequestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateExtendedRequestStatusRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Extended request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UpdateExtendedRequestStatusResponse"];
+        };
+      };
+    };
+  };
+  "getApiExtended-requestsByExtendedRequestIdAudit-logs": {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path: {
+        extendedRequestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetExtendedRequestAuditLogsResponse"];
+        };
+      };
+    };
+  };
+  getApiStorageFiles: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        parentId?: (string | null) | null;
+        type?: "FILE" | "FOLDER";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListFilesResponse"];
+        };
+      };
+    };
+  };
+  postApiStorageFiles: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateFileRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File or folder data structure */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateFileResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesSearch: {
+    parameters: {
+      query: {
+        page?: number;
+        pageSize?: number;
+        query: string;
+        type?: "FILE" | "FOLDER";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SearchFilesResponse"];
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetFileResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeleteFileResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  patchApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateFileRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File or folder data structure */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UpdateFileResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdMove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MoveFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["MoveFileRequestBody"];
+        "multipart/form-data": components["schemas"]["MoveFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File or folder data structure */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MoveFileResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdCopy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CopyFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CopyFileRequestBody"];
+        "multipart/form-data": components["schemas"]["CopyFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File or folder data structure */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CopyFileResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileIdVersions: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetFileVersionsResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdVersions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateFileVersionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateFileVersionRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateFileVersionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File version data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateFileVersionResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileIdVersionsByVersionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        versionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeleteFileVersionResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileIdPermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of file permissions */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetFilePermissionsResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdPermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddFilePermissionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["AddFilePermissionRequestBody"];
+        "multipart/form-data": components["schemas"]["AddFilePermissionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File permission data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AddFilePermissionResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileIdPermissionsByPermissionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        permissionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RemoveFilePermissionResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  patchApiStorageFilesByFileIdPermissionsByPermissionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        permissionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateFilePermissionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateFilePermissionRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateFilePermissionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description File permission data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UpdateFilePermissionResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  socialSignIn: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Callback URL to redirect to after the user has signed in */
+          callbackURL?: string | null;
+          newUserCallbackURL?: string | null;
+          /** @description Callback URL to redirect to if an error happens */
+          errorCallbackURL?: string | null;
+          provider: string;
+          /** @description Disable automatic redirection to the provider. Useful for handling the redirection yourself */
+          disableRedirect?: boolean | null;
+          idToken?: {
+            /** @description ID token from the provider */
+            token: string;
+            /** @description Nonce used to generate the token */
+            nonce?: string | null;
+            /** @description Access token from the provider */
+            accessToken?: string | null;
+            /** @description Refresh token from the provider */
+            refreshToken?: string | null;
+            /** @description Expiry date of the token */
+            expiresAt?: number | null;
+          } | null;
+          /** @description Array of scopes to request from the provider. This will override the default scopes passed. */
+          scopes?: unknown[] | null;
+          /** @description Explicitly request sign-up. Useful when disableImplicitSignUp is true for this provider */
+          requestSignUp?: boolean | null;
+          /** @description The login hint to use for the authorization code request */
+          loginHint?: string | null;
+          additionalData?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success - Returns either session details or redirect URL */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            token: string;
+            user: components["schemas"]["User"];
+            url?: string;
+            /** @enum {boolean} */
+            redirect: false;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  getSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            session: components["schemas"]["Session"];
+            user: components["schemas"]["User"];
+          } | null;
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  signOut: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": Record<string, never>;
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            success?: boolean;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  signUpWithEmailAndPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          /** @description The name of the user */
+          name: string;
+          /** @description The email of the user */
+          email: string;
+          /** @description The password of the user */
+          password: string;
+          /** @description The profile image URL of the user */
+          image?: string;
+          /** @description The URL to use for email verification callback */
+          callbackURL?: string;
+          /** @description If this is false, the session will not be remembered. Default is `true`. */
+          rememberMe?: boolean;
+        };
+      };
+    };
+    responses: {
+      /** @description Successfully created user */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description Authentication token for the session */
+            token?: string | null;
+            user: {
+              /** @description The unique identifier of the user */
+              id: string;
+              /**
+               * Format: email
+               * @description The email address of the user
+               */
+              email: string;
+              /** @description The name of the user */
+              name: string;
+              /**
+               * Format: uri
+               * @description The profile image URL of the user
+               */
+              image?: string | null;
+              /** @description Whether the email has been verified */
+              emailVerified: boolean;
+              /**
+               * Format: date-time
+               * @description When the user was created
+               */
+              createdAt: string;
+              /**
+               * Format: date-time
+               * @description When the user was last updated
+               */
+              updatedAt: string;
+            };
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Unprocessable Entity. User already exists or failed to create user. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  signInEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Email of the user */
+          email: string;
+          /** @description Password of the user */
+          password: string;
+          /** @description Callback URL to use as a redirect for email verification */
+          callbackURL?: string | null;
+          rememberMe?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success - Returns either session details or redirect URL */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @enum {boolean} */
+            redirect: false;
+            /** @description Session token */
+            token: string;
+            url?: string | null;
+            user: components["schemas"]["User"];
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  resetPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The new password to set */
+          newPassword: string;
+          /** @description The token to reset the password */
+          token?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            status?: boolean;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  sendVerificationEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          /**
+           * @description The email to send the verification email to
+           * @example user@example.com
+           */
+          email: string;
+          /**
+           * @description The URL to use for email verification callback
+           * @example https://example.com/callback
+           */
+          callbackURL?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /**
+             * @description Indicates if the email was sent successfully
+             * @example true
+             */
+            status?: boolean;
+          };
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /**
+             * @description Error message
+             * @example Verification email isn't enabled
+             */
+            message?: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  changeEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The new email address to set must be a valid email address */
+          newEmail: string;
+          /** @description The URL to redirect to after email verification */
+          callbackURL?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Email change request processed successfully */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            user?: components["schemas"]["User"];
+            /** @description Indicates if the request was successful */
+            status: boolean;
+            /**
+             * @description Status message of the email change process
+             * @enum {string|null}
+             */
+            message?: "Email updated" | "Verification email sent" | null;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Unprocessable Entity. Email already exists */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  changePassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The new password to set */
+          newPassword: string;
+          /** @description The current password is required */
+          currentPassword: string;
+          /** @description Must be a boolean value */
+          revokeOtherSessions?: boolean | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Password successfully changed */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description New session token if other sessions were revoked */
+            token?: string | null;
+            user: {
+              /** @description The unique identifier of the user */
+              id: string;
+              /**
+               * Format: email
+               * @description The email address of the user
+               */
+              email: string;
+              /** @description The name of the user */
+              name: string;
+              /**
+               * Format: uri
+               * @description The profile image URL of the user
+               */
+              image?: string | null;
+              /** @description Whether the email has been verified */
+              emailVerified: boolean;
+              /**
+               * Format: date-time
+               * @description When the user was created
+               */
+              createdAt: string;
+              /**
+               * Format: date-time
+               * @description When the user was last updated
+               */
+              updatedAt: string;
+            };
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  updateUser: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          /** @description The name of the user */
+          name?: string;
+          /** @description The image of the user */
+          image?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            user?: components["schemas"]["User"];
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  deleteUser: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          /** @description The callback URL to redirect to after the user is deleted */
+          callbackURL?: string;
+          /** @description The user's password. Required if session is not fresh */
+          password?: string;
+          /** @description The deletion verification token */
+          token?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description User deletion processed successfully */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description Indicates if the operation was successful */
+            success: boolean;
+            /**
+             * @description Status message of the deletion process
+             * @enum {string}
+             */
+            message: "User deleted" | "Verification email sent";
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  requestPasswordReset: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The email address of the user to send a password reset email to */
+          email: string;
+          /** @description The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with a query parameter `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?token=VALID_TOKEN */
+          redirectTo?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            status?: boolean;
+            message?: string;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  resetPasswordCallback: {
+    parameters: {
+      query: {
+        /** @description The URL to redirect the user to reset their password */
+        callbackURL: string;
+      };
+      header?: never;
+      path: {
+        /** @description The token to reset the password */
+        token: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            token?: string;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  listUserSessions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Session"][];
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  linkSocialAccount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The URL to redirect to after the user has signed in */
+          callbackURL?: string | null;
+          provider: string;
+          idToken?: {
+            token: string;
+            nonce?: string | null;
+            accessToken?: string | null;
+            refreshToken?: string | null;
+            scopes?: unknown[] | null;
+          } | null;
+          requestSignUp?: boolean | null;
+          /** @description Additional scopes to request from the provider */
+          scopes?: unknown[] | null;
+          /** @description The URL to redirect to if there is an error during the link process */
+          errorCallbackURL?: string | null;
+          /** @description Disable automatic redirection to the provider. Useful for handling the redirection yourself */
+          disableRedirect?: boolean | null;
+          additionalData?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description The authorization URL to redirect the user to */
+            url?: string;
+            /** @description Indicates if the user should be redirected to the authorization URL */
+            redirect: boolean;
+            status?: boolean;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  listUserAccounts: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            id: string;
+            providerId: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            accountId: string;
+            userId: string;
+            scopes: string[];
+          }[];
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
 }

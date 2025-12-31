@@ -7,6 +7,8 @@ export const QueryProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useRef(new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient.current}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient.current}>
+      {children}
+    </QueryClientProvider>
   );
 };

@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Server, Plus, Search, Filter, MoreVertical, Trash2, ArrowUpCircle } from "lucide-react";
+import {
+  Server,
+  Plus,
+  Search,
+  Filter,
+  MoreVertical,
+  Trash2,
+  ArrowUpCircle,
+} from "lucide-react";
 
 import { api } from "@midori/lib/api";
-import { useRole } from "@midori/hooks/useRole";
 import { RoleGuard } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -52,18 +59,13 @@ const statusColors = {
 export default function InstancesPage() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-  const { isAdmin, isInstructor } = useRole();
 
   // Use role-appropriate endpoint
-  const { data, isLoading, error } = api.useQuery(
-    "get",
-    "/api/instances/",
-    {
-      params: {
-        query: { page, pageSize },
-      },
-    }
-  );
+  const { data, isLoading } = api.useQuery("get", "/api/instances/", {
+    params: {
+      query: { page, pageSize },
+    },
+  });
 
   const instances = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -133,7 +135,9 @@ export default function InstancesPage() {
           </EmptyMedia>
           <EmptyHeader>
             <EmptyTitle>No Instances</EmptyTitle>
-            <EmptyDescription>You don't have any instances yet.</EmptyDescription>
+            <EmptyDescription>
+              You don't have any instances yet.
+            </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <RoleGuard permission="CREATE_INSTANCE">

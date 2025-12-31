@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -16,7 +15,6 @@ import {
 } from "lucide-react";
 
 import { api } from "@midori/lib/api";
-import { useRole } from "@midori/hooks/useRole";
 import { RoleGuard } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
 import {
@@ -28,7 +26,12 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@midori/components/ui/tabs";
 import { Separator } from "@midori/components/ui/separator";
 
 const statusColors = {
@@ -41,7 +44,7 @@ const statusColors = {
 
 export default function InstanceDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const _router = useRouter();
   const instanceId = Number(params.id);
 
   const { data: instance, isLoading } = api.useQuery(
@@ -51,7 +54,7 @@ export default function InstanceDetailPage() {
       params: {
         path: { instanceId },
       },
-    }
+    },
   );
 
   const { data: reverseProxies } = api.useQuery(
@@ -61,7 +64,7 @@ export default function InstanceDetailPage() {
       params: {
         path: { instanceId },
       },
-    }
+    },
   );
 
   if (isLoading) {
@@ -148,7 +151,9 @@ export default function InstanceDetailPage() {
           {instance.vmDetails && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Virtual Machine Details</CardTitle>
+                <CardTitle className="text-base">
+                  Virtual Machine Details
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -158,15 +163,21 @@ export default function InstanceDetailPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">IP Address</p>
-                    <p className="font-mono font-medium">{instance.vmDetails.ip}</p>
+                    <p className="font-mono font-medium">
+                      {instance.vmDetails.ip}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Operating System</p>
+                    <p className="text-sm text-muted-foreground">
+                      Operating System
+                    </p>
                     <p className="font-medium">{instance.vmDetails.os}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">CPU Cores</p>
-                    <p className="font-medium">{instance.vmDetails.cpus} vCPU</p>
+                    <p className="font-medium">
+                      {instance.vmDetails.cpus} vCPU
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Memory</p>
@@ -176,7 +187,9 @@ export default function InstanceDetailPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Disk Size</p>
-                    <p className="font-medium">{instance.vmDetails.diskGB} GB</p>
+                    <p className="font-medium">
+                      {instance.vmDetails.diskGB} GB
+                    </p>
                   </div>
                 </div>
 
@@ -206,15 +219,23 @@ export default function InstanceDetailPage() {
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div>
                     <p className="text-sm text-muted-foreground">Course Code</p>
-                    <p className="font-medium">{instance.courseOffering.courseCode}</p>
+                    <p className="font-medium">
+                      {instance.courseOffering.courseCode}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Course Title</p>
-                    <p className="font-medium">{instance.courseOffering.courseTitle}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Course Title
+                    </p>
+                    <p className="font-medium">
+                      {instance.courseOffering.courseTitle}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Semester</p>
-                    <p className="font-medium">{instance.courseOffering.semester}</p>
+                    <p className="font-medium">
+                      {instance.courseOffering.semester}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -249,7 +270,8 @@ export default function InstanceDetailPage() {
                         <div>
                           <p className="font-medium">Port {proxy.targetPort}</p>
                           <p className="text-sm text-muted-foreground">
-                            {proxy.type} • {proxy.description || "No description"}
+                            {proxy.type} •{" "}
+                            {proxy.description || "No description"}
                           </p>
                         </div>
                       </div>
@@ -257,7 +279,11 @@ export default function InstanceDetailPage() {
                         <Button variant="ghost" size="icon">
                           <ExternalLink className="size-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="text-destructive">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive"
+                        >
                           <Trash2 className="size-4" />
                         </Button>
                       </div>

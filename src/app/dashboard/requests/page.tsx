@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FileText, Plus, Search, Filter, Clock, CheckCircle, XCircle, Ban } from "lucide-react";
+import {
+  FileText,
+  Plus,
+  Search,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Ban,
+} from "lucide-react";
 
 import { api } from "@midori/lib/api";
 import { useRole } from "@midori/hooks/useRole";
@@ -18,7 +26,7 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
 import {
   Empty,
   EmptyContent,
@@ -57,19 +65,21 @@ export default function RequestsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const { isStudent } = useRole();
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/api/requests/",
-    {
-      params: {
-        query: {
-          page,
-          pageSize,
-          ...(statusFilter !== "all" && { status: statusFilter as "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" }),
-        },
+  const { data, isLoading } = api.useQuery("get", "/api/requests/", {
+    params: {
+      query: {
+        page,
+        pageSize,
+        ...(statusFilter !== "all" && {
+          status: statusFilter as
+            | "PENDING"
+            | "APPROVED"
+            | "REJECTED"
+            | "CANCELLED",
+        }),
       },
-    }
-  );
+    },
+  });
 
   const requests = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -168,7 +178,10 @@ export default function RequestsPage() {
           {requests.map((request) => {
             const StatusIcon = statusConfig[request.status].icon;
             return (
-              <Card key={request.id} className="transition-colors hover:border-primary/50">
+              <Card
+                key={request.id}
+                className="transition-colors hover:border-primary/50"
+              >
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">

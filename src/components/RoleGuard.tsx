@@ -127,7 +127,7 @@ interface WithRoleCheckOptions {
  */
 export function withRoleCheck<P extends object>(
   Component: React.ComponentType<P>,
-  options: WithRoleCheckOptions
+  options: WithRoleCheckOptions,
 ) {
   return function ProtectedComponent(props: P) {
     return (

@@ -29,7 +29,7 @@ import { getRoleDisplayName, getRoleBadgeVariant } from "@midori/lib/roles";
 export default function DashboardPage() {
   const router = useRouter();
   const { user, role, isLoading } = useSession();
-  const { isAdmin, isInstructor, isStudent } = useRole();
+  const { isStudent } = useRole();
 
   if (isLoading) {
     return (
@@ -220,7 +220,9 @@ export default function DashboardPage() {
               <Button
                 variant="link"
                 className="mt-2 h-auto p-0"
-                onClick={() => router.push("/dashboard/requests?status=PENDING")}
+                onClick={() =>
+                  router.push("/dashboard/requests?status=PENDING")
+                }
               >
                 Review Pending
                 <ArrowRight className="ml-1 size-3" />

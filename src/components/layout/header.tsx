@@ -89,7 +89,10 @@ export function DashboardHeader() {
             </a>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+          <DropdownMenuItem
+            onClick={handleSignOut}
+            className="text-destructive"
+          >
             <LogOut className="mr-2 size-4" />
             Sign Out
           </DropdownMenuItem>

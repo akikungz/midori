@@ -16,8 +16,12 @@ import {
 } from "@midori/components/ui/card";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
-import { Separator } from "@midori/components/ui/separator";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@midori/components/ui/tabs";
 import { getRoleDisplayName, getRoleBadgeVariant } from "@midori/lib/roles";
 import {
   Dialog,
@@ -27,11 +31,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@midori/components/ui/dialog";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@midori/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@midori/components/ui/field";
 import { Textarea } from "@midori/components/ui/textarea";
 import {
   Empty,
@@ -53,7 +53,7 @@ export default function SettingsPage() {
       params: {
         query: { page: 1, pageSize: 50 },
       },
-    }
+    },
   );
 
   const sshKeys = sshKeysData?.values || [];
@@ -97,9 +97,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Profile Information</CardTitle>
-              <CardDescription>
-                Your basic account information
-              </CardDescription>
+              <CardDescription>Your basic account information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">

@@ -10,11 +10,14 @@ export type Env = z.infer<typeof envSchema>;
 export const getEnv = (): Env => {
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
-    console.error("❌ Invalid environment variables:", z.formatError(parsed.error));
+    console.error(
+      "❌ Invalid environment variables:",
+      z.formatError(parsed.error),
+    );
     throw new Error("Invalid environment variables");
   }
 
   return parsed.data;
-}
+};
 
 export const env = getEnv();

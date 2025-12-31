@@ -29,15 +29,11 @@ function CoursesPage() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/api/academic/courses",
-    {
-      params: {
-        query: { page, pageSize },
-      },
-    }
-  );
+  const { data, isLoading } = api.useQuery("get", "/api/academic/courses", {
+    params: {
+      query: { page, pageSize },
+    },
+  });
 
   const courses = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -64,9 +60,7 @@ function CoursesPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Courses</h1>
-          <p className="text-muted-foreground">
-            Manage courses in the system
-          </p>
+          <p className="text-muted-foreground">Manage courses in the system</p>
         </div>
         <Button>
           <Plus className="mr-2 size-4" />
@@ -100,7 +94,10 @@ function CoursesPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <Card key={course.id} className="transition-colors hover:border-primary/50">
+            <Card
+              key={course.id}
+              className="transition-colors hover:border-primary/50"
+            >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
                   <div>

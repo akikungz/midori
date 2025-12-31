@@ -60,7 +60,7 @@ export function hasPermission(role: Role, permission: Permission): boolean {
  */
 export function hasAnyPermission(
   role: Role,
-  permissions: Permission[]
+  permissions: Permission[],
 ): boolean {
   return permissions.some((permission) => hasPermission(role, permission));
 }
@@ -70,7 +70,7 @@ export function hasAnyPermission(
  */
 export function hasAllPermissions(
   role: Role,
-  permissions: Permission[]
+  permissions: Permission[],
 ): boolean {
   return permissions.every((permission) => hasPermission(role, permission));
 }
@@ -112,7 +112,7 @@ export function getRoleDisplayName(role: Role): string {
  * Get role badge color classes for UI
  */
 export function getRoleBadgeVariant(
-  role: Role
+  role: Role,
 ): "default" | "secondary" | "destructive" | "outline" {
   const variants: Record<
     Role,

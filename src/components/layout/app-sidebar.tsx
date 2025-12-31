@@ -17,7 +17,6 @@ import {
   FilePlus,
 } from "lucide-react";
 
-import { useRole } from "@midori/hooks/useRole";
 import { useSession } from "@midori/hooks/useSession";
 import {
   Sidebar,
@@ -55,11 +54,6 @@ const mainNavItems = [
     title: "Requests",
     url: "/dashboard/requests",
     icon: FileText,
-  },
-  {
-    title: "Extended Requests",
-    url: "/dashboard/extended-requests",
-    icon: FilePlus,
   },
   {
     title: "Storage",
@@ -102,7 +96,6 @@ const adminNavItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, role } = useSession();
-  const { isAdmin } = useRole();
 
   const getInitials = (name: string) => {
     return name

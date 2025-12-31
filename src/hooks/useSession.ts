@@ -8,10 +8,14 @@ import type { Role } from "@midori/lib/roles";
  * Uses the /api/user/me endpoint to get user data including role
  */
 export function useSession() {
-  const { data, isLoading, error, refetch } = api.useQuery("get", "/api/user/me", {
-    retry: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+  const { data, isLoading, error, refetch } = api.useQuery(
+    "get",
+    "/api/user/me",
+    {
+      retry: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  );
 
   const user = data;
   const role = user?.role as Role | undefined;

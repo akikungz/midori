@@ -56,7 +56,9 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
       if (result.error) {
-        setError(result.error.message || "Failed to sign in. Please try again.");
+        setError(
+          result.error.message || "Failed to sign in. Please try again.",
+        );
         setIsEmailLoading(false);
       }
     } catch {
@@ -164,8 +166,8 @@ export default function LoginPage() {
                       <p className="text-center text-xs text-muted-foreground">
                         <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-amber-600 dark:text-amber-400">
                           Development Mode
-                        </span>
-                        {" "}Email login is only available in development.
+                        </span>{" "}
+                        Email login is only available in development.
                       </p>
                     </FieldError>
                   </FieldGroup>

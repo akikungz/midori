@@ -30,15 +30,11 @@ function SemestersPage() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/api/academic/semesters",
-    {
-      params: {
-        query: { page, pageSize },
-      },
-    }
-  );
+  const { data, isLoading } = api.useQuery("get", "/api/academic/semesters", {
+    params: {
+      query: { page, pageSize },
+    },
+  });
 
   const semesters = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -72,9 +68,7 @@ function SemestersPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Semesters</h1>
-          <p className="text-muted-foreground">
-            Manage academic semesters
-          </p>
+          <p className="text-muted-foreground">Manage academic semesters</p>
         </div>
         <Button>
           <Plus className="mr-2 size-4" />
@@ -96,7 +90,9 @@ function SemestersPage() {
           </EmptyMedia>
           <EmptyHeader>
             <EmptyTitle>No Semesters</EmptyTitle>
-            <EmptyDescription>No semesters have been added yet.</EmptyDescription>
+            <EmptyDescription>
+              No semesters have been added yet.
+            </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button>
@@ -108,13 +104,17 @@ function SemestersPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {semesters.map((semester) => (
-            <Card key={semester.id} className="transition-colors hover:border-primary/50">
+            <Card
+              key={semester.id}
+              className="transition-colors hover:border-primary/50"
+            >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-base">{semester.name}</CardTitle>
                     <CardDescription>
-                      {formatDate(semester.startDate)} - {formatDate(semester.endDate)}
+                      {formatDate(semester.startDate)} -{" "}
+                      {formatDate(semester.endDate)}
                     </CardDescription>
                   </div>
                   {semester.isCurrent && (
