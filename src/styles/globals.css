@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -41,6 +41,28 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-vm-blue-50: var(--vm-blue-50);
+  --color-vm-blue-100: var(--vm-blue-100);
+  --color-vm-blue-200: var(--vm-blue-200);
+  --color-vm-blue-300: var(--vm-blue-300);
+  --color-vm-blue-400: var(--vm-blue-400);
+  --color-vm-blue-500: var(--vm-blue-500);
+  --color-vm-blue-600: var(--vm-blue-600);
+  --color-vm-blue-700: var(--vm-blue-700);
+  --color-vm-blue-800: var(--vm-blue-800);
+  --color-vm-blue-900: var(--vm-blue-900);
+
+  --color-vm-orange-50: var(--vm-orange-50);
+  --color-vm-orange-100: var(--vm-orange-100);
+  --color-vm-orange-200: var(--vm-orange-200);
+  --color-vm-orange-300: var(--vm-orange-300);
+  --color-vm-orange-400: var(--vm-orange-400);
+  --color-vm-orange-500: var(--vm-orange-500);
+  --color-vm-orange-600: var(--vm-orange-600);
+  --color-vm-orange-700: var(--vm-orange-700);
+  --color-vm-orange-800: var(--vm-orange-800);
+  --color-vm-orange-900: var(--vm-orange-900);
 }
 
 :root {
@@ -76,6 +98,29 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Custom VM Platform Colors */
+  --vm-blue-50: #f0f7ff;
+  --vm-blue-100: #c9e2ff;
+  --vm-blue-200: #93ccff;
+  --vm-blue-300: #5db6ff;
+  --vm-blue-400: #2699ff;
+  --vm-blue-500: #1374d9;
+  --vm-blue-600: #105fb3;
+  --vm-blue-700: #0d4a8c;
+  --vm-blue-800: #0a3566;
+  --vm-blue-900: #07203f;
+
+  --vm-orange-50: #fef7f0;
+  --vm-orange-100: #fde0b8;
+  --vm-orange-200: #fbc980;
+  --vm-orange-300: #f9b248;
+  --vm-orange-400: #f79b10;
+  --vm-orange-500: #e87c00;
+  --vm-orange-600: #d16800;
+  --vm-orange-700: #b95500;
+  --vm-orange-800: #a24200;
+  --vm-orange-900: #8a2f00;
 }
 
 .dark {

@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2Icon, Server } from "lucide-react";
 
 import { authClient } from "@midori/lib/auth-client";
+import { useSession } from "@midori/hooks/useSession";
 import { Button } from "@midori/components/ui/button";
 import {
   Card,
@@ -23,6 +25,9 @@ import {
 import { Google } from "@midori/components/icons/google";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { isAuthenticated, isLoading: isSessionLoading, error: sessionError } = useSession();
+
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -30,6 +35,14 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const isDevMode = process.env.APP_ENV !== "production";
+
+  // Redirect to dashboard if already authenticated
+  // Don't redirect if there's a session error (e.g., after signout)
+  useEffect(() => {
+    if (isAuthenticated && !isSessionLoading && !sessionError) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, isSessionLoading, sessionError, router]);
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
@@ -73,7 +86,8 @@ export default function LoginPage() {
         {/* Logo and Branding */}
         <div className="flex flex-col items-center space-y-2 text-center">
           <div className="flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
-            <span className="text-2xl font-bold">FC</span>
+            {/* <span className="text-2xl font-bold">FC</span> */}
+            <Server className="text-2xl" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight">FITM Cloud</h1>
           <p className="text-muted-foreground text-sm">

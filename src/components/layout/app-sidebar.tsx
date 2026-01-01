@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Cloud,
   FolderOpen,
   GraduationCap,
   Home,
@@ -113,9 +112,9 @@ export function AppSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
                 <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Cloud className="size-4" />
+                  <Server className="size-4" />
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
+                <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
                   <span className="font-semibold">FITM Cloud</span>
                   <span className="text-xs text-muted-foreground">
                     Platform

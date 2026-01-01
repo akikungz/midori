@@ -13,15 +13,15 @@ import { Button } from "@midori/components/ui/button";
 import { Avatar, AvatarFallback } from "@midori/components/ui/avatar";
 import { LogOut, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { useSession } from "@midori/hooks/useSession";
+import { useSession, useClearSession } from "@midori/hooks/useSession";
 import { authClient } from "@midori/lib/auth-client";
 
 export function DashboardHeader() {
   const { user } = useSession();
+  const clearSession = useClearSession();
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
 
   const getInitials = (name: string) => {
     return name
@@ -36,7 +36,8 @@ export function DashboardHeader() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login");
+          clearSession();
+          redirect("/login");
         },
       },
     });

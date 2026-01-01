@@ -2,6 +2,7 @@
 
 import { api } from "@midori/lib/api";
 import type { Role } from "@midori/lib/roles";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Hook for fetching and managing the current user session
@@ -28,5 +29,13 @@ export function useSession() {
     isAuthenticated,
     error,
     refetch,
+  };
+}
+
+export function useClearSession() {
+  const queryClient = useQueryClient();
+
+  return () => {
+    queryClient.removeQueries({ queryKey: ["get", "/api/user/me"] });
   };
 }
