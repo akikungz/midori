@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Key, Plus, Trash2, User, Shield, Clock } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { api } from "@midori/lib/api";
+import { api, fetchClinet } from "@midori/lib/api";
 import { useSession } from "@midori/hooks/useSession";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -40,11 +41,25 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@midori/components/ui/empty";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@midori/components/ui/alert-dialog";
 
 export default function SettingsPage() {
+  const queryClient = useQueryClient();
   const { user, role, isLoading: userLoading } = useSession();
   const [sshKeyName, setSshKeyName] = useState("");
   const [sshPublicKey, setSshPublicKey] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: sshKeysData, isLoading: keysLoading } = api.useQuery(
     "get",
@@ -57,6 +72,42 @@ export default function SettingsPage() {
   );
 
   const sshKeys = sshKeysData?.values || [];
+
+  const handleAddSshKey = async () => {
+    if (!sshKeyName || !sshPublicKey) return;
+    setIsSubmitting(true);
+    try {
+      await fetchClinet.POST("/api/user/ssh-keys", {
+        body: {
+          name: sshKeyName,
+          publicKey: sshPublicKey,
+        },
+      });
+      // Invalidate query to refetch
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/user/ssh-keys"] });
+      setSshKeyName("");
+      setSshPublicKey("");
+      setIsAddDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to add SSH key:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteSshKey = async (keyId: number) => {
+    try {
+      await fetchClinet.DELETE("/api/user/ssh-keys", {
+        body: {
+          keyIds: [keyId],
+        },
+      });
+      // Invalidate query to refetch
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/user/ssh-keys"] });
+    } catch (error) {
+      console.error("Failed to delete SSH key:", error);
+    }
+  };
 
   if (userLoading) {
     return (
@@ -136,7 +187,7 @@ export default function SettingsPage() {
                   Manage your SSH public keys for secure access
                 </CardDescription>
               </div>
-              <Dialog>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm">
                     <Plus className="mr-2 size-4" />
@@ -171,7 +222,13 @@ export default function SettingsPage() {
                         onChange={(e) => setSshPublicKey(e.target.value)}
                       />
                     </Field>
-                    <Button className="w-full">Add SSH Key</Button>
+                    <Button
+                      className="w-full"
+                      onClick={handleAddSshKey}
+                      disabled={!sshKeyName || !sshPublicKey || isSubmitting}
+                    >
+                      {isSubmitting ? "Adding..." : "Add SSH Key"}
+                    </Button>
                   </FieldGroup>
                 </DialogContent>
               </Dialog>
@@ -211,13 +268,34 @@ export default function SettingsPage() {
                           </p>
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="shrink-0 text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="shrink-0 text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete SSH Key</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete the SSH key "
+                              {key.name}"? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteSshKey(key.id)}
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   ))}
                 </div>

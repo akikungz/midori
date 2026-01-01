@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Server,
@@ -14,9 +15,10 @@ import {
   Activity,
   ExternalLink,
   Clock,
+  History,
 } from "lucide-react";
 
-import { api } from "@midori/lib/api";
+import { api, fetchClinet } from "@midori/lib/api";
 import { RoleGuard } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
 import {
@@ -43,9 +45,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@midori/components/ui/dialog";
-import { Field, FieldGroup, FieldLabel, FieldDescription } from "@midori/components/ui/field";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldDescription,
+} from "@midori/components/ui/field";
 import { Input } from "@midori/components/ui/input";
 import { Textarea } from "@midori/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@midori/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@midori/components/ui/select";
 
 const statusColors = {
   PENDING: "secondary",
@@ -57,12 +82,21 @@ const statusColors = {
 
 export default function InstanceDetailPage() {
   const params = useParams();
-  const _router = useRouter();
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const instanceId = Number(params.id);
+
+  // State
   const [extensionDays, setExtensionDays] = useState("7");
   const [extensionReason, setExtensionReason] = useState("");
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
+  const [isProxyDialogOpen, setIsProxyDialogOpen] = useState(false);
+  const [proxyPort, setProxyPort] = useState("");
+  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS">("HTTP");
+  const [proxyDescription, setProxyDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Queries
   const { data: instance, isLoading } = api.useQuery(
     "get",
     "/api/instances/{instanceId}",
@@ -82,6 +116,108 @@ export default function InstanceDetailPage() {
       },
     },
   );
+
+  const { data: auditLogs } = api.useQuery(
+    "get",
+    "/api/instances/{instanceId}/audit-logs",
+    {
+      params: {
+        path: { instanceId },
+        query: { page: 1, pageSize: 20 },
+      },
+    },
+  );
+
+  // Handlers
+  const handlePromote = async () => {
+    setIsSubmitting(true);
+    try {
+      await fetchClinet.PATCH("/api/instances/{instanceId}/promote", {
+        params: { path: { instanceId } },
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/instances/{instanceId}"],
+      });
+    } catch (error) {
+      console.error("Failed to promote instance:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await fetchClinet.DELETE("/api/instances/{instanceId}", {
+        params: { path: { instanceId } },
+      });
+      router.push("/dashboard/instances");
+    } catch (error) {
+      console.error("Failed to delete instance:", error);
+    }
+  };
+
+  const handleSubmitExtension = async () => {
+    if (!extensionReason) return;
+    setIsSubmitting(true);
+    try {
+      await fetchClinet.POST("/api/instances/{instanceId}/extended-request", {
+        params: { path: { instanceId } },
+        body: {
+          title: `Extension Request - ${extensionDays} days`,
+          description: extensionReason,
+        },
+      });
+      setIsExtensionDialogOpen(false);
+      setExtensionDays("7");
+      setExtensionReason("");
+    } catch (error) {
+      console.error("Failed to submit extension request:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAddProxy = async () => {
+    if (!proxyPort) return;
+    setIsSubmitting(true);
+    try {
+      await fetchClinet.POST("/api/instances/{instanceId}/reverse-proxies", {
+        params: { path: { instanceId } },
+        body: {
+          targetPort: Number(proxyPort),
+          type: proxyType,
+          description: proxyDescription || undefined,
+        },
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/instances/{instanceId}/reverse-proxies"],
+      });
+      setIsProxyDialogOpen(false);
+      setProxyPort("");
+      setProxyType("HTTP");
+      setProxyDescription("");
+    } catch (error) {
+      console.error("Failed to add proxy:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteProxy = async (proxyId: number) => {
+    try {
+      await fetchClinet.DELETE(
+        "/api/instances/{instanceId}/reverse-proxies/{proxyId}",
+        {
+          params: { path: { instanceId, proxyId } },
+        },
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/instances/{instanceId}/reverse-proxies"],
+      });
+    } catch (error) {
+      console.error("Failed to delete proxy:", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -113,6 +249,8 @@ export default function InstanceDetailPage() {
     );
   }
 
+  const logs = auditLogs?.values || [];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -142,7 +280,10 @@ export default function InstanceDetailPage() {
         <div className="flex gap-2">
           {/* Extension Request for Students */}
           <RoleGuard permission="CREATE_EXTENDED_REQUEST">
-            <Dialog open={isExtensionDialogOpen} onOpenChange={setIsExtensionDialogOpen}>
+            <Dialog
+              open={isExtensionDialogOpen}
+              onOpenChange={setIsExtensionDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button variant="outline">
                   <Clock className="mr-2 size-4" />
@@ -158,7 +299,9 @@ export default function InstanceDetailPage() {
                 </DialogHeader>
                 <FieldGroup>
                   <Field>
-                    <FieldLabel htmlFor="extension-days">Extension Duration</FieldLabel>
+                    <FieldLabel htmlFor="extension-days">
+                      Extension Duration
+                    </FieldLabel>
                     <FieldDescription>
                       Number of additional days requested
                     </FieldDescription>
@@ -172,7 +315,9 @@ export default function InstanceDetailPage() {
                         onChange={(e) => setExtensionDays(e.target.value)}
                         className="w-24"
                       />
-                      <span className="text-sm text-muted-foreground">days</span>
+                      <span className="text-sm text-muted-foreground">
+                        days
+                      </span>
                     </div>
                   </Field>
                   <Field>
@@ -190,31 +335,49 @@ export default function InstanceDetailPage() {
                   </Field>
                   <Button
                     className="w-full"
-                    disabled={!extensionReason}
-                    onClick={() => {
-                      // TODO: Submit via POST /api/instances/{instanceId}/extended-request
-                      setIsExtensionDialogOpen(false);
-                      setExtensionDays("7");
-                      setExtensionReason("");
-                    }}
+                    disabled={!extensionReason || isSubmitting}
+                    onClick={handleSubmitExtension}
                   >
-                    Submit Extension Request
+                    {isSubmitting ? "Submitting..." : "Submit Extension Request"}
                   </Button>
                 </FieldGroup>
               </DialogContent>
             </Dialog>
           </RoleGuard>
           <RoleGuard permission="PROMOTE_INSTANCE">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={handlePromote}
+              disabled={isSubmitting || instance.status === "PROMOTED"}
+            >
               <ArrowUpCircle className="mr-2 size-4" />
-              Promote
+              {isSubmitting ? "..." : "Promote"}
             </Button>
           </RoleGuard>
           <RoleGuard permission="DELETE_INSTANCE">
-            <Button variant="destructive">
-              <Trash2 className="mr-2 size-4" />
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">
+                  <Trash2 className="mr-2 size-4" />
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Instance</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this instance? This action
+                    cannot be undone and all data will be permanently lost.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Delete Instance
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </RoleGuard>
         </div>
       </div>
@@ -332,10 +495,70 @@ export default function InstanceDetailPage() {
                   Configure reverse proxies to expose services
                 </CardDescription>
               </div>
-              <Button size="sm">
-                <Plus className="mr-2 size-4" />
-                Add Proxy
-              </Button>
+              <Dialog
+                open={isProxyDialogOpen}
+                onOpenChange={setIsProxyDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button size="sm">
+                    <Plus className="mr-2 size-4" />
+                    Add Proxy
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add Reverse Proxy</DialogTitle>
+                    <DialogDescription>
+                      Configure a new reverse proxy for this instance
+                    </DialogDescription>
+                  </DialogHeader>
+                  <FieldGroup>
+                    <Field>
+                      <FieldLabel htmlFor="proxy-port">Target Port</FieldLabel>
+                      <Input
+                        id="proxy-port"
+                        type="number"
+                        placeholder="3000"
+                        value={proxyPort}
+                        onChange={(e) => setProxyPort(e.target.value)}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
+                      <Select
+                        value={proxyType}
+                        onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS")}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="HTTP">HTTP</SelectItem>
+                          <SelectItem value="HTTPS">HTTPS</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="proxy-desc">
+                        Description (Optional)
+                      </FieldLabel>
+                      <Input
+                        id="proxy-desc"
+                        placeholder="Web server, API, etc."
+                        value={proxyDescription}
+                        onChange={(e) => setProxyDescription(e.target.value)}
+                      />
+                    </Field>
+                    <Button
+                      className="w-full"
+                      disabled={!proxyPort || isSubmitting}
+                      onClick={handleAddProxy}
+                    >
+                      {isSubmitting ? "Adding..." : "Add Proxy"}
+                    </Button>
+                  </FieldGroup>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               {reverseProxies && reverseProxies.length > 0 ? (
@@ -359,13 +582,35 @@ export default function InstanceDetailPage() {
                         <Button variant="ghost" size="icon">
                           <ExternalLink className="size-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive"
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-destructive"
+                            >
+                              <Trash2 className="size-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Proxy</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete this reverse
+                                proxy? Services on port {proxy.targetPort} will
+                                no longer be accessible.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDeleteProxy(proxy.id)}
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </div>
                   ))}
@@ -388,9 +633,38 @@ export default function InstanceDetailPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-center text-muted-foreground py-8">
-                Audit logs will be displayed here
-              </p>
+              {logs.length > 0 ? (
+                <div className="space-y-3">
+                  {logs.map((log) => (
+                    <div
+                      key={log.id}
+                      className="flex items-start gap-3 rounded-lg border p-3"
+                    >
+                      <History className="size-4 mt-0.5 text-muted-foreground" />
+                      <div className="flex-1">
+                        <p className="font-medium">{log.action}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {log.notes || "No additional notes"}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {log.timestamp
+                            ? new Date(
+                              typeof log.timestamp === "string" ||
+                                typeof log.timestamp === "number"
+                                ? log.timestamp
+                                : "",
+                            ).toLocaleString()
+                            : ""}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No audit logs available
+                </p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

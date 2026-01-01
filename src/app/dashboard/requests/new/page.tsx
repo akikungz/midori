@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 
-import { api } from "@midori/lib/api";
+import { api, fetchClinet } from "@midori/lib/api";
 import { withRoleCheck } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -66,14 +66,24 @@ function NewRequestPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCourseId) return;
+    if (!selectedCourseId || !title || !description) return;
 
     setIsSubmitting(true);
     try {
-      // Submit request via API
-      // await api.mutate("post", "/api/requests/", ...)
+      await fetchClinet.POST("/api/requests/", {
+        body: {
+          title,
+          description,
+          courseOfferingId: Number(selectedCourseId),
+          cpus,
+          memoryMB: memoryGB * 1024,
+          diskGB,
+          pveTemplateId: 0, // For future implementation
+        },
+      });
       router.push("/dashboard/requests");
-    } catch {
+    } catch (error) {
+      console.error("Failed to create request:", error);
       setIsSubmitting(false);
     }
   };
@@ -213,7 +223,7 @@ function NewRequestPage() {
                       </div>
                       <Slider
                         value={[cpus]}
-                        onValueChange={([v]) => setCpus(v)}
+                        onValueChange={(values: number[]) => setCpus(values[0])}
                         min={1}
                         max={8}
                         step={1}
@@ -235,7 +245,7 @@ function NewRequestPage() {
                       </div>
                       <Slider
                         value={[memoryGB]}
-                        onValueChange={([v]) => setMemoryGB(v)}
+                        onValueChange={(values: number[]) => setMemoryGB(values[0])}
                         min={1}
                         max={32}
                         step={1}
@@ -257,7 +267,7 @@ function NewRequestPage() {
                       </div>
                       <Slider
                         value={[diskGB]}
-                        onValueChange={([v]) => setDiskGB(v)}
+                        onValueChange={(values: number[]) => setDiskGB(values[0])}
                         min={20}
                         max={500}
                         step={10}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   FileText,
   Plus,
@@ -13,7 +14,7 @@ import {
   FilePlus,
 } from "lucide-react";
 
-import { api } from "@midori/lib/api";
+import { api, fetchClinet } from "@midori/lib/api";
 import { useRole } from "@midori/hooks/useRole";
 import { RoleGuard } from "@midori/components/RoleGuard";
 import { Button } from "@midori/components/ui/button";
@@ -66,12 +67,14 @@ const statusConfig = {
 };
 
 export default function RequestsPage() {
+  const queryClient = useQueryClient();
   const [requestType, setRequestType] = useState<"instance" | "extended">(
     "instance",
   );
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
   const { isStudent, can } = useRole();
 
   // Fetch instance requests
@@ -127,6 +130,47 @@ export default function RequestsPage() {
     requestType === "instance" ? instanceTotalPages : extendedTotalPages;
 
   const canReview = can("REVIEW_REQUEST") || can("REVIEW_EXTENDED_REQUEST");
+
+  const handleInstanceRequestAction = async (
+    requestId: number,
+    action: "APPROVED" | "REJECTED",
+  ) => {
+    setActionLoading(requestId);
+    try {
+      await fetchClinet.PATCH("/api/requests/{requestId}/status", {
+        params: { path: { requestId } },
+        body: { status: action },
+      });
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/requests/"] });
+    } catch (error) {
+      console.error("Failed to update request:", error);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleExtendedRequestAction = async (
+    extendedRequestId: number,
+    action: "APPROVED" | "REJECTED",
+  ) => {
+    setActionLoading(extendedRequestId);
+    try {
+      await fetchClinet.PATCH(
+        "/api/extended-requests/{extendedRequestId}/status",
+        {
+          params: { path: { extendedRequestId } },
+          body: { status: action },
+        },
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/extended-requests/"],
+      });
+    } catch (error) {
+      console.error("Failed to update extended request:", error);
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -287,11 +331,33 @@ export default function RequestsPage() {
                         </div>
                         {canReview && request.status === "PENDING" && (
                           <div className="flex gap-2">
-                            <Button variant="default" size="sm">
+                            <Button
+                              variant="default"
+                              size="sm"
+                              disabled={actionLoading === request.id}
+                              onClick={() =>
+                                handleInstanceRequestAction(
+                                  request.id,
+                                  "APPROVED",
+                                )
+                              }
+                            >
                               <CheckCircle className="mr-1.5 size-3.5" />
-                              Approve
+                              {actionLoading === request.id
+                                ? "..."
+                                : "Approve"}
                             </Button>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={actionLoading === request.id}
+                              onClick={() =>
+                                handleInstanceRequestAction(
+                                  request.id,
+                                  "REJECTED",
+                                )
+                              }
+                            >
                               <XCircle className="mr-1.5 size-3.5" />
                               Reject
                             </Button>
@@ -386,11 +452,33 @@ export default function RequestsPage() {
                         </div>
                         {canReview && request.status === "PENDING" && (
                           <div className="flex gap-2">
-                            <Button variant="default" size="sm">
+                            <Button
+                              variant="default"
+                              size="sm"
+                              disabled={actionLoading === request.id}
+                              onClick={() =>
+                                handleExtendedRequestAction(
+                                  request.id,
+                                  "APPROVED",
+                                )
+                              }
+                            >
                               <CheckCircle className="mr-1.5 size-3.5" />
-                              Approve
+                              {actionLoading === request.id
+                                ? "..."
+                                : "Approve"}
                             </Button>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={actionLoading === request.id}
+                              onClick={() =>
+                                handleExtendedRequestAction(
+                                  request.id,
+                                  "REJECTED",
+                                )
+                              }
+                            >
                               <XCircle className="mr-1.5 size-3.5" />
                               Reject
                             </Button>
