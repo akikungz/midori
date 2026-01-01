@@ -2,7 +2,7 @@ import z from "zod";
 
 export const envSchema = z.object({
   APP_ENV: z.enum(["development", "production", "test"]),
-  API_URL: z.url().optional(),
+  SERVER_API_URL: z.url()
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -6,12 +6,12 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   output: "standalone",
   rewrites: async () => {
-    if (env.APP_ENV === "production" || !env.API_URL) return [];
+    if (env.APP_ENV === "production" || !env.SERVER_API_URL) return [];
 
     return [
       {
         source: "/api/:path*",
-        destination: `${env.API_URL}/api/:path*`,
+        destination: `${env.SERVER_API_URL}/api/:path*`,
       },
     ];
   },
