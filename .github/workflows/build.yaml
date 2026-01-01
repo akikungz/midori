@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - project-2-2025
+      - development
 
 jobs:
   build-and-push:
@@ -32,3 +32,12 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: self-hosted
+
+    steps:
+      - name: Trigger deployment in kubernetes cluster
+        run: |
+          kubectl rollout restart deployment/midori-${{ github.ref_name }} -n fitm-cloud
