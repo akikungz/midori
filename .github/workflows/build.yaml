@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+      - development
+    paths:
+      - "Dockerfile"
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "bun.lock"
+      - ".github/workflows/build.yaml"
 
 jobs:
   build-and-push:
