@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Key, Plus, Trash2, User, Shield, Clock } from "lucide-react";
+import { Key, Plus, Trash2, User, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { api, fetchClinet } from "@midori/lib/api";
@@ -134,10 +134,10 @@ export function SettingsClient({ user }: SettingsClientProps) {
           <Key className="mr-1.5 size-4" />
           SSH Keys
         </TabsTrigger>
-        <TabsTrigger value="sessions">
+        {/* <TabsTrigger value="sessions">
           <Shield className="mr-1.5 size-4" />
           Sessions
-        </TabsTrigger>
+        </TabsTrigger> */}
       </TabsList>
 
       {/* Profile Tab */}
