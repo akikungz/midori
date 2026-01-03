@@ -2,8 +2,8 @@ import z from "zod";
 
 export const envSchema = z.object({
   APP_ENV: z.enum(["development", "production", "test"]),
-  SERVER_API_URL: z.url().default("http://momoi-development:3000"),
-  OTEL_EXPORTER_OTLP_ENDPOINT: z.url().default("http://localhost:4318/v1/traces"),
+  SERVER_API_URL: z.url(),
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.url().optional(),
   OTEL_SERVICE_NAME: z.string().default("midori-dev"),
 });
 
