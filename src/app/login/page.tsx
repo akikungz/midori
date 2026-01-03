@@ -26,7 +26,11 @@ import { Google } from "@midori/components/icons/google";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading: isSessionLoading, error: sessionError } = useSession();
+  const {
+    isAuthenticated,
+    isLoading: isSessionLoading,
+    error: sessionError,
+  } = useSession();
 
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);

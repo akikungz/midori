@@ -5,7 +5,11 @@ import { Key, Plus, Trash2, User, Shield, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { api, fetchClinet } from "@midori/lib/api";
-import { getRoleDisplayName, getRoleBadgeVariant, type Role } from "@midori/lib/roles";
+import {
+  getRoleDisplayName,
+  getRoleBadgeVariant,
+  type Role,
+} from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import {
@@ -91,7 +95,9 @@ export function SettingsClient({ user }: SettingsClientProps) {
           publicKey: sshPublicKey,
         },
       });
-      queryClient.invalidateQueries({ queryKey: ["get", "/api/user/ssh-keys"] });
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/user/ssh-keys"],
+      });
       setSshKeyName("");
       setSshPublicKey("");
       setIsAddDialogOpen(false);
@@ -109,7 +115,9 @@ export function SettingsClient({ user }: SettingsClientProps) {
           keyIds: [keyId],
         },
       });
-      queryClient.invalidateQueries({ queryKey: ["get", "/api/user/ssh-keys"] });
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/user/ssh-keys"],
+      });
     } catch (error) {
       console.error("Failed to delete SSH key:", error);
     }
@@ -298,9 +306,7 @@ export function SettingsClient({ user }: SettingsClientProps) {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Active Sessions</CardTitle>
-            <CardDescription>
-              Manage your active login sessions
-            </CardDescription>
+            <CardDescription>Manage your active login sessions</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between rounded-lg border p-3">

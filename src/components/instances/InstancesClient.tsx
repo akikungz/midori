@@ -89,7 +89,10 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const can = (permission: string) => {
-    return hasPermission(userRole, permission as Parameters<typeof hasPermission>[1]);
+    return hasPermission(
+      userRole,
+      permission as Parameters<typeof hasPermission>[1],
+    );
   };
 
   // Create instance handler

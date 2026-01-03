@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
+import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 
 import { fetchClinet } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
@@ -91,8 +90,8 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
         <EmptyHeader>
           <EmptyTitle>No Courses Available</EmptyTitle>
           <EmptyDescription>
-            There are no active courses available for enrollment. Please
-            contact your administrator.
+            There are no active courses available for enrollment. Please contact
+            your administrator.
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -106,9 +105,7 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
         <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">
-                Request Information
-              </CardTitle>
+              <CardTitle className="text-base">Request Information</CardTitle>
               <CardDescription>
                 Basic information about your instance request
               </CardDescription>
@@ -143,10 +140,7 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
                     </SelectTrigger>
                     <SelectContent>
                       {courses.map((course) => (
-                        <SelectItem
-                          key={course.id}
-                          value={String(course.id)}
-                        >
+                        <SelectItem key={course.id} value={String(course.id)}>
                           {course.code} - {course.title}
                         </SelectItem>
                       ))}

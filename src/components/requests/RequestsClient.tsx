@@ -81,7 +81,10 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
   const [actionLoading, setActionLoading] = useState<number | null>(null);
 
   const can = (permission: string) => {
-    return hasPermission(userRole, permission as Parameters<typeof hasPermission>[1]);
+    return hasPermission(
+      userRole,
+      permission as Parameters<typeof hasPermission>[1],
+    );
   };
 
   // Fetch instance requests
@@ -301,9 +304,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
                           <CardTitle className="text-base">
                             {request.title}
                           </CardTitle>
-                          <Badge
-                            variant={statusConfig[request.status].variant}
-                          >
+                          <Badge variant={statusConfig[request.status].variant}>
                             <StatusIcon className="mr-1 size-3" />
                             {statusConfig[request.status].label}
                           </Badge>
@@ -328,9 +329,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
                             }
                           >
                             <CheckCircle className="mr-1.5 size-3.5" />
-                            {actionLoading === request.id
-                              ? "..."
-                              : "Approve"}
+                            {actionLoading === request.id ? "..." : "Approve"}
                           </Button>
                           <Button
                             variant="destructive"
@@ -424,9 +423,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
                           <CardTitle className="text-base">
                             {request.title}
                           </CardTitle>
-                          <Badge
-                            variant={statusConfig[request.status].variant}
-                          >
+                          <Badge variant={statusConfig[request.status].variant}>
                             <StatusIcon className="mr-1 size-3" />
                             {statusConfig[request.status].label}
                           </Badge>
@@ -449,9 +446,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
                             }
                           >
                             <CheckCircle className="mr-1.5 size-3.5" />
-                            {actionLoading === request.id
-                              ? "..."
-                              : "Approve"}
+                            {actionLoading === request.id ? "..." : "Approve"}
                           </Button>
                           <Button
                             variant="destructive"
@@ -479,7 +474,10 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
                     )}
                     {request.reason && (
                       <p className="mt-2 text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">Reason:</span> {request.reason}
+                        <span className="font-medium text-foreground">
+                          Reason:
+                        </span>{" "}
+                        {request.reason}
                       </p>
                     )}
                   </CardContent>

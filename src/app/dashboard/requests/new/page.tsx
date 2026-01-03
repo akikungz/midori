@@ -2,7 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { getServerSession, createServerApiClient } from "@midori/lib/server-api";
+import {
+  getServerSession,
+  createServerApiClient,
+} from "@midori/lib/server-api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { NewRequestForm } from "@midori/components/requests/NewRequestForm";

@@ -85,12 +85,18 @@ interface InstanceDetailClientProps {
   userRole: Role;
 }
 
-export function InstanceDetailClient({ instanceId, userRole }: InstanceDetailClientProps) {
+export function InstanceDetailClient({
+  instanceId,
+  userRole,
+}: InstanceDetailClientProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const can = (permission: string) => {
-    return hasPermission(userRole, permission as Parameters<typeof hasPermission>[1]);
+    return hasPermission(
+      userRole,
+      permission as Parameters<typeof hasPermission>[1],
+    );
   };
 
   // State
@@ -345,7 +351,9 @@ export function InstanceDetailClient({ instanceId, userRole }: InstanceDetailCli
                     disabled={!extensionReason || isSubmitting}
                     onClick={handleSubmitExtension}
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Extension Request"}
+                    {isSubmitting
+                      ? "Submitting..."
+                      : "Submit Extension Request"}
                   </Button>
                 </FieldGroup>
               </DialogContent>
@@ -534,7 +542,9 @@ export function InstanceDetailClient({ instanceId, userRole }: InstanceDetailCli
                       <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
                       <Select
                         value={proxyType}
-                        onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS")}
+                        onValueChange={(v) =>
+                          setProxyType(v as "HTTP" | "HTTPS")
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -656,11 +666,11 @@ export function InstanceDetailClient({ instanceId, userRole }: InstanceDetailCli
                         <p className="text-xs text-muted-foreground mt-1">
                           {log.timestamp
                             ? new Date(
-                              typeof log.timestamp === "string" ||
-                                typeof log.timestamp === "number"
-                                ? log.timestamp
-                                : "",
-                            ).toLocaleString()
+                                typeof log.timestamp === "string" ||
+                                  typeof log.timestamp === "number"
+                                  ? log.timestamp
+                                  : "",
+                              ).toLocaleString()
                             : ""}
                         </p>
                       </div>

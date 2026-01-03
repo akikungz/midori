@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   output: "standalone",
+  logging: {
+    incomingRequests: true,
+    fetches: {
+      fullUrl: true,
+      hmrRefreshes: true,
+    },
+  },
   rewrites: async () => {
     if (env.APP_ENV === "production" || !env.SERVER_API_URL) return [];
 

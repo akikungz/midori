@@ -41,7 +41,10 @@ export function DashboardCards({ user }: DashboardCardsProps) {
 
   const can = (permission: string) => {
     if (!role) return false;
-    return hasPermission(role, permission as Parameters<typeof hasPermission>[1]);
+    return hasPermission(
+      role,
+      permission as Parameters<typeof hasPermission>[1],
+    );
   };
 
   return (
