@@ -159,7 +159,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           <Input placeholder="Search instances..." className="pl-9" />
         </div>
         <Select defaultValue="all">
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-45">
             <Filter className="mr-2 size-4" />
             <SelectValue placeholder="Status" />
           </SelectTrigger>

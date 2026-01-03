@@ -135,7 +135,7 @@ export function withRoleCheck<P extends object>(
         roles={options.roles}
         permission={options.permission}
         fallback={
-          <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
+          <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
             <div className="text-6xl">🚫</div>
             <h2 className="text-xl font-semibold">Access Denied</h2>
             <p className="text-muted-foreground">

@@ -1,0 +1,563 @@
+import { useState } from "react";
+import {
+  Clock,
+  Plus,
+  Trash2,
+  Globe,
+  ExternalLink,
+  History,
+} from "lucide-react";
+
+import { Button } from "@midori/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@midori/components/ui/dialog";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldDescription,
+} from "@midori/components/ui/field";
+import { Input } from "@midori/components/ui/input";
+import { Textarea } from "@midori/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@midori/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@midori/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@midori/components/ui/card";
+
+// ==================== Create Instance Dialog ====================
+
+interface CreateInstanceDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: {
+    pveTemplateId: number;
+    cpus: number;
+    memoryGB: number;
+    diskGB: number;
+  }) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export function CreateInstanceDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isSubmitting,
+}: CreateInstanceDialogProps) {
+  const [pveTemplateId, setPveTemplateId] = useState("1");
+  const [cpus, setCpus] = useState("2");
+  const [memoryGB, setMemoryGB] = useState("4");
+  const [diskGB, setDiskGB] = useState("20");
+
+  const handleSubmit = async () => {
+    if (!pveTemplateId) return;
+    await onSubmit({
+      pveTemplateId: Number(pveTemplateId),
+      cpus: Number(cpus),
+      memoryGB: Number(memoryGB),
+      diskGB: Number(diskGB),
+    });
+    // Reset form on success
+    setPveTemplateId("1");
+    setCpus("2");
+    setMemoryGB("4");
+    setDiskGB("20");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create New Instance</DialogTitle>
+          <DialogDescription>
+            Configure and create a new virtual machine instance
+          </DialogDescription>
+        </DialogHeader>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="pve-template">Template ID</FieldLabel>
+            <FieldDescription>
+              PVE template to use for the instance
+            </FieldDescription>
+            <Input
+              id="pve-template"
+              type="number"
+              min="1"
+              value={pveTemplateId}
+              onChange={(e) => setPveTemplateId(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="cpus">CPU Cores</FieldLabel>
+            <FieldDescription>Number of virtual CPU cores</FieldDescription>
+            <Input
+              id="cpus"
+              type="number"
+              min="1"
+              max="16"
+              value={cpus}
+              onChange={(e) => setCpus(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="memory">Memory (GB)</FieldLabel>
+            <FieldDescription>Amount of RAM in gigabytes</FieldDescription>
+            <Input
+              id="memory"
+              type="number"
+              min="1"
+              max="64"
+              value={memoryGB}
+              onChange={(e) => setMemoryGB(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="disk">Disk Size (GB)</FieldLabel>
+            <FieldDescription>Storage capacity in gigabytes</FieldDescription>
+            <Input
+              id="disk"
+              type="number"
+              min="10"
+              max="500"
+              value={diskGB}
+              onChange={(e) => setDiskGB(e.target.value)}
+            />
+          </Field>
+          <Button
+            className="w-full"
+            disabled={!pveTemplateId || isSubmitting}
+            onClick={handleSubmit}
+          >
+            {isSubmitting ? "Creating..." : "Create Instance"}
+          </Button>
+        </FieldGroup>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ==================== Extension Request Dialog ====================
+
+interface ExtensionRequestDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (days: number, reason: string) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export function ExtensionRequestDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isSubmitting,
+}: ExtensionRequestDialogProps) {
+  const [extensionDays, setExtensionDays] = useState("7");
+  const [extensionReason, setExtensionReason] = useState("");
+
+  const handleSubmit = async () => {
+    if (!extensionReason) return;
+    await onSubmit(Number(extensionDays), extensionReason);
+    setExtensionDays("7");
+    setExtensionReason("");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <Clock className="mr-2 size-4" />
+          Request Extension
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Request Instance Extension</DialogTitle>
+          <DialogDescription>
+            Request to extend this instance to the next semester
+          </DialogDescription>
+        </DialogHeader>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="extension-days">Extension Duration</FieldLabel>
+            <FieldDescription>
+              Number of additional days requested
+            </FieldDescription>
+            <div className="flex items-center gap-2">
+              <Input
+                id="extension-days"
+                type="number"
+                min="1"
+                max="90"
+                value={extensionDays}
+                onChange={(e) => setExtensionDays(e.target.value)}
+                className="w-24"
+              />
+              <span className="text-sm text-muted-foreground">days</span>
+            </div>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="extension-reason">Reason</FieldLabel>
+            <FieldDescription>
+              Explain why you need this extension
+            </FieldDescription>
+            <Textarea
+              id="extension-reason"
+              placeholder="I need more time to complete my project because..."
+              value={extensionReason}
+              onChange={(e) => setExtensionReason(e.target.value)}
+              rows={4}
+            />
+          </Field>
+          <Button
+            className="w-full"
+            disabled={!extensionReason || isSubmitting}
+            onClick={handleSubmit}
+          >
+            {isSubmitting ? "Submitting..." : "Submit Extension Request"}
+          </Button>
+        </FieldGroup>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ==================== Add Proxy Dialog ====================
+
+interface AddProxyDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: {
+    port: number;
+    type: "HTTP" | "HTTPS";
+    description?: string;
+  }) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export function AddProxyDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isSubmitting,
+}: AddProxyDialogProps) {
+  const [proxyPort, setProxyPort] = useState("");
+  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS">("HTTP");
+  const [proxyDescription, setProxyDescription] = useState("");
+
+  const handleSubmit = async () => {
+    if (!proxyPort) return;
+    await onSubmit({
+      port: Number(proxyPort),
+      type: proxyType,
+      description: proxyDescription || undefined,
+    });
+    setProxyPort("");
+    setProxyType("HTTP");
+    setProxyDescription("");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button size="sm">
+          <Plus className="mr-2 size-4" />
+          Add Proxy
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Reverse Proxy</DialogTitle>
+          <DialogDescription>
+            Configure a new reverse proxy for this instance
+          </DialogDescription>
+        </DialogHeader>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="proxy-port">Target Port</FieldLabel>
+            <Input
+              id="proxy-port"
+              type="number"
+              placeholder="3000"
+              value={proxyPort}
+              onChange={(e) => setProxyPort(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
+            <Select
+              value={proxyType}
+              onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS")}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="HTTP">HTTP</SelectItem>
+                <SelectItem value="HTTPS">HTTPS</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="proxy-desc">Description (Optional)</FieldLabel>
+            <Input
+              id="proxy-desc"
+              placeholder="Web server, API, etc."
+              value={proxyDescription}
+              onChange={(e) => setProxyDescription(e.target.value)}
+            />
+          </Field>
+          <Button
+            className="w-full"
+            disabled={!proxyPort || isSubmitting}
+            onClick={handleSubmit}
+          >
+            {isSubmitting ? "Adding..." : "Add Proxy"}
+          </Button>
+        </FieldGroup>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ==================== Delete Instance Dialog ====================
+
+interface DeleteInstanceDialogProps {
+  onConfirm: () => Promise<void>;
+}
+
+export function DeleteInstanceDialog({ onConfirm }: DeleteInstanceDialogProps) {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">
+          <Trash2 className="mr-2 size-4" />
+          Delete
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Instance</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete this instance? This action cannot be
+            undone and all data will be permanently lost.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>
+            Delete Instance
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+// ==================== Reverse Proxy List ====================
+
+export interface ReverseProxy {
+  id: number;
+  targetPort: number;
+  type: "HTTP" | "HTTPS";
+  description?: string;
+}
+
+interface ReverseProxyListProps {
+  proxies: ReverseProxy[];
+  onDelete: (proxyId: number) => Promise<void>;
+  onAddClick: () => void;
+  isAddDialogOpen: boolean;
+  onAddDialogChange: (open: boolean) => void;
+  onAddProxy: (data: {
+    port: number;
+    type: "HTTP" | "HTTPS";
+    description?: string;
+  }) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export function ReverseProxyList({
+  proxies,
+  onDelete,
+  isAddDialogOpen,
+  onAddDialogChange,
+  onAddProxy,
+  isSubmitting,
+}: ReverseProxyListProps) {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle className="text-base">Reverse Proxies</CardTitle>
+          <CardDescription>
+            Configure reverse proxies to expose services
+          </CardDescription>
+        </div>
+        <AddProxyDialog
+          open={isAddDialogOpen}
+          onOpenChange={onAddDialogChange}
+          onSubmit={onAddProxy}
+          isSubmitting={isSubmitting}
+        />
+      </CardHeader>
+      <CardContent>
+        {proxies && proxies.length > 0 ? (
+          <div className="space-y-3">
+            {proxies.map((proxy) => (
+              <ReverseProxyItem
+                key={proxy.id}
+                proxy={proxy}
+                onDelete={onDelete}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted-foreground py-8">
+            No reverse proxies configured
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+interface ReverseProxyItemProps {
+  proxy: ReverseProxy;
+  onDelete: (proxyId: number) => Promise<void>;
+}
+
+function ReverseProxyItem({ proxy, onDelete }: ReverseProxyItemProps) {
+  return (
+    <div className="flex items-center justify-between rounded-lg border p-3">
+      <div className="flex items-center gap-3">
+        <Globe className="size-4 text-muted-foreground" />
+        <div>
+          <p className="font-medium">Port {proxy.targetPort}</p>
+          <p className="text-sm text-muted-foreground">
+            {proxy.type} • {proxy.description || "No description"}
+          </p>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button variant="ghost" size="icon">
+          <ExternalLink className="size-4" />
+        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-destructive">
+              <Trash2 className="size-4" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Proxy</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this reverse proxy? Services on
+                port {proxy.targetPort} will no longer be accessible.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => onDelete(proxy.id)}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </div>
+  );
+}
+
+// ==================== Audit Log List ====================
+
+export interface AuditLog {
+  id: number;
+  action: string;
+  notes?: string;
+  timestamp?: string | number;
+}
+
+interface AuditLogListProps {
+  logs: AuditLog[];
+}
+
+export function AuditLogList({ logs }: AuditLogListProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Audit Logs</CardTitle>
+        <CardDescription>Activity history for this instance</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {logs.length > 0 ? (
+          <div className="space-y-3">
+            {logs.map((log) => (
+              <AuditLogItem key={log.id} log={log} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted-foreground py-8">
+            No audit logs available
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+interface AuditLogItemProps {
+  log: AuditLog;
+}
+
+function AuditLogItem({ log }: AuditLogItemProps) {
+  const formattedTime = log.timestamp
+    ? new Date(
+        typeof log.timestamp === "string" || typeof log.timestamp === "number"
+          ? log.timestamp
+          : "",
+      ).toLocaleString()
+    : "";
+
+  return (
+    <div className="flex items-start gap-3 rounded-lg border p-3">
+      <History className="size-4 mt-0.5 text-muted-foreground" />
+      <div className="flex-1">
+        <p className="font-medium">{log.action}</p>
+        <p className="text-sm text-muted-foreground">
+          {log.notes || "No additional notes"}
+        </p>
+        {formattedTime && (
+          <p className="text-xs text-muted-foreground mt-1">{formattedTime}</p>
+        )}
+      </div>
+    </div>
+  );
+}
