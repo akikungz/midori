@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 
 import { api, fetchClinet } from "@midori/lib/api";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Label } from "@midori/components/ui/label";
@@ -59,6 +60,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@midori/components/ui/alert-dialog";
+import { SelectableAutocomplete } from "./courses/CourseDialogs";
 
 type Semester = {
   id: number;
@@ -102,6 +104,13 @@ export function SemestersClient() {
   // Courses assignment states
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
 
+  // Use autocomplete for courses selection in edit dialog
+  const coursesAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/courses",
+    limit: 50,
+    enabled: isEditDialogOpen,
+  });
+
   const { data, isLoading, refetch } = api.useQuery(
     "get",
     "/api/academic/semesters",
@@ -112,16 +121,8 @@ export function SemestersClient() {
     },
   );
 
-  // Fetch all courses for assignment
-  const { data: coursesData } = api.useQuery("get", "/api/academic/courses", {
-    params: {
-      query: { page: 1, pageSize: 100 },
-    },
-  });
-
   const semesters = data?.values || [];
   const totalPages = data?.totalPages || 1;
-  const allCourses = coursesData?.values || [];
 
   const formatDate = (date: string | number | Record<string, never>) => {
     if (typeof date === "string" || typeof date === "number") {
@@ -595,38 +596,16 @@ export function SemestersClient() {
                 </div>
               </TabsContent>
               <TabsContent value="courses" className="pt-4">
-                <div className="max-h-64 overflow-y-auto">
-                  {allCourses.length === 0 ? (
-                    <p className="py-4 text-center text-sm text-muted-foreground">
-                      No courses available
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {allCourses.map((course) => (
-                        <button
-                          type="button"
-                          key={course.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
-                            selectedCourseIds.includes(course.id)
-                              ? "border-primary bg-primary/5"
-                              : "hover:bg-muted/50"
-                          }`}
-                          onClick={() => toggleCourse(course.id)}
-                        >
-                          <div>
-                            <p className="font-medium">{course.code}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {course.title}
-                            </p>
-                          </div>
-                          {selectedCourseIds.includes(course.id) && (
-                            <Check className="size-5 text-primary" />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <SelectableAutocomplete
+                  search={coursesAutocomplete.search}
+                  onSearchChange={coursesAutocomplete.setSearch}
+                  options={coursesAutocomplete.options}
+                  isLoading={coursesAutocomplete.isLoading}
+                  selectedIds={selectedCourseIds}
+                  onToggle={toggleCourse}
+                  searchPlaceholder="Search courses..."
+                  emptyMessage="No courses found"
+                />
               </TabsContent>
             </Tabs>
           )}

@@ -828,6 +828,106 @@ export interface paths {
     patch: operations["patchApiStorageFilesByFileIdPermissionsByPermissionId"];
     trace?: never;
   };
+  "/api/autocomplete/courses": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get course options
+     * @description Get autocomplete options for courses
+     */
+    get: operations["getApiAutocompleteCourses"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/autocomplete/semesters": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get semester options
+     * @description Get autocomplete options for semesters
+     */
+    get: operations["getApiAutocompleteSemesters"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/autocomplete/instructors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get instructor options
+     * @description Get autocomplete options for instructors
+     */
+    get: operations["getApiAutocompleteInstructors"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/autocomplete/templates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get template options
+     * @description Get autocomplete options for PVE templates
+     */
+    get: operations["getApiAutocompleteTemplates"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/autocomplete/course-offerings": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get course offering options
+     * @description Get autocomplete options for course offerings
+     */
+    get: operations["getApiAutocompleteCourse-offerings"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/auth/sign-in/social": {
     parameters: {
       query?: never;
@@ -4285,6 +4385,30 @@ export interface components {
       /** @description Number of items per page */
       pageSize: number;
     };
+    /** @description Query parameters for autocomplete endpoints */
+    AutocompleteQuery: {
+      /** @description Search term to filter options */
+      search?: string;
+      /**
+       * @description Maximum number of options to return
+       * @default 10
+       */
+      limit: number;
+    };
+    /** @description A single autocomplete option */
+    AutocompleteOption: {
+      /** @description Unique identifier for the option */
+      id: number;
+      /** @description Display label for the option */
+      label: string;
+    };
+    /** @description List of autocomplete options */
+    AutocompleteResponse: {
+      /** @description Unique identifier for the option */
+      id: number;
+      /** @description Display label for the option */
+      label: string;
+    }[];
     User: {
       id?: string;
       name: string;
@@ -6468,6 +6592,121 @@ export interface operations {
             /** @description Error message */
             message: string;
           };
+        };
+      };
+    };
+  };
+  getApiAutocompleteCourses: {
+    parameters: {
+      query?: {
+        search?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of autocomplete options */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutocompleteResponse"];
+        };
+      };
+    };
+  };
+  getApiAutocompleteSemesters: {
+    parameters: {
+      query?: {
+        search?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of autocomplete options */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutocompleteResponse"];
+        };
+      };
+    };
+  };
+  getApiAutocompleteInstructors: {
+    parameters: {
+      query?: {
+        search?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of autocomplete options */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutocompleteResponse"];
+        };
+      };
+    };
+  };
+  getApiAutocompleteTemplates: {
+    parameters: {
+      query?: {
+        search?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of autocomplete options */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutocompleteResponse"];
+        };
+      };
+    };
+  };
+  "getApiAutocompleteCourse-offerings": {
+    parameters: {
+      query?: {
+        search?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description List of autocomplete options */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutocompleteResponse"];
         };
       };
     };

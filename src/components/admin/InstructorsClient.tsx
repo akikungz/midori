@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Users,
   Search,
@@ -9,12 +9,13 @@ import {
   Loader2,
   User,
   BookOpen,
-  Check,
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { api, fetchClinet } from "@midori/lib/api";
+import { useDebounce } from "@midori/hooks/useCommon";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Card, CardHeader } from "@midori/components/ui/card";
@@ -65,7 +66,7 @@ import {
   getRoleBadgeVariant,
   type Role,
 } from "@midori/lib/roles";
-import { cn } from "@midori/lib/utils";
+import { SelectableAutocomplete } from "./courses/CourseDialogs";
 
 type Instructor = {
   id: number;
@@ -74,18 +75,12 @@ type Instructor = {
   role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
 };
 
-type Course = {
-  id: number;
-  code: string;
-  title: string;
-  isActive: boolean;
-};
-
 export function InstructorsClient() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const searchQuery = useDebounce(inputValue, 300);
 
   // Edit dialog state
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -103,6 +98,19 @@ export function InstructorsClient() {
     useState<Instructor | null>(null);
   const [isPromoting, setIsPromoting] = useState(false);
 
+  // Use autocomplete for courses selection in edit dialog
+  const coursesAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/courses",
+    limit: 50,
+    enabled: editDialogOpen,
+  });
+
+  // Reset page when search query changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: false
+  useEffect(() => {
+    setPage(1);
+  }, [inputValue]);
+
   // Use API search params for server-side filtering
   const { data, isLoading } = api.useQuery("get", "/api/academic/instructors", {
     params: {
@@ -111,13 +119,6 @@ export function InstructorsClient() {
         pageSize,
         ...(searchQuery && { name: searchQuery }),
       },
-    },
-  });
-
-  // Fetch all courses for assignment
-  const { data: coursesData } = api.useQuery("get", "/api/academic/courses", {
-    params: {
-      query: { page: 1, pageSize: 100 },
     },
   });
 
@@ -144,19 +145,6 @@ export function InstructorsClient() {
 
   const instructors = data?.values || [];
   const totalPages = data?.totalPages || 1;
-  const courses: Course[] = coursesData?.values || [];
-
-  // Debounced search handler
-  const handleSearchChange = useMemo(() => {
-    let timeoutId: NodeJS.Timeout;
-    return (value: string) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setSearchQuery(value);
-        setPage(1); // Reset to first page when searching
-      }, 300);
-    };
-  }, []);
 
   const getInitials = (name: string) => {
     return name
@@ -278,7 +266,8 @@ export function InstructorsClient() {
         <Input
           placeholder="Search instructors by name..."
           className="pl-9"
-          onChange={(e) => handleSearchChange(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
       </div>
 
@@ -437,52 +426,18 @@ export function InstructorsClient() {
                     <Skeleton key={i} className="h-12 w-full" />
                   ))}
                 </div>
-              ) : courses.length === 0 ? (
-                <div className="py-8 text-center text-muted-foreground">
-                  <BookOpen className="mx-auto mb-2 size-8 opacity-50" />
-                  <p>No courses available</p>
-                </div>
               ) : (
-                <div className="max-h-64 space-y-2 overflow-y-auto pr-2">
-                  {courses.map((course) => {
-                    const isSelected = selectedCourseIds.includes(course.id);
-                    return (
-                      <button
-                        key={course.id}
-                        type="button"
-                        onClick={() => toggleCourseSelection(course.id)}
-                        className={cn(
-                          "flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors",
-                          isSelected
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50",
-                        )}
-                      >
-                        <div>
-                          <p className="font-medium">{course.code}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {course.title}
-                          </p>
-                        </div>
-                        <div
-                          className={cn(
-                            "flex size-5 items-center justify-center rounded-full border-2 transition-colors",
-                            isSelected
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-muted-foreground/30",
-                          )}
-                        >
-                          {isSelected && <Check className="size-3" />}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                <SelectableAutocomplete
+                  search={coursesAutocomplete.search}
+                  onSearchChange={coursesAutocomplete.setSearch}
+                  options={coursesAutocomplete.options}
+                  isLoading={coursesAutocomplete.isLoading}
+                  selectedIds={selectedCourseIds}
+                  onToggle={toggleCourseSelection}
+                  searchPlaceholder="Search courses..."
+                  emptyMessage="No courses found"
+                />
               )}
-              <p className="mt-3 text-sm text-muted-foreground">
-                {selectedCourseIds.length} course
-                {selectedCourseIds.length !== 1 ? "s" : ""} selected
-              </p>
             </TabsContent>
           </Tabs>
 

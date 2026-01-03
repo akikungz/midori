@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import type { Course, Semester } from "@midori/types/admin";
+import type { Semester, Course } from "@midori/types/admin";
 import { formatDateForInput } from "@midori/lib/format";
 import { api, fetchClinet } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
@@ -92,13 +92,8 @@ export function SemestersClient() {
     },
   );
 
-  const { data: coursesData } = api.useQuery("get", "/api/academic/courses", {
-    params: { query: { page: 1, pageSize: 100 } },
-  });
-
   const semesters = (data?.values || []) as Semester[];
   const totalPages = data?.totalPages || 1;
-  const allCourses = (coursesData?.values || []) as Course[];
 
   // ============================================================================
   // Handlers
@@ -351,7 +346,6 @@ export function SemestersClient() {
         onSubmit={handleEditSemester}
         isSubmitting={isSubmitting}
         isLoadingDetails={isLoadingSemesterDetails}
-        allCourses={allCourses}
         selectedCourseIds={courseSelection.selected}
         onToggleCourse={courseSelection.toggle}
       />

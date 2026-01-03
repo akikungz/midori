@@ -1,13 +1,13 @@
 "use client";
 
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, Search } from "lucide-react";
 
-import type { Course, Instructor, Semester } from "@midori/types/admin";
+import type { Course } from "@midori/types/admin";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Label } from "@midori/components/ui/label";
 import { Textarea } from "@midori/components/ui/textarea";
-import { Badge } from "@midori/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -131,11 +131,9 @@ interface EditCourseDialogProps {
   isSubmitting: boolean;
   isLoadingDetails: boolean;
   // Instructors
-  allInstructors: Instructor[];
   selectedInstructorIds: number[];
   onToggleInstructor: (id: number) => void;
   // Semesters
-  allSemesters: Semester[];
   selectedSemesterIds: number[];
   onToggleSemester: (id: number) => void;
 }
@@ -152,13 +150,24 @@ export function EditCourseDialog({
   onSubmit,
   isSubmitting,
   isLoadingDetails,
-  allInstructors,
   selectedInstructorIds,
   onToggleInstructor,
-  allSemesters,
   selectedSemesterIds,
   onToggleSemester,
 }: EditCourseDialogProps) {
+  // Use autocomplete for instructors and semesters
+  const instructorsAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/instructors",
+    limit: 50,
+    enabled: isOpen,
+  });
+
+  const semestersAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/semesters",
+    limit: 50,
+    enabled: isOpen,
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
@@ -214,37 +223,27 @@ export function EditCourseDialog({
               </div>
             </TabsContent>
             <TabsContent value="instructors" className="pt-4">
-              <SelectableList
-                items={allInstructors}
+              <SelectableAutocomplete
+                search={instructorsAutocomplete.search}
+                onSearchChange={instructorsAutocomplete.setSearch}
+                options={instructorsAutocomplete.options}
+                isLoading={instructorsAutocomplete.isLoading}
                 selectedIds={selectedInstructorIds}
                 onToggle={onToggleInstructor}
-                renderItem={(instructor) => (
-                  <>
-                    <p className="font-medium">{instructor.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {instructor.email}
-                    </p>
-                  </>
-                )}
-                emptyMessage="No instructors available"
+                searchPlaceholder="Search instructors..."
+                emptyMessage="No instructors found"
               />
             </TabsContent>
             <TabsContent value="semesters" className="pt-4">
-              <SelectableList
-                items={allSemesters}
+              <SelectableAutocomplete
+                search={semestersAutocomplete.search}
+                onSearchChange={semestersAutocomplete.setSearch}
+                options={semestersAutocomplete.options}
+                isLoading={semestersAutocomplete.isLoading}
                 selectedIds={selectedSemesterIds}
                 onToggle={onToggleSemester}
-                renderItem={(semester) => (
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium">{semester.name}</p>
-                    {semester.isCurrent && (
-                      <Badge variant="secondary" className="text-xs">
-                        Current
-                      </Badge>
-                    )}
-                  </div>
-                )}
-                emptyMessage="No semesters available"
+                searchPlaceholder="Search semesters..."
+                emptyMessage="No semesters found"
               />
             </TabsContent>
           </Tabs>
@@ -271,7 +270,91 @@ export function EditCourseDialog({
 }
 
 // ============================================================================
-// Selectable List (reusable for instructors/semesters/courses)
+// Selectable Autocomplete (with search input)
+// ============================================================================
+
+interface AutocompleteOption {
+  id: number;
+  label: string;
+}
+
+interface SelectableAutocompleteProps {
+  search: string;
+  onSearchChange: (value: string) => void;
+  options: AutocompleteOption[];
+  isLoading?: boolean;
+  selectedIds: number[];
+  onToggle: (id: number) => void;
+  searchPlaceholder?: string;
+  emptyMessage?: string;
+}
+
+export function SelectableAutocomplete({
+  search,
+  onSearchChange,
+  options,
+  isLoading = false,
+  selectedIds,
+  onToggle,
+  searchPlaceholder = "Search...",
+  emptyMessage = "No items found",
+}: SelectableAutocompleteProps) {
+  return (
+    <div className="space-y-3">
+      {/* Search Input */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder={searchPlaceholder}
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+
+      {/* Selected Count */}
+      {selectedIds.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          {selectedIds.length} selected
+        </p>
+      )}
+
+      {/* Options List */}
+      <div className="max-h-48 space-y-2 overflow-y-auto">
+        {isLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          </div>
+        ) : options.length === 0 ? (
+          <p className="py-4 text-center text-sm text-muted-foreground">
+            {emptyMessage}
+          </p>
+        ) : (
+          options.map((option) => (
+            <button
+              type="button"
+              key={option.id}
+              className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                selectedIds.includes(option.id)
+                  ? "border-primary bg-primary/5"
+                  : "hover:bg-muted/50"
+              }`}
+              onClick={() => onToggle(option.id)}
+            >
+              <p className="font-medium">{option.label}</p>
+              {selectedIds.includes(option.id) && (
+                <Check className="size-5 text-primary" />
+              )}
+            </button>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Selectable List (legacy - for backward compatibility)
 // ============================================================================
 
 interface SelectableListProps<T extends { id: number }> {

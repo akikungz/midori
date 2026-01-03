@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Clock,
   Plus,
@@ -8,6 +8,7 @@ import {
   History,
 } from "lucide-react";
 
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import {
   Dialog,
@@ -25,6 +26,7 @@ import {
 } from "@midori/components/ui/field";
 import { Input } from "@midori/components/ui/input";
 import { Textarea } from "@midori/components/ui/textarea";
+import { Autocomplete } from "@midori/components/ui/autocomplete";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -71,24 +73,43 @@ export function CreateInstanceDialog({
   onSubmit,
   isSubmitting,
 }: CreateInstanceDialogProps) {
-  const [pveTemplateId, setPveTemplateId] = useState("1");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
+    null,
+  );
   const [cpus, setCpus] = useState("2");
   const [memoryGB, setMemoryGB] = useState("4");
   const [diskGB, setDiskGB] = useState("20");
 
+  // Use autocomplete hook for templates
+  const templatesAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/templates",
+    limit: 20,
+    enabled: open, // Only fetch when dialog is open
+  });
+
+  // Store reset function in a ref to avoid dependency issues
+  const resetAutocompleteRef = useRef(templatesAutocomplete.reset);
+  resetAutocompleteRef.current = templatesAutocomplete.reset;
+
+  // Reset form when dialog closes
+  useEffect(() => {
+    if (!open) {
+      setSelectedTemplateId(null);
+      setCpus("2");
+      setMemoryGB("4");
+      setDiskGB("20");
+      resetAutocompleteRef.current();
+    }
+  }, [open]);
+
   const handleSubmit = async () => {
-    if (!pveTemplateId) return;
+    if (!selectedTemplateId) return;
     await onSubmit({
-      pveTemplateId: Number(pveTemplateId),
+      pveTemplateId: selectedTemplateId,
       cpus: Number(cpus),
       memoryGB: Number(memoryGB),
       diskGB: Number(diskGB),
     });
-    // Reset form on success
-    setPveTemplateId("1");
-    setCpus("2");
-    setMemoryGB("4");
-    setDiskGB("20");
   };
 
   return (
@@ -102,16 +123,20 @@ export function CreateInstanceDialog({
         </DialogHeader>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="pve-template">Template ID</FieldLabel>
+            <FieldLabel htmlFor="pve-template">Template</FieldLabel>
             <FieldDescription>
-              PVE template to use for the instance
+              Select a PVE template for the instance
             </FieldDescription>
-            <Input
-              id="pve-template"
-              type="number"
-              min="1"
-              value={pveTemplateId}
-              onChange={(e) => setPveTemplateId(e.target.value)}
+            <Autocomplete
+              placeholder="Select a template..."
+              searchPlaceholder="Search templates..."
+              search={templatesAutocomplete.search}
+              onSearchChange={templatesAutocomplete.setSearch}
+              options={templatesAutocomplete.options}
+              isLoading={templatesAutocomplete.isLoading}
+              value={selectedTemplateId}
+              onChange={setSelectedTemplateId}
+              emptyMessage="No templates found."
             />
           </Field>
           <Field>
@@ -152,7 +177,7 @@ export function CreateInstanceDialog({
           </Field>
           <Button
             className="w-full"
-            disabled={!pveTemplateId || isSubmitting}
+            disabled={!selectedTemplateId || isSubmitting}
             onClick={handleSubmit}
           >
             {isSubmitting ? "Creating..." : "Create Instance"}

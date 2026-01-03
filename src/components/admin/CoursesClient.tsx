@@ -9,11 +9,11 @@ import {
   Loader2,
   Power,
   PowerOff,
-  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { api, fetchClinet } from "@midori/lib/api";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Label } from "@midori/components/ui/label";
@@ -49,6 +49,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@midori/components/ui/tabs";
+import { SelectableAutocomplete } from "./courses/CourseDialogs";
 
 type Course = {
   id: number;
@@ -100,6 +101,19 @@ export function CoursesClient() {
   // Semesters assignment states
   const [selectedSemesterIds, setSelectedSemesterIds] = useState<number[]>([]);
 
+  // Use autocomplete for instructors and semesters selection in edit dialog
+  const instructorsAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/instructors",
+    limit: 50,
+    enabled: isEditDialogOpen,
+  });
+
+  const semestersAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/semesters",
+    limit: 50,
+    enabled: isEditDialogOpen,
+  });
+
   const { data, isLoading, refetch } = api.useQuery(
     "get",
     "/api/academic/courses",
@@ -114,32 +128,8 @@ export function CoursesClient() {
     },
   );
 
-  // Fetch all instructors for assignment
-  const { data: instructorsData } = api.useQuery(
-    "get",
-    "/api/academic/instructors",
-    {
-      params: {
-        query: { page: 1, pageSize: 100 },
-      },
-    },
-  );
-
-  // Fetch all semesters for assignment
-  const { data: semestersData } = api.useQuery(
-    "get",
-    "/api/academic/semesters",
-    {
-      params: {
-        query: { page: 1, pageSize: 100 },
-      },
-    },
-  );
-
   const courses = data?.values || [];
   const totalPages = data?.totalPages || 1;
-  const allInstructors = instructorsData?.values || [];
-  const allSemesters = semestersData?.values || [];
 
   const resetForm = () => {
     setFormCode("");
@@ -601,74 +591,28 @@ export function CoursesClient() {
                 </div>
               </TabsContent>
               <TabsContent value="instructors" className="pt-4">
-                <div className="max-h-64 overflow-y-auto">
-                  {allInstructors.length === 0 ? (
-                    <p className="text-center text-sm text-muted-foreground py-4">
-                      No instructors available
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {allInstructors.map((instructor) => (
-                        <button
-                          type="button"
-                          key={instructor.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
-                            selectedInstructorIds.includes(instructor.id)
-                              ? "border-primary bg-primary/5"
-                              : "hover:bg-muted/50"
-                          }`}
-                          onClick={() => toggleInstructor(instructor.id)}
-                        >
-                          <div>
-                            <p className="font-medium">{instructor.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {instructor.email}
-                            </p>
-                          </div>
-                          {selectedInstructorIds.includes(instructor.id) && (
-                            <Check className="size-5 text-primary" />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <SelectableAutocomplete
+                  search={instructorsAutocomplete.search}
+                  onSearchChange={instructorsAutocomplete.setSearch}
+                  options={instructorsAutocomplete.options}
+                  isLoading={instructorsAutocomplete.isLoading}
+                  selectedIds={selectedInstructorIds}
+                  onToggle={toggleInstructor}
+                  searchPlaceholder="Search instructors..."
+                  emptyMessage="No instructors found"
+                />
               </TabsContent>
               <TabsContent value="semesters" className="pt-4">
-                <div className="max-h-64 overflow-y-auto">
-                  {allSemesters.length === 0 ? (
-                    <p className="text-center text-sm text-muted-foreground py-4">
-                      No semesters available
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {allSemesters.map((semester) => (
-                        <button
-                          type="button"
-                          key={semester.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
-                            selectedSemesterIds.includes(semester.id)
-                              ? "border-primary bg-primary/5"
-                              : "hover:bg-muted/50"
-                          }`}
-                          onClick={() => toggleSemester(semester.id)}
-                        >
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">{semester.name}</p>
-                            {semester.isCurrent && (
-                              <Badge variant="secondary" className="text-xs">
-                                Current
-                              </Badge>
-                            )}
-                          </div>
-                          {selectedSemesterIds.includes(semester.id) && (
-                            <Check className="size-5 text-primary" />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <SelectableAutocomplete
+                  search={semestersAutocomplete.search}
+                  onSearchChange={semestersAutocomplete.setSearch}
+                  options={semestersAutocomplete.options}
+                  isLoading={semestersAutocomplete.isLoading}
+                  selectedIds={selectedSemesterIds}
+                  onToggle={toggleSemester}
+                  searchPlaceholder="Search semesters..."
+                  emptyMessage="No semesters found"
+                />
               </TabsContent>
             </Tabs>
           )}

@@ -2,7 +2,8 @@
 
 import { Loader2 } from "lucide-react";
 
-import type { Course, Semester } from "@midori/types/admin";
+import type { Semester } from "@midori/types/admin";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Label } from "@midori/components/ui/label";
@@ -30,7 +31,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@midori/components/ui/alert-dialog";
-import { SelectableList } from "../courses/CourseDialogs";
+import { SelectableAutocomplete } from "../courses/CourseDialogs";
 
 // ============================================================================
 // Add Semester Dialog
@@ -135,7 +136,6 @@ interface EditSemesterDialogProps {
   onSubmit: () => void;
   isSubmitting: boolean;
   isLoadingDetails: boolean;
-  allCourses: Course[];
   selectedCourseIds: number[];
   onToggleCourse: (id: number) => void;
 }
@@ -152,10 +152,16 @@ export function EditSemesterDialog({
   onSubmit,
   isSubmitting,
   isLoadingDetails,
-  allCourses,
   selectedCourseIds,
   onToggleCourse,
 }: EditSemesterDialogProps) {
+  // Use autocomplete for courses
+  const coursesAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/courses",
+    limit: 50,
+    enabled: isOpen,
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
@@ -207,19 +213,15 @@ export function EditSemesterDialog({
               </div>
             </TabsContent>
             <TabsContent value="courses" className="pt-4">
-              <SelectableList
-                items={allCourses}
+              <SelectableAutocomplete
+                search={coursesAutocomplete.search}
+                onSearchChange={coursesAutocomplete.setSearch}
+                options={coursesAutocomplete.options}
+                isLoading={coursesAutocomplete.isLoading}
                 selectedIds={selectedCourseIds}
                 onToggle={onToggleCourse}
-                renderItem={(course) => (
-                  <>
-                    <p className="font-medium">{course.code}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {course.title}
-                    </p>
-                  </>
-                )}
-                emptyMessage="No courses available"
+                searchPlaceholder="Search courses..."
+                emptyMessage="No courses found"
               />
             </TabsContent>
           </Tabs>

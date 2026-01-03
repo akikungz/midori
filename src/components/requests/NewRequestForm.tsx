@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 
 import { fetchClinet } from "@midori/lib/api";
+import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Textarea } from "@midori/components/ui/textarea";
@@ -15,13 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@midori/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@midori/components/ui/select";
+import { Autocomplete } from "@midori/components/ui/autocomplete";
 import {
   Field,
   FieldGroup,
@@ -37,29 +32,27 @@ import {
 } from "@midori/components/ui/empty";
 import { Slider } from "@midori/components/ui/slider";
 
-interface Course {
-  id: number;
-  code: string;
-  title: string;
-}
-
-interface NewRequestFormProps {
-  courses: Course[];
-}
-
-export function NewRequestForm({ courses }: NewRequestFormProps) {
+export function NewRequestForm() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedCourseId, setSelectedCourseId] = useState<string>("");
+  const [selectedCourseOfferingId, setSelectedCourseOfferingId] = useState<
+    number | null
+  >(null);
   const [cpus, setCpus] = useState(2);
   const [memoryGB, setMemoryGB] = useState(4);
   const [diskGB, setDiskGB] = useState(50);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Use autocomplete hook for course offerings
+  const courseOfferingsAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/course-offerings",
+    limit: 20,
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCourseId || !title || !description) return;
+    if (!selectedCourseOfferingId || !title || !description) return;
 
     setIsSubmitting(true);
     try {
@@ -67,7 +60,7 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
         body: {
           title,
           description,
-          courseOfferingId: Number(selectedCourseId),
+          courseOfferingId: selectedCourseOfferingId,
           cpus,
           memoryMB: memoryGB * 1024,
           diskGB,
@@ -81,7 +74,12 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
     }
   };
 
-  if (courses.length === 0) {
+  // Show empty state only when autocomplete returns empty results and not loading
+  if (
+    !courseOfferingsAutocomplete.isLoading &&
+    courseOfferingsAutocomplete.options.length === 0 &&
+    courseOfferingsAutocomplete.search === ""
+  ) {
     return (
       <Empty>
         <EmptyMedia variant="icon">
@@ -131,21 +129,17 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
                   <FieldDescription>
                     Select the course this instance is for
                   </FieldDescription>
-                  <Select
-                    value={selectedCourseId}
-                    onValueChange={setSelectedCourseId}
-                  >
-                    <SelectTrigger id="course">
-                      <SelectValue placeholder="Select a course" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {courses.map((course) => (
-                        <SelectItem key={course.id} value={String(course.id)}>
-                          {course.code} - {course.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Autocomplete
+                    placeholder="Select a course..."
+                    searchPlaceholder="Search courses..."
+                    search={courseOfferingsAutocomplete.search}
+                    onSearchChange={courseOfferingsAutocomplete.setSearch}
+                    options={courseOfferingsAutocomplete.options}
+                    isLoading={courseOfferingsAutocomplete.isLoading}
+                    value={selectedCourseOfferingId}
+                    onChange={setSelectedCourseOfferingId}
+                    emptyMessage="No courses found."
+                  />
                 </Field>
 
                 <Field>
@@ -276,7 +270,10 @@ export function NewRequestForm({ courses }: NewRequestFormProps) {
               type="submit"
               className="w-full"
               disabled={
-                !title || !selectedCourseId || !description || isSubmitting
+                !title ||
+                !selectedCourseOfferingId ||
+                !description ||
+                isSubmitting
               }
             >
               {isSubmitting ? "Submitting..." : "Submit Request"}

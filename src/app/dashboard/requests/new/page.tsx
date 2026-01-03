@@ -2,10 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import {
-  getServerSession,
-  createServerApiClient,
-} from "@midori/lib/server-api";
+import { getServerSession } from "@midori/lib/server-api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { NewRequestForm } from "@midori/components/requests/NewRequestForm";
@@ -21,7 +18,7 @@ export default async function NewRequestPage() {
   const role = user.role as Role;
   if (!hasPermission(role, "CREATE_REQUEST")) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
+      <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
         <div className="text-6xl">🚫</div>
         <h2 className="text-xl font-semibold">Access Denied</h2>
         <p className="text-muted-foreground">
@@ -30,16 +27,6 @@ export default async function NewRequestPage() {
       </div>
     );
   }
-
-  // Fetch courses on server
-  const api = await createServerApiClient();
-  const { data: coursesData } = await api.GET("/api/academic/courses", {
-    params: {
-      query: { page: 1, pageSize: 100, isActive: true },
-    },
-  });
-
-  const courses = coursesData?.values || [];
 
   return (
     <div className="space-y-6">
@@ -60,7 +47,7 @@ export default async function NewRequestPage() {
         </div>
       </div>
 
-      <NewRequestForm courses={courses} />
+      <NewRequestForm />
     </div>
   );
 }

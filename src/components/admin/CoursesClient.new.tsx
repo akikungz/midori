@@ -87,22 +87,8 @@ export function CoursesClient() {
     },
   );
 
-  const { data: instructorsData } = api.useQuery(
-    "get",
-    "/api/academic/instructors",
-    { params: { query: { page: 1, pageSize: 100 } } },
-  );
-
-  const { data: semestersData } = api.useQuery(
-    "get",
-    "/api/academic/semesters",
-    { params: { query: { page: 1, pageSize: 100 } } },
-  );
-
   const courses = (data?.values || []) as Course[];
   const totalPages = data?.totalPages || 1;
-  const allInstructors = (instructorsData?.values || []) as Instructor[];
-  const allSemesters = (semestersData?.values || []) as Semester[];
 
   // ============================================================================
   // Handlers
@@ -347,10 +333,8 @@ export function CoursesClient() {
         onSubmit={handleEditCourse}
         isSubmitting={isSubmitting}
         isLoadingDetails={isLoadingCourseDetails}
-        allInstructors={allInstructors}
         selectedInstructorIds={instructorSelection.selected}
         onToggleInstructor={instructorSelection.toggle}
-        allSemesters={allSemesters}
         selectedSemesterIds={semesterSelection.selected}
         onToggleSemester={semesterSelection.toggle}
       />
