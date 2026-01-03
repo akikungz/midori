@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     },
   },
   rewrites: async () => {
-    if (env.APP_ENV === "production" || !env.SERVER_API_URL) return [];
+    if (process.env.NODE_ENV === "production") return [];
 
     return [
       {
