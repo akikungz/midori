@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { Plus } from "lucide-react";
 
 import { getServerSession } from "@midori/lib/server-api";
 import type { Role } from "@midori/lib/roles";
-import { Button } from "@midori/components/ui/button";
 import { CoursesClient } from "@midori/components/admin/CoursesClient";
 
 export default async function CoursesPage() {
@@ -17,7 +15,7 @@ export default async function CoursesPage() {
   const role = user.role as Role;
   if (role !== "ADMIN") {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
+      <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
         <div className="text-6xl">🚫</div>
         <h2 className="text-xl font-semibold">Access Denied</h2>
         <p className="text-muted-foreground">
@@ -35,10 +33,6 @@ export default async function CoursesPage() {
           <h1 className="text-2xl font-bold tracking-tight">Courses</h1>
           <p className="text-muted-foreground">Manage courses in the system</p>
         </div>
-        <Button>
-          <Plus className="mr-2 size-4" />
-          Add Course
-        </Button>
       </div>
 
       <CoursesClient />
