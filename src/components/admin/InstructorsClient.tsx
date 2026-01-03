@@ -53,7 +53,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@midori/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@midori/components/ui/tabs";
 import { Field, FieldGroup, FieldLabel } from "@midori/components/ui/field";
 import {
   getRoleDisplayName,
@@ -190,18 +195,15 @@ export function InstructorsClient() {
 
     setIsSubmitting(true);
     try {
-      await fetchClinet.PATCH(
-        "/api/academic/instructors/{instructorId}",
-        {
-          params: {
-            path: { instructorId: selectedInstructor.id },
-          },
-          body: {
-            role: editRole,
-            courseIds: selectedCourseIds,
-          },
+      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+        params: {
+          path: { instructorId: selectedInstructor.id },
         },
-      );
+        body: {
+          role: editRole,
+          courseIds: selectedCourseIds,
+        },
+      });
 
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/academic/instructors"],
@@ -229,17 +231,14 @@ export function InstructorsClient() {
 
     setIsPromoting(true);
     try {
-      await fetchClinet.PATCH(
-        "/api/academic/instructors/{instructorId}",
-        {
-          params: {
-            path: { instructorId: instructorToPromote.id },
-          },
-          body: {
-            role: "ADMIN",
-          },
+      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+        params: {
+          path: { instructorId: instructorToPromote.id },
         },
-      );
+        body: {
+          role: "ADMIN",
+        },
+      });
 
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/academic/instructors"],
@@ -496,9 +495,7 @@ export function InstructorsClient() {
               Cancel
             </Button>
             <Button onClick={handleEditSubmit} disabled={isSubmitting}>
-              {isSubmitting && (
-                <Loader2 className="mr-2 size-4 animate-spin" />
-              )}
+              {isSubmitting && <Loader2 className="mr-2 size-4 animate-spin" />}
               Save Changes
             </Button>
           </DialogFooter>
@@ -512,9 +509,7 @@ export function InstructorsClient() {
             <AlertDialogTitle>Promote to Admin</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to promote{" "}
-              <span className="font-semibold">
-                {instructorToPromote?.name}
-              </span>{" "}
+              <span className="font-semibold">{instructorToPromote?.name}</span>{" "}
               to Admin? This will give them full administrative privileges
               including the ability to manage other users, courses, and system
               settings.
@@ -526,9 +521,7 @@ export function InstructorsClient() {
               onClick={handlePromoteConfirm}
               disabled={isPromoting}
             >
-              {isPromoting && (
-                <Loader2 className="mr-2 size-4 animate-spin" />
-              )}
+              {isPromoting && <Loader2 className="mr-2 size-4 animate-spin" />}
               Promote to Admin
             </AlertDialogAction>
           </AlertDialogFooter>
