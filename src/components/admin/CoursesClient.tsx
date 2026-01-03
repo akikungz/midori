@@ -43,7 +43,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@midori/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@midori/components/ui/tabs";
 
 type Course = {
   id: number;
@@ -174,9 +179,7 @@ export function CoursesClient() {
       setSelectedInstructorIds(
         (data.instructors || []).map((i: Instructor) => i.id),
       );
-      setSelectedSemesterIds(
-        (data.semesters || []).map((s: Semester) => s.id),
-      );
+      setSelectedSemesterIds((data.semesters || []).map((s: Semester) => s.id));
     } catch {
       toast.error("An error occurred while loading course details");
     } finally {
@@ -609,10 +612,11 @@ export function CoursesClient() {
                         <button
                           type="button"
                           key={instructor.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${selectedInstructorIds.includes(instructor.id)
+                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                            selectedInstructorIds.includes(instructor.id)
                               ? "border-primary bg-primary/5"
                               : "hover:bg-muted/50"
-                            }`}
+                          }`}
                           onClick={() => toggleInstructor(instructor.id)}
                         >
                           <div>
@@ -642,10 +646,11 @@ export function CoursesClient() {
                         <button
                           type="button"
                           key={semester.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${selectedSemesterIds.includes(semester.id)
+                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                            selectedSemesterIds.includes(semester.id)
                               ? "border-primary bg-primary/5"
                               : "hover:bg-muted/50"
-                            }`}
+                          }`}
                           onClick={() => toggleSemester(semester.id)}
                         >
                           <div className="flex items-center gap-2">
@@ -675,7 +680,10 @@ export function CoursesClient() {
             >
               Cancel
             </Button>
-            <Button onClick={handleEditCourse} disabled={isSubmitting || isLoadingCourseDetails}>
+            <Button
+              onClick={handleEditCourse}
+              disabled={isSubmitting || isLoadingCourseDetails}
+            >
               {isSubmitting && <Loader2 className="mr-2 size-4 animate-spin" />}
               Save Changes
             </Button>

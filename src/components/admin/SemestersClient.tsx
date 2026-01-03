@@ -96,7 +96,8 @@ export function SemestersClient() {
   const [formStartDate, setFormStartDate] = useState("");
   const [formEndDate, setFormEndDate] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoadingSemesterDetails, setIsLoadingSemesterDetails] = useState(false);
+  const [isLoadingSemesterDetails, setIsLoadingSemesterDetails] =
+    useState(false);
 
   // Courses assignment states
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
@@ -112,15 +113,11 @@ export function SemestersClient() {
   );
 
   // Fetch all courses for assignment
-  const { data: coursesData } = api.useQuery(
-    "get",
-    "/api/academic/courses",
-    {
-      params: {
-        query: { page: 1, pageSize: 100 },
-      },
+  const { data: coursesData } = api.useQuery("get", "/api/academic/courses", {
+    params: {
+      query: { page: 1, pageSize: 100 },
     },
-  );
+  });
 
   const semesters = data?.values || [];
   const totalPages = data?.totalPages || 1;
@@ -133,7 +130,9 @@ export function SemestersClient() {
     return "N/A";
   };
 
-  const formatDateForInput = (date: string | number | Record<string, never>) => {
+  const formatDateForInput = (
+    date: string | number | Record<string, never>,
+  ) => {
     if (typeof date === "string" || typeof date === "number") {
       return format(new Date(date), "yyyy-MM-dd");
     }
@@ -176,9 +175,7 @@ export function SemestersClient() {
         return;
       }
 
-      setSelectedCourseIds(
-        (data.courses || []).map((c: Course) => c.id),
-      );
+      setSelectedCourseIds((data.courses || []).map((c: Course) => c.id));
     } catch {
       toast.error("An error occurred while loading semester details");
     } finally {
@@ -609,10 +606,11 @@ export function SemestersClient() {
                         <button
                           type="button"
                           key={course.id}
-                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${selectedCourseIds.includes(course.id)
+                          className={`flex w-full cursor-pointer items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                            selectedCourseIds.includes(course.id)
                               ? "border-primary bg-primary/5"
                               : "hover:bg-muted/50"
-                            }`}
+                          }`}
                           onClick={() => toggleCourse(course.id)}
                         >
                           <div>
@@ -666,7 +664,9 @@ export function SemestersClient() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteSemester}
               disabled={isSubmitting}
