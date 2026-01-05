@@ -32,8 +32,11 @@ COPY --from=build --chown=nextjs:nodejs /app/.next/standalone .
 COPY --from=build --chown=nextjs:nodejs /app/public /app/public
 COPY --from=build --chown=nextjs:nodejs /app/.next/static /app/.next/static
 
+RUN apk add --no-cache openssl ca-certificates \
+  && update-ca-certificates
+
 USER nextjs
 
 EXPOSE 3000
 
-CMD [ "node", "server.js" ]
+CMD [ "node", "--use-system-ca", "server.js" ]
