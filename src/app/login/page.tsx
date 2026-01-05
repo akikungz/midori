@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2Icon, Server } from "lucide-react";
+import { GoogleLogin, useGoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
 import { authClient } from "@midori/lib/auth-client";
 import { useSession } from "@midori/hooks/useSession";
@@ -48,19 +49,53 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, isSessionLoading, sessionError, router]);
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
     setIsGoogleLoading(true);
     setError(null);
     try {
-      await authClient.signIn.social({
+      if (!credentialResponse.credential) {
+        throw new Error("No credential received from Google");
+      }
+
+      // Send id_token to better-auth backend
+      const result = await authClient.signIn.social({
         provider: "google",
+        idToken: {
+          token: credentialResponse.credential,
+          accessToken: "",
+        },
         callbackURL: "/dashboard",
       });
-    } catch {
-      setError("Failed to sign in with Google. Please try again.");
+
+      if (result.error) {
+        throw new Error(result.error.message || "Failed to authenticate");
+      }
+
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to sign in with Google. Please try again.");
       setIsGoogleLoading(false);
     }
   };
+
+  const handleOldGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+
+    try {
+      const result = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      })
+
+      if (result.error) {
+        throw new Error(result.error.message || "Failed to authenticate");
+      }
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to sign in with Google. Please try again.");
+      setIsGoogleLoading(false);
+    }
+  }
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,19 +151,47 @@ export default function LoginPage() {
             )}
 
             {/* Google Sign In */}
-            <Button
-              variant="outline"
-              className="w-full gap-3"
-              onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading || isEmailLoading}
-            >
+            <div className="w-full">
               {isGoogleLoading ? (
-                <Loader2Icon className="size-5 animate-spin" />
+                <Button
+                  variant="outline"
+                  className="w-full gap-3"
+                  disabled
+                >
+                  <Loader2Icon className="size-5 animate-spin" />
+                  Signing in...
+                </Button>
               ) : (
-                <Google className="size-5" />
+                <>
+                  <GoogleLogin
+                    onSuccess={handleGoogleSignIn}
+                    onError={() => {
+                      setError("Failed to sign in with Google. Please try again.");
+                    }}
+                    useOneTap={false}
+                    theme="outline"
+                    size="large"
+                    width="100%"
+                    text="continue_with"
+                  />
+
+                  <Button
+                    variant="outline"
+                    className="w-full gap-3 mt-4"
+                    onClick={handleOldGoogleSignIn}
+                    disabled={isGoogleLoading || isEmailLoading}
+                  >
+                    {isGoogleLoading ? (
+                      <Loader2Icon className="size-5 animate-spin" />
+                    ) : (
+                      <Google className="size-5" />
+                    )}
+                    Continue with Google
+                  </Button>
+
+                </>
               )}
-              Continue with Google
-            </Button>
+            </div>
 
             {/* Dev Mode Email/Password Login */}
             {isDevMode && (
