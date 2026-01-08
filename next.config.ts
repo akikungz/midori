@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       hmrRefreshes: true,
     },
   },
+  experimental: {
+    proxyClientMaxBodySize: "1gb",
+  },
   rewrites: async () => {
     if (process.env.NODE_ENV === "production") return [];
 

@@ -659,7 +659,7 @@ export interface paths {
     put?: never;
     /**
      * Create file or folder
-     * @description Create a new file or folder
+     * @description Create a new file or folder, optionally with file upload
      */
     post: operations["postApiStorageFiles"];
     delete?: never;
@@ -704,14 +704,14 @@ export interface paths {
     post?: never;
     /**
      * Delete file or folder
-     * @description Delete a file or folder and all its children
+     * @description Permanently delete a file or folder and its contents
      */
     delete: operations["deleteApiStorageFilesByFileId"];
     options?: never;
     head?: never;
     /**
-     * Update file or folder
-     * @description Update metadata of a file or folder
+     * Update file or folder metadata
+     * @description Update name, parent folder, or public status
      */
     patch: operations["patchApiStorageFilesByFileId"];
     trace?: never;
@@ -726,8 +726,8 @@ export interface paths {
     get?: never;
     put?: never;
     /**
-     * Move file or folder
-     * @description Move a file or folder to a new location
+     * Move file to another folder
+     * @description Move a file or folder to a different parent folder
      */
     post: operations["postApiStorageFilesByFileIdMove"];
     delete?: never;
@@ -746,8 +746,8 @@ export interface paths {
     get?: never;
     put?: never;
     /**
-     * Copy file or folder
-     * @description Copy a file or folder to a new location
+     * Copy file to another folder
+     * @description Create a copy of a file in the same or different folder
      */
     post: operations["postApiStorageFilesByFileIdCopy"];
     delete?: never;
@@ -800,6 +800,66 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/storage/files/{fileId}/versions/presign_upload": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Presign upload URL for file version
+     * @description Generate a presigned PUT URL to upload a new file version directly to S3
+     */
+    post: operations["postApiStorageFilesByFileIdVersionsPresign_upload"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions/upload": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload file version directly
+     * @description Upload a new file version directly through the API (alternative to presign flow)
+     */
+    post: operations["postApiStorageFilesByFileIdVersionsUpload"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions/{versionId}/presign_download": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Presign download URL for file version
+     * @description Generate a presigned GET URL to download an existing file version from S3
+     */
+    get: operations["getApiStorageFilesByFileIdVersionsByVersionIdPresign_download"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/storage/files/{fileId}/permissions": {
     parameters: {
       query?: never;
@@ -846,6 +906,26 @@ export interface paths {
      * @description Update a user's permission level for a file
      */
     patch: operations["patchApiStorageFilesByFileIdPermissionsByPermissionId"];
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/share": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Share file
+     * @description Share a file publicly and/or with specific users (owner only)
+     */
+    post: operations["postApiStorageFilesByFileIdShare"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
     trace?: never;
   };
   "/api/autocomplete/courses": {
@@ -4108,6 +4188,12 @@ export interface components {
       name: string;
       /** @enum {string} */
       type: "FILE" | "FOLDER";
+      /**
+       * Format: binary
+       * @description File to upload (required if type is FILE)
+       * @default File
+       */
+      file: string;
       parentId?: (string | null) | null;
       /**
        * @description Whether the file is publicly accessible
@@ -4422,6 +4508,150 @@ export interface components {
       currentPage: number;
       /** @description Number of items per page */
       pageSize: number;
+    };
+    ShareFileRequestParams: {
+      /** @description Unique identifier for the file/folder */
+      fileId: string;
+    };
+    /** @description Share a file publicly and/or with specific users */
+    ShareFileRequestBody: {
+      /** @description Whether the file should be publicly viewable */
+      isPublic?: boolean;
+      /** @description Specific users to share with and their permission levels */
+      users?: {
+        /** @description User ID to share with */
+        platformUserId: number;
+        /** @enum {string} */
+        permission: "VIEWER" | "EDITOR" | "OWNER";
+      }[];
+    };
+    ShareFileResponse: {
+      /** @description Unique identifier for the file/folder */
+      id: string;
+      /** @description Name of the file/folder */
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      /** @description Size of the file in bytes (0 for folders) */
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "VIEWER" | "EDITOR" | "OWNER";
+      parentId?: (string | null) | null;
+      /** @description Whether the file is publicly accessible */
+      isPublic: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+      /** @description Full path of the file/folder */
+      path: string;
+      /** @description Child files/folders (for folders) */
+      children?: {
+        /** @description Unique identifier for the file/folder */
+        id: string;
+        /** @description Name of the file/folder */
+        name: string;
+        /** @enum {string} */
+        type: "FILE" | "FOLDER";
+        /** @description Size of the file in bytes (0 for folders) */
+        sizeBytes: number;
+        /** @enum {string} */
+        visibility: "VIEWER" | "EDITOR" | "OWNER";
+        parentId?: (string | null) | null;
+        /** @description Whether the file is publicly accessible */
+        isPublic: boolean;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+      /** @description File versions (for files) */
+      versions?: {
+        /** @description Unique identifier for the version */
+        id: number;
+        /** @description Version number */
+        versionNumber: number;
+        /** @description Size of the version in bytes */
+        sizeBytes: number;
+        /** @description When this version was created */
+        createdAt: Record<string, never> | string | number;
+      }[];
+      /** @description File permissions */
+      permissions?: {
+        /** @description Unique identifier for the permission */
+        id: number;
+        /** @description User ID with permission */
+        platformUserId: number;
+        /** @enum {string} */
+        permission: "VIEWER" | "EDITOR" | "OWNER";
+        user?: {
+          /** @description User ID */
+          id: number;
+          /** @description User name */
+          name: string;
+          /** @description User email */
+          email: string;
+        };
+      }[];
+    };
+    PresignUploadRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    PresignUploadRequestBody: {
+      /** @description Content-Type of the upload */
+      contentType?: string;
+      /**
+       * @description Expiry in seconds
+       * @default 86400
+       */
+      expiresIn: number;
+    };
+    PresignUploadResponse: {
+      /** @description Presigned URL for uploading */
+      url: string;
+      /** @description Storage key/path for uploaded version */
+      storagePath: string;
+      /** @constant */
+      method: "PUT";
+      expiresIn: number;
+      contentType?: string;
+    };
+    PresignDownloadRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+      /** @description Version id to download */
+      versionId: number;
+    };
+    PresignDownloadRequestQuery: {
+      /**
+       * @description Expiry in seconds
+       * @default 86400
+       */
+      expiresIn: number;
+    };
+    PresignDownloadResponse: {
+      /** @description Presigned URL for downloading */
+      url: string;
+      /** @constant */
+      method: "GET";
+      expiresIn: number;
+    };
+    UploadFileVersionRequestParams: {
+      /** @description Unique identifier for the file */
+      fileId: string;
+    };
+    UploadFileVersionResponse: {
+      /** @description Unique identifier for the version */
+      id: number;
+      /** @description Version number */
+      versionNumber: number;
+      /** @description Size of the version in bytes */
+      sizeBytes: number;
+      /** @description When this version was created */
+      createdAt: Record<string, never> | string | number;
+      /** @description Storage path where the file was uploaded */
+      storagePath: string;
     };
     /** @description Query parameters for autocomplete endpoints */
     AutocompleteQuery: {
@@ -6124,20 +6354,6 @@ export interface operations {
           };
         };
       };
-      /** @description Response for status 409 */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Error message */
-            message: string;
-          };
-        };
-      };
     };
   };
   postApiStorageFilesByFileIdCopy: {
@@ -6196,20 +6412,6 @@ export interface operations {
       };
       /** @description Response for status 404 */
       404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Error message */
-            message: string;
-          };
-        };
-      };
-      /** @description Response for status 409 */
-      409: {
         headers: {
           [name: string]: unknown;
         };
@@ -6380,6 +6582,207 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DeleteFileVersionResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdVersionsPresign_upload: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PresignUploadRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["PresignUploadRequestBody"];
+        "multipart/form-data": components["schemas"]["PresignUploadRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PresignUploadResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdVersionsUpload: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UploadFileVersionResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileIdVersionsByVersionIdPresign_download: {
+    parameters: {
+      query?: {
+        expiresIn?: number;
+      };
+      header?: never;
+      path: {
+        fileId: string;
+        versionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PresignDownloadResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
         };
       };
       /** @description Response for status 403 */
@@ -6640,6 +7043,91 @@ export interface operations {
       };
       /** @description Response for status 404 */
       404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdShare: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    /** @description Share a file publicly and/or with specific users */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ShareFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["ShareFileRequestBody"];
+        "multipart/form-data": components["schemas"]["ShareFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ShareFileResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
         headers: {
           [name: string]: unknown;
         };

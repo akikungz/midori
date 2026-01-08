@@ -39,9 +39,12 @@ export function NewRequestForm() {
   const [selectedCourseOfferingId, setSelectedCourseOfferingId] = useState<
     number | null
   >(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
+    null,
+  );
   const [cpus, setCpus] = useState(2);
   const [memoryGB, setMemoryGB] = useState(4);
-  const [diskGB, setDiskGB] = useState(50);
+  const [diskGB, setDiskGB] = useState(16);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Use autocomplete hook for course offerings
@@ -50,9 +53,21 @@ export function NewRequestForm() {
     limit: 20,
   });
 
+  // Use autocomplete hook for templates
+  const templatesAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/templates",
+    limit: 20,
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCourseOfferingId || !title || !description) return;
+    if (
+      !selectedCourseOfferingId ||
+      !selectedTemplateId ||
+      !title ||
+      !description
+    )
+      return;
 
     setIsSubmitting(true);
     try {
@@ -64,7 +79,7 @@ export function NewRequestForm() {
           cpus,
           memoryMB: memoryGB * 1024,
           diskGB,
-          pveTemplateId: 0, // For future implementation
+          pveTemplateId: selectedTemplateId,
         },
       });
       router.push("/dashboard/requests");
@@ -143,6 +158,24 @@ export function NewRequestForm() {
                 </Field>
 
                 <Field>
+                  <FieldLabel htmlFor="template">Operating System</FieldLabel>
+                  <FieldDescription>
+                    Select the operating system template
+                  </FieldDescription>
+                  <Autocomplete
+                    placeholder="Select an OS template..."
+                    searchPlaceholder="Search templates..."
+                    search={templatesAutocomplete.search}
+                    onSearchChange={templatesAutocomplete.setSearch}
+                    options={templatesAutocomplete.options}
+                    isLoading={templatesAutocomplete.isLoading}
+                    value={selectedTemplateId}
+                    onChange={setSelectedTemplateId}
+                    emptyMessage="No templates found."
+                  />
+                </Field>
+
+                <Field>
                   <FieldLabel htmlFor="description">Description</FieldLabel>
                   <FieldDescription>
                     Explain what you'll use this instance for
@@ -205,13 +238,13 @@ export function NewRequestForm() {
                     value={[memoryGB]}
                     onValueChange={(values: number[]) => setMemoryGB(values[0])}
                     min={1}
-                    max={32}
+                    max={16}
                     step={1}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>1 GB</span>
-                    <span>32 GB</span>
+                    <span>16 GB</span>
                   </div>
                 </Field>
 
@@ -226,14 +259,14 @@ export function NewRequestForm() {
                   <Slider
                     value={[diskGB]}
                     onValueChange={(values: number[]) => setDiskGB(values[0])}
-                    min={20}
-                    max={500}
-                    step={10}
+                    min={16}
+                    max={64}
+                    step={4}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>20 GB</span>
-                    <span>500 GB</span>
+                    <span>16 GB</span>
+                    <span>64 GB</span>
                   </div>
                 </Field>
               </FieldGroup>
@@ -272,6 +305,7 @@ export function NewRequestForm() {
               disabled={
                 !title ||
                 !selectedCourseOfferingId ||
+                !selectedTemplateId ||
                 !description ||
                 isSubmitting
               }

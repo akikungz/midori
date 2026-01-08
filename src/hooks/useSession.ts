@@ -14,7 +14,11 @@ export function useSession() {
     "/api/user/me",
     {
       retry: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 30, // 30 minutes - user data rarely changes
+      gcTime: 1000 * 60 * 60, // 1 hour
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   );
 

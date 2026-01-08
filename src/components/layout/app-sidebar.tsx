@@ -111,7 +111,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex size-8 items-center justify-center rounded-lg bg-vm-blue-500 text-white">
                   <Server className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">

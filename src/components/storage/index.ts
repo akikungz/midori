@@ -1,15 +1,11 @@
-export { default as StorageClient } from "./StorageClient.new";
-
+export { StorageClient } from "./StorageClient";
 export {
-  FileGrid,
-  FileList,
-  FileActions,
-  getVisibilityIcon,
-  getVisibilityLabel,
-  canEdit,
-  isOwner,
-} from "./FileViews";
-
+  FileCard,
+  FilesGrid,
+  FilesList,
+  StorageBreadcrumb,
+  EmptyStorage,
+} from "./FileCard";
 export {
   CreateFolderDialog,
   RenameDialog,
@@ -17,12 +13,6 @@ export {
   MoveDialog,
   CopyDialog,
   ShareDialog,
-  DetailsDialog,
   UploadDialog,
-} from "./FileDialogs";
-
-export {
-  BreadcrumbNav,
-  SearchIndicator,
-  EmptyFilesState,
-} from "./FileNavigation";
+  FileDetailsDialog,
+} from "./StorageDialogs";

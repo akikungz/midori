@@ -92,7 +92,7 @@ export function DashboardHeader() {
       </Button>
 
       {!isPending && currentSemester && (
-        <Badge variant="default">{currentSemester.name}</Badge>
+        <Badge variant="vm-blue">{currentSemester.name}</Badge>
       )}
 
       <DropdownMenu>

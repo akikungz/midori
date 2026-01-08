@@ -65,8 +65,8 @@ import {
 
 const statusColors = {
   PENDING: "secondary",
-  ACTIVE: "default",
-  PROMOTED: "destructive",
+  ACTIVE: "vm-blue",
+  PROMOTED: "vm-orange",
   INACTIVE: "outline",
   DELETED: "outline",
 } as const;
