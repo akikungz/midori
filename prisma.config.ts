@@ -8,5 +8,5 @@ export default defineConfig({
   datasource: {
     // biome-ignore lint/style/noNonNullAssertion: false
     url: process.env.DATABASE_URL!,
-  }
+  },
 });

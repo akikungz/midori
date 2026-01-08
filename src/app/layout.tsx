@@ -1,7 +1,6 @@
 import type { PropsWithChildren } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "@midori/styles/globals.css";
 
@@ -31,11 +30,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
       <body
         className={cn(geistSans.variable, geistMono.variable, "antialiased")}
       >
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <QueryProvider>{children}</QueryProvider>
-          </ThemeProvider>
-        </GoogleOAuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

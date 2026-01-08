@@ -55,17 +55,21 @@ export default function LoginPage() {
       const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
-      })
+      });
 
       if (result.error) {
         throw new Error(result.error.message || "Failed to authenticate");
       }
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to sign in with Google. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to sign in with Google. Please try again.",
+      );
       setIsGoogleLoading(false);
     }
-  }
+  };
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,11 +127,7 @@ export default function LoginPage() {
             {/* Google Sign In */}
             <div className="w-full">
               {isGoogleLoading ? (
-                <Button
-                  variant="outline"
-                  className="w-full gap-3"
-                  disabled
-                >
+                <Button variant="outline" className="w-full gap-3" disabled>
                   <Loader2Icon className="size-5 animate-spin" />
                   Signing in...
                 </Button>
