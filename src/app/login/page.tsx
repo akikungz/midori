@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2Icon, Server } from "lucide-react";
-import { GoogleLogin, useGoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
 import { authClient } from "@midori/lib/auth-client";
 import { useSession } from "@midori/hooks/useSession";
@@ -49,36 +48,7 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, isSessionLoading, sessionError, router]);
 
-  const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
-    setIsGoogleLoading(true);
-    setError(null);
-    try {
-      if (!credentialResponse.credential) {
-        throw new Error("No credential received from Google");
-      }
-
-      // Send id_token to better-auth backend
-      const result = await authClient.signIn.social({
-        provider: "google",
-        idToken: {
-          token: credentialResponse.credential,
-          accessToken: "",
-        },
-        callbackURL: "/dashboard",
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message || "Failed to authenticate");
-      }
-
-      router.push("/dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to sign in with Google. Please try again.");
-      setIsGoogleLoading(false);
-    }
-  };
-
-  const handleOldGoogleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
 
     try {
@@ -162,34 +132,19 @@ export default function LoginPage() {
                   Signing in...
                 </Button>
               ) : (
-                <>
-                  <GoogleLogin
-                    onSuccess={handleGoogleSignIn}
-                    onError={() => {
-                      setError("Failed to sign in with Google. Please try again.");
-                    }}
-                    useOneTap={false}
-                    theme="outline"
-                    size="large"
-                    width="100%"
-                    text="continue_with"
-                  />
-
-                  <Button
-                    variant="outline"
-                    className="w-full gap-3 mt-4"
-                    onClick={handleOldGoogleSignIn}
-                    disabled={isGoogleLoading || isEmailLoading}
-                  >
-                    {isGoogleLoading ? (
-                      <Loader2Icon className="size-5 animate-spin" />
-                    ) : (
-                      <Google className="size-5" />
-                    )}
-                    Continue with Google
-                  </Button>
-
-                </>
+                <Button
+                  variant="outline"
+                  className="w-full gap-3 mt-4"
+                  onClick={handleGoogleSignIn}
+                  disabled={isGoogleLoading || isEmailLoading}
+                >
+                  {isGoogleLoading ? (
+                    <Loader2Icon className="size-5 animate-spin" />
+                  ) : (
+                    <Google className="size-5" />
+                  )}
+                  Continue with Google
+                </Button>
               )}
             </div>
 
