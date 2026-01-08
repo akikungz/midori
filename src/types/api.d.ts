@@ -248,6 +248,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/academic/semesters/current": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get current semester
+     * @description Retrieve the current active semester
+     */
+    get: operations["getApiAcademicSemestersCurrent"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/academic/mailing-list": {
     parameters: {
       query?: never;
@@ -2431,6 +2451,7 @@ export interface components {
       name: string;
       /** @description Email address of the user */
       email: string;
+      image: string | null;
       /** @enum {string} */
       role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
     };
@@ -3789,6 +3810,23 @@ export interface components {
         updatedAt?: Record<string, never> | string | number;
       }[];
     };
+    /** @description Response structure for fetching the current active semester, returns null if no current semester exists */
+    GetCurrentSemesterResponse: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    } | null;
     /** @description Request body for adding a new semester */
     AddSemesterRequestBody: {
       /** @description Name of the semester */
@@ -4974,6 +5012,26 @@ export interface operations {
             /** @description Error message */
             message: string;
           };
+        };
+      };
+    };
+  };
+  getApiAcademicSemestersCurrent: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for fetching the current active semester, returns null if no current semester exists */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetCurrentSemesterResponse"];
         };
       };
     };
