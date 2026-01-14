@@ -211,81 +211,83 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {instances.map((instance) => (
-            <Card
-              key={instance.id}
-              className="group transition-colors hover:border-primary/50"
-            >
-              <CardHeader className="flex flex-row items-start justify-between pb-2">
-                <div className="space-y-1">
-                  <CardTitle className="text-base">
-                    {instance.vmDetails?.hostname || `Instance #${instance.id}`}
-                  </CardTitle>
-                  <CardDescription>
-                    {instance.courseOffering
-                      ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
-                      : "No course assigned"}
-                  </CardDescription>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="size-8">
-                      <MoreVertical className="size-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/instances/${instance.id}`}>
-                        View Details
-                      </Link>
-                    </DropdownMenuItem>
-                    {can("PROMOTE_INSTANCE") && (
-                      <DropdownMenuItem>
-                        <ArrowUpCircle className="mr-2 size-4" />
-                        Promote
+            <Link href={`/dashboard/instances/${instance.id}`} key={instance.id} className="text-inherit no-underline">
+              <Card
+                key={instance.id}
+                className="group transition-colors hover:border-primary/50"
+              >
+                <CardHeader className="flex flex-row items-start justify-between pb-2">
+                  <div className="space-y-1">
+                    <CardTitle className="text-base">
+                      {instance.vmDetails?.hostname || `Instance #${instance.id}`}
+                    </CardTitle>
+                    <CardDescription>
+                      {instance.courseOffering
+                        ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
+                        : "No course assigned"}
+                    </CardDescription>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="size-8">
+                        <MoreVertical className="size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/instances/${instance.id}`}>
+                          View Details
+                        </Link>
                       </DropdownMenuItem>
-                    )}
-                    {can("DELETE_INSTANCE") && (
-                      <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="mr-2 size-4" />
-                          Delete
+                      {can("PROMOTE_INSTANCE") && (
+                        <DropdownMenuItem>
+                          <ArrowUpCircle className="mr-2 size-4" />
+                          Promote
                         </DropdownMenuItem>
-                      </>
+                      )}
+                      {can("DELETE_INSTANCE") && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="mr-2 size-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <Badge variant={statusColors[instance.status]}>
+                      {instance.status}
+                    </Badge>
+                    {instance.vmDetails && (
+                      <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground">
+                        <div>
+                          <p className="font-medium text-foreground">
+                            {instance.vmDetails.cpus} vCPU
+                          </p>
+                          <p>CPU</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">
+                            {instance.vmDetails.memoryMB / 1024}GB
+                          </p>
+                          <p>RAM</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">
+                            {instance.vmDetails.diskGB}GB
+                          </p>
+                          <p>Disk</p>
+                        </div>
+                      </div>
                     )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <Badge variant={statusColors[instance.status]}>
-                    {instance.status}
-                  </Badge>
-                  {instance.vmDetails && (
-                    <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground">
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {instance.vmDetails.cpus} vCPU
-                        </p>
-                        <p>CPU</p>
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {instance.vmDetails.memoryMB / 1024}GB
-                        </p>
-                        <p>RAM</p>
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {instance.vmDetails.diskGB}GB
-                        </p>
-                        <p>Disk</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
