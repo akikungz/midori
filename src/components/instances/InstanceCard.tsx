@@ -40,6 +40,12 @@ const statusColors = {
   DELETED: "outline",
 } as const;
 
+const vmStatusColors = {
+  RUNNING: "vm-blue",
+  STOPPED: "vm-orange",
+  SUSPENDED: "secondary",
+} as const;
+
 export interface VmDetails {
   hostname: string;
   ip: string;
@@ -47,6 +53,7 @@ export interface VmDetails {
   cpus: number;
   memoryMB: number;
   diskGB: number;
+  vmStatus?: keyof typeof vmStatusColors;
 }
 
 export interface CourseOffering {
@@ -73,6 +80,8 @@ interface InstanceCardProps {
   canPromote: boolean;
   canDelete: boolean;
   onReprovision?: (instanceId: number) => void;
+  onPromote?: (instanceId: number) => void;
+  onDelete?: (instanceId: number) => void;
 }
 
 /**
@@ -83,20 +92,33 @@ export function InstanceCard({
   canPromote,
   canDelete,
   onReprovision,
+  onPromote,
+  onDelete,
 }: InstanceCardProps) {
+  const handleMenuAction =
+    (action?: (instanceId: number) => void) => (event: Event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      action?.(instance.id);
+    };
+
+  const showPromote = canPromote && instance.status !== "PROMOTED";
+
   return (
     <Card className="group transition-colors hover:border-primary/50">
       <CardHeader className="flex flex-row items-start justify-between pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base">
-            {instance.vmDetails?.hostname || `Instance #${instance.id}`}
-          </CardTitle>
-          <CardDescription>
-            {instance.courseOffering
-              ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
-              : "No course assigned"}
-          </CardDescription>
-        </div>
+        <Link href={`/dashboard/instances/${instance.id}`}>
+          <div className="space-y-1">
+            <CardTitle className="text-base">
+              {instance.vmDetails?.hostname || `Instance #${instance.id}`}
+            </CardTitle>
+            <CardDescription>
+              {instance.courseOffering
+                ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
+                : "No course assigned"}
+            </CardDescription>
+          </div>
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="size-8">
@@ -109,15 +131,18 @@ export function InstanceCard({
                 View Details
               </Link>
             </DropdownMenuItem>
-            {canPromote && (
-              <DropdownMenuItem>
+            {showPromote && (
+              <DropdownMenuItem
+                onSelect={handleMenuAction(onPromote)}
+                disabled={!onPromote}
+              >
                 <ArrowUpCircle className="mr-2 size-4" />
                 Promote
               </DropdownMenuItem>
             )}
             {instance.provisionStatus === "FAILED" && onReprovision && (
               <DropdownMenuItem
-                onClick={() => onReprovision(instance.id)}
+                onSelect={handleMenuAction(onReprovision)}
                 className="text-orange-600"
               >
                 <Server className="mr-2 size-4" />
@@ -127,7 +152,11 @@ export function InstanceCard({
             {canDelete && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onSelect={handleMenuAction(onDelete)}
+                  disabled={!onDelete}
+                >
                   <Trash2 className="mr-2 size-4" />
                   Delete
                 </DropdownMenuItem>
@@ -137,16 +166,23 @@ export function InstanceCard({
         </DropdownMenu>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
+        <div className="space-y-3 space-x-2">
           <Badge variant={statusColors[instance.status]}>
             {instance.status}
           </Badge>
           {instance.vmDetails && (
-            <VmSpecs
-              cpus={instance.vmDetails.cpus}
-              memoryMB={instance.vmDetails.memoryMB}
-              diskGB={instance.vmDetails.diskGB}
-            />
+            <>
+              {instance.vmDetails.vmStatus && (
+                <Badge variant={vmStatusColors[instance.vmDetails.vmStatus]}>
+                  {instance.vmDetails.vmStatus}
+                </Badge>
+              )}
+              <VmSpecs
+                cpus={instance.vmDetails.cpus}
+                memoryMB={instance.vmDetails.memoryMB}
+                diskGB={instance.vmDetails.diskGB}
+              />
+            </>
           )}
         </div>
       </CardContent>
@@ -187,6 +223,8 @@ interface InstancesGridProps {
   canPromote: boolean;
   canDelete: boolean;
   onReprovision?: (instanceId: number) => void;
+  onPromote?: (instanceId: number) => void;
+  onDelete?: (instanceId: number) => void;
 }
 
 /**
@@ -197,6 +235,8 @@ export function InstancesGrid({
   canPromote,
   canDelete,
   onReprovision,
+  onPromote,
+  onDelete,
 }: InstancesGridProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -207,6 +247,8 @@ export function InstancesGrid({
           canPromote={canPromote}
           canDelete={canDelete}
           onReprovision={onReprovision}
+          onPromote={onPromote}
+          onDelete={onDelete}
         />
       ))}
     </div>

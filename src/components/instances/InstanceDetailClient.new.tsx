@@ -293,6 +293,8 @@ function InstanceDetailHeader({
   onDelete,
   isSubmitting,
 }: InstanceDetailHeaderProps) {
+  const showPromote = canPromote && instance.status !== "PROMOTED";
+
   return (
     <div className="flex items-start justify-between">
       <div className="flex items-center gap-4">
@@ -326,12 +328,8 @@ function InstanceDetailHeader({
             isSubmitting={isSubmitting}
           />
         )}
-        {canPromote && (
-          <Button
-            variant="outline"
-            onClick={onPromote}
-            disabled={isSubmitting || instance.status === "PROMOTED"}
-          >
+        {showPromote && (
+          <Button variant="outline" onClick={onPromote} disabled={isSubmitting}>
             <ArrowUpCircle className="mr-2 size-4" />
             {isSubmitting ? "..." : "Promote"}
           </Button>

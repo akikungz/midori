@@ -2386,6 +2386,8 @@ export interface components {
           memoryMB: number;
           /** @description Disk size (in GB) of the virtual machine */
           diskGB: number;
+          /** @enum {string} */
+          vmStatus: "RUNNING" | "STOPPED" | "SUSPENDED";
         };
         /** @enum {string} */
         provisionStatus:
@@ -2440,6 +2442,8 @@ export interface components {
         memoryMB: number;
         /** @description Disk size (in GB) of the virtual machine */
         diskGB: number;
+        /** @enum {string} */
+        vmStatus: "RUNNING" | "STOPPED" | "SUSPENDED";
       };
       /** @enum {string} */
       provisionStatus:
@@ -2507,6 +2511,8 @@ export interface components {
         memoryMB: number;
         /** @description Disk size (in GB) of the virtual machine */
         diskGB: number;
+        /** @enum {string} */
+        vmStatus: "RUNNING" | "STOPPED" | "SUSPENDED";
       };
       /** @description Timestamp when the record was created */
       createdAt?: Record<string, never> | string | number;

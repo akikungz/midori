@@ -74,12 +74,14 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       cpus: number;
       memoryGB: number;
       diskGB: number;
+      courseOfferingId?: number;
     }) => {
       submitState.startSubmit();
       try {
         await fetchClinet.POST("/api/instances/", {
           body: {
             pveTemplateId: formData.pveTemplateId,
+            courseOfferingId: formData.courseOfferingId,
             cpus: formData.cpus,
             memoryMB: formData.memoryGB * 1024,
             diskGB: formData.diskGB,
@@ -117,6 +119,42 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
     [queryClient],
   );
 
+  const handlePromote = useCallback(
+    async (instanceId: number) => {
+      try {
+        await fetchClinet.PATCH("/api/instances/{instanceId}/promote", {
+          params: {
+            path: { instanceId },
+          },
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["get", "/api/instances/"],
+        });
+      } catch (error) {
+        console.error("Failed to promote instance:", error);
+      }
+    },
+    [queryClient],
+  );
+
+  const handleDelete = useCallback(
+    async (instanceId: number) => {
+      try {
+        await fetchClinet.DELETE("/api/instances/{instanceId}", {
+          params: {
+            path: { instanceId },
+          },
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["get", "/api/instances/"],
+        });
+      } catch (error) {
+        console.error("Failed to delete instance:", error);
+      }
+    },
+    [queryClient],
+  );
+
   if (isLoading) {
     return <InstancesLoadingState />;
   }
@@ -142,6 +180,8 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           canPromote={canPromote}
           canDelete={canDelete}
           onReprovision={handleReprovision}
+          onPromote={handlePromote}
+          onDelete={handleDelete}
         />
       )}
 

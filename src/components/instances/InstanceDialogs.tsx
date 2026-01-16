@@ -63,6 +63,7 @@ interface CreateInstanceDialogProps {
     cpus: number;
     memoryGB: number;
     diskGB: number;
+    courseOfferingId?: number;
   }) => Promise<void>;
   isSubmitting: boolean;
 }
@@ -76,9 +77,19 @@ export function CreateInstanceDialog({
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
     null,
   );
+  const [selectedCourseOfferingId, setSelectedCourseOfferingId] = useState<
+    number | null
+  >(null);
   const [cpus, setCpus] = useState("2");
   const [memoryGB, setMemoryGB] = useState("4");
   const [diskGB, setDiskGB] = useState("20");
+
+  // Use autocomplete hook for course offerings
+  const courseOfferingsAutocomplete = useAutocomplete({
+    endpoint: "/api/autocomplete/course-offerings",
+    limit: 20,
+    enabled: open,
+  });
 
   // Use autocomplete hook for templates
   const templatesAutocomplete = useAutocomplete({
@@ -95,6 +106,7 @@ export function CreateInstanceDialog({
   useEffect(() => {
     if (!open) {
       setSelectedTemplateId(null);
+      setSelectedCourseOfferingId(null);
       setCpus("2");
       setMemoryGB("4");
       setDiskGB("20");
@@ -109,6 +121,7 @@ export function CreateInstanceDialog({
       cpus: Number(cpus),
       memoryGB: Number(memoryGB),
       diskGB: Number(diskGB),
+      courseOfferingId: selectedCourseOfferingId || undefined,
     });
   };
 
@@ -121,7 +134,24 @@ export function CreateInstanceDialog({
             Configure and create a new virtual machine instance
           </DialogDescription>
         </DialogHeader>
-        <FieldGroup>
+        <FieldGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor="course">Course (optional)</FieldLabel>
+            <FieldDescription>
+              Link this instance to a course offering
+            </FieldDescription>
+            <Autocomplete
+              placeholder="Select a course..."
+              searchPlaceholder="Search courses..."
+              search={courseOfferingsAutocomplete.search}
+              onSearchChange={courseOfferingsAutocomplete.setSearch}
+              options={courseOfferingsAutocomplete.options}
+              isLoading={courseOfferingsAutocomplete.isLoading}
+              value={selectedCourseOfferingId}
+              onChange={setSelectedCourseOfferingId}
+              emptyMessage="No courses found."
+            />
+          </Field>
           <Field>
             <FieldLabel htmlFor="pve-template">Template</FieldLabel>
             <FieldDescription>
@@ -176,7 +206,7 @@ export function CreateInstanceDialog({
             />
           </Field>
           <Button
-            className="w-full"
+            className="w-full lg:col-span-2"
             disabled={!selectedTemplateId || isSubmitting}
             onClick={handleSubmit}
           >
@@ -228,7 +258,7 @@ export function ExtensionRequestDialog({
             Request to extend this instance to the next semester
           </DialogDescription>
         </DialogHeader>
-        <FieldGroup>
+        <FieldGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="extension-days">Extension Duration</FieldLabel>
             <FieldDescription>
@@ -247,7 +277,7 @@ export function ExtensionRequestDialog({
               <span className="text-sm text-muted-foreground">days</span>
             </div>
           </Field>
-          <Field>
+          <Field className="lg:col-span-2">
             <FieldLabel htmlFor="extension-reason">Reason</FieldLabel>
             <FieldDescription>
               Explain why you need this extension
@@ -261,7 +291,7 @@ export function ExtensionRequestDialog({
             />
           </Field>
           <Button
-            className="w-full"
+            className="w-full lg:col-span-2"
             disabled={!extensionReason || isSubmitting}
             onClick={handleSubmit}
           >
@@ -323,7 +353,7 @@ export function AddProxyDialog({
             Configure a new reverse proxy for this instance
           </DialogDescription>
         </DialogHeader>
-        <FieldGroup>
+        <FieldGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="proxy-port">Target Port</FieldLabel>
             <Input
@@ -349,7 +379,7 @@ export function AddProxyDialog({
               </SelectContent>
             </Select>
           </Field>
-          <Field>
+          <Field className="lg:col-span-2">
             <FieldLabel htmlFor="proxy-desc">Description (Optional)</FieldLabel>
             <Input
               id="proxy-desc"
@@ -359,7 +389,7 @@ export function AddProxyDialog({
             />
           </Field>
           <Button
-            className="w-full"
+            className="w-full lg:col-span-2"
             disabled={!proxyPort || isSubmitting}
             onClick={handleSubmit}
           >
