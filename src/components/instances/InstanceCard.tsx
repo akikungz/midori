@@ -58,6 +58,12 @@ export interface CourseOffering {
 export interface Instance {
   id: number;
   status: keyof typeof statusColors;
+  provisionStatus?:
+    | "NOT_STARTED"
+    | "QUEUED"
+    | "PROVISIONING"
+    | "COMPLETED"
+    | "FAILED";
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
 }
@@ -66,6 +72,7 @@ interface InstanceCardProps {
   instance: Instance;
   canPromote: boolean;
   canDelete: boolean;
+  onReprovision?: (instanceId: number) => void;
 }
 
 /**
@@ -75,6 +82,7 @@ export function InstanceCard({
   instance,
   canPromote,
   canDelete,
+  onReprovision,
 }: InstanceCardProps) {
   return (
     <Card className="group transition-colors hover:border-primary/50">
@@ -105,6 +113,15 @@ export function InstanceCard({
               <DropdownMenuItem>
                 <ArrowUpCircle className="mr-2 size-4" />
                 Promote
+              </DropdownMenuItem>
+            )}
+            {instance.provisionStatus === "FAILED" && onReprovision && (
+              <DropdownMenuItem
+                onClick={() => onReprovision(instance.id)}
+                className="text-orange-600"
+              >
+                <Server className="mr-2 size-4" />
+                Re-provision
               </DropdownMenuItem>
             )}
             {canDelete && (
@@ -169,6 +186,7 @@ interface InstancesGridProps {
   instances: Instance[];
   canPromote: boolean;
   canDelete: boolean;
+  onReprovision?: (instanceId: number) => void;
 }
 
 /**
@@ -178,6 +196,7 @@ export function InstancesGrid({
   instances,
   canPromote,
   canDelete,
+  onReprovision,
 }: InstancesGridProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -187,6 +206,7 @@ export function InstancesGrid({
           instance={instance}
           canPromote={canPromote}
           canDelete={canDelete}
+          onReprovision={onReprovision}
         />
       ))}
     </div>

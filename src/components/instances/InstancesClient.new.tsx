@@ -98,6 +98,25 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
     [queryClient, submitState],
   );
 
+  // Re-provision instance handler
+  const handleReprovision = useCallback(
+    async (instanceId: number) => {
+      try {
+        await fetchClinet.POST("/api/instances/{instanceId}/reprovision", {
+          params: {
+            path: { instanceId },
+          },
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["get", "/api/instances/"],
+        });
+      } catch (error) {
+        console.error("Failed to re-provision instance:", error);
+      }
+    },
+    [queryClient],
+  );
+
   if (isLoading) {
     return <InstancesLoadingState />;
   }
@@ -122,6 +141,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           instances={instances}
           canPromote={canPromote}
           canDelete={canDelete}
+          onReprovision={handleReprovision}
         />
       )}
 

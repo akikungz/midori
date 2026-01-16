@@ -211,7 +211,11 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {instances.map((instance) => (
-            <Link href={`/dashboard/instances/${instance.id}`} key={instance.id} className="text-inherit no-underline">
+            <Link
+              href={`/dashboard/instances/${instance.id}`}
+              key={instance.id}
+              className="text-inherit no-underline"
+            >
               <Card
                 key={instance.id}
                 className="group transition-colors hover:border-primary/50"
@@ -219,7 +223,8 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
                 <CardHeader className="flex flex-row items-start justify-between pb-2">
                   <div className="space-y-1">
                     <CardTitle className="text-base">
-                      {instance.vmDetails?.hostname || `Instance #${instance.id}`}
+                      {instance.vmDetails?.hostname ||
+                        `Instance #${instance.id}`}
                     </CardTitle>
                     <CardDescription>
                       {instance.courseOffering

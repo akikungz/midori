@@ -9,10 +9,10 @@ export const QueryProvider = ({ children }: PropsWithChildren) => {
       defaultOptions: {
         queries: {
           staleTime: 1000 * 60 * 5, // 5 minutes
-          gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+          gcTime: 1000 * 60, // 1 minute
           refetchOnWindowFocus: false,
-          refetchOnMount: false,
-          refetchOnReconnect: false,
+          refetchOnMount: true,
+          refetchOnReconnect: true,
         },
       },
     }),
