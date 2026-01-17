@@ -66,11 +66,11 @@ export interface Instance {
   id: number;
   status: keyof typeof statusColors;
   provisionStatus?:
-    | "NOT_STARTED"
-    | "QUEUED"
-    | "PROVISIONING"
-    | "COMPLETED"
-    | "FAILED";
+  | "NOT_STARTED"
+  | "QUEUED"
+  | "PROVISIONING"
+  | "COMPLETED"
+  | "FAILED";
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
 }
@@ -128,6 +128,7 @@ export function InstanceCard({
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link href={`/dashboard/instances/${instance.id}`}>
+                <Server className="mr-2 size-4" />
                 View Details
               </Link>
             </DropdownMenuItem>
@@ -172,11 +173,12 @@ export function InstanceCard({
           </Badge>
           {instance.vmDetails && (
             <>
-              {instance.vmDetails.vmStatus && (
-                <Badge variant={vmStatusColors[instance.vmDetails.vmStatus]}>
-                  {instance.vmDetails.vmStatus}
-                </Badge>
-              )}
+              {instance.vmDetails.vmStatus &&
+                ["ACTIVE", "PROMOTED"].includes(instance.status) && (
+                  <Badge variant={vmStatusColors[instance.vmDetails.vmStatus]}>
+                    {instance.vmDetails.vmStatus}
+                  </Badge>
+                )}
               <VmSpecs
                 cpus={instance.vmDetails.cpus}
                 memoryMB={instance.vmDetails.memoryMB}
