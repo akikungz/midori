@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Mail, Plus, Trash2, Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Card, CardHeader } from "@midori/components/ui/card";
@@ -58,7 +58,7 @@ export function MailingListClient() {
     if (!newEmail || !newEmail.includes("@")) return;
     setIsSubmitting(true);
     try {
-      await fetchClinet.POST("/api/academic/mailing-list", {
+      await fetchClient.POST("/api/academic/mailing-list", {
         body: { email: newEmail },
       });
       queryClient.invalidateQueries({
@@ -75,7 +75,7 @@ export function MailingListClient() {
 
   const handleDeleteEmail = async (mailingId: number) => {
     try {
-      await fetchClinet.DELETE("/api/academic/mailing-list/{mailingId}", {
+      await fetchClient.DELETE("/api/academic/mailing-list/{mailingId}", {
         params: { path: { mailingId } },
       });
       queryClient.invalidateQueries({

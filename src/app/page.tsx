@@ -1,16 +1,6 @@
-"use client";
-
 import Link from "next/link";
-import {
-  ArrowRight,
-  GraduationCap,
-  Moon,
-  Server,
-  Shield,
-  Sun,
-  Users,
-} from "lucide-react";
-import { useTheme } from "next-themes";
+import { ArrowRight, GraduationCap, Server, Shield, Users } from "lucide-react";
+
 import { Button } from "@midori/components/ui/button";
 import { Badge } from "@midori/components/ui/badge";
 import {
@@ -20,14 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@midori/components/ui/card";
+import { ThemeToggleButton } from "@midori/components/shared/ThemeToggleButton";
 
 export default function HomePage() {
-  const { theme, setTheme } = useTheme();
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -38,11 +23,7 @@ export default function HomePage() {
             <span className="font-semibold">FITM Cloud</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme}>
-              <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
+            <ThemeToggleButton />
             <Button asChild>
               <Link href="/login">Sign In</Link>
             </Button>

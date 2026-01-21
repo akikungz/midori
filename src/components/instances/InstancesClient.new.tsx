@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Plus, Search, Filter } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -78,7 +78,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
     }) => {
       submitState.startSubmit();
       try {
-        await fetchClinet.POST("/api/instances/", {
+        await fetchClient.POST("/api/instances/", {
           body: {
             pveTemplateId: formData.pveTemplateId,
             courseOfferingId: formData.courseOfferingId,
@@ -104,7 +104,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
   const handleReprovision = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClinet.POST("/api/instances/{instanceId}/reprovision", {
+        await fetchClient.POST("/api/instances/{instanceId}/reprovision", {
           params: {
             path: { instanceId },
           },
@@ -122,7 +122,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
   const handlePromote = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClinet.PATCH("/api/instances/{instanceId}/promote", {
+        await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
           params: {
             path: { instanceId },
           },
@@ -140,7 +140,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
   const handleDelete = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClinet.DELETE("/api/instances/{instanceId}", {
+        await fetchClient.DELETE("/api/instances/{instanceId}", {
           params: {
             path: { instanceId },
           },

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Key, Plus, Trash2, User, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import {
   getRoleDisplayName,
   getRoleBadgeVariant,
@@ -89,7 +89,7 @@ export function SettingsClient({ user }: SettingsClientProps) {
     if (!sshKeyName || !sshPublicKey) return;
     setIsSubmitting(true);
     try {
-      await fetchClinet.POST("/api/user/ssh-keys", {
+      await fetchClient.POST("/api/user/ssh-keys", {
         body: {
           name: sshKeyName,
           publicKey: sshPublicKey,
@@ -110,7 +110,7 @@ export function SettingsClient({ user }: SettingsClientProps) {
 
   const handleDeleteSshKey = async (keyId: number) => {
     try {
-      await fetchClinet.DELETE("/api/user/ssh-keys", {
+      await fetchClient.DELETE("/api/user/ssh-keys", {
         body: {
           keyIds: [keyId],
         },

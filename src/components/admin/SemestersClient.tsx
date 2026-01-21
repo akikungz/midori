@@ -14,7 +14,7 @@ import {
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -162,7 +162,7 @@ export function SemestersClient() {
     setIsEditDialogOpen(true);
 
     try {
-      const { data, error } = await fetchClinet.GET(
+      const { data, error } = await fetchClient.GET(
         "/api/academic/semesters/{semesterId}",
         {
           params: {
@@ -197,7 +197,7 @@ export function SemestersClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.POST("/api/academic/semesters", {
+      const { error } = await fetchClient.POST("/api/academic/semesters", {
         body: {
           name: formName,
           startDate: formStartDate,
@@ -230,7 +230,7 @@ export function SemestersClient() {
     setIsSubmitting(true);
     try {
       // Update semester details
-      const { error: detailsError } = await fetchClinet.PATCH(
+      const { error: detailsError } = await fetchClient.PATCH(
         "/api/academic/semesters/{semesterId}",
         {
           params: {
@@ -250,7 +250,7 @@ export function SemestersClient() {
       }
 
       // Update courses
-      const { error: coursesError } = await fetchClinet.PATCH(
+      const { error: coursesError } = await fetchClient.PATCH(
         "/api/academic/semesters/{semesterId}/courses",
         {
           params: {
@@ -291,7 +291,7 @@ export function SemestersClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.DELETE(
+      const { error } = await fetchClient.DELETE(
         "/api/academic/semesters/{semesterId}",
         {
           params: {
@@ -320,7 +320,7 @@ export function SemestersClient() {
     if (semester.isCurrent) return;
 
     try {
-      const { error } = await fetchClinet.PATCH(
+      const { error } = await fetchClient.PATCH(
         "/api/academic/semesters/{semesterId}",
         {
           params: {

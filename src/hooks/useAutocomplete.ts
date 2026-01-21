@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useCommon";
-import { fetchClinet } from "@midori/lib/api";
+import { fetchClient } from "@midori/lib/api";
 
 type AutocompleteEndpoint =
   | "/api/autocomplete/courses"
@@ -73,7 +73,7 @@ export function useAutocomplete({
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClinet.GET(endpoint, {
+      const { data, error } = await fetchClient.GET(endpoint, {
         params: {
           query: {
             search: debouncedSearch || undefined,

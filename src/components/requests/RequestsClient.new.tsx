@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Skeleton } from "@midori/components/ui/skeleton";
 import { Tabs, TabsContent } from "@midori/components/ui/tabs";
@@ -136,7 +136,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
     async (requestId: number, action: "APPROVED" | "REJECTED") => {
       setActionLoading(requestId);
       try {
-        await fetchClinet.PATCH("/api/requests/{requestId}/status", {
+        await fetchClient.PATCH("/api/requests/{requestId}/status", {
           params: { path: { requestId } },
           body: { status: action },
         });
@@ -155,7 +155,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
     async (extendedRequestId: number, action: "APPROVED" | "REJECTED") => {
       setActionLoading(extendedRequestId);
       try {
-        await fetchClinet.PATCH(
+        await fetchClient.PATCH(
           "/api/extended-requests/{extendedRequestId}/status",
           {
             params: { path: { extendedRequestId } },

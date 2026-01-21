@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import type { Semester, Course } from "@midori/types/admin";
 import { formatDateForInput } from "@midori/lib/format";
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { LoadingState } from "@midori/components/shared/LoadingState";
 import { SearchInput } from "@midori/components/shared/SearchInput";
@@ -112,7 +112,7 @@ export function SemestersClient() {
       setIsEditDialogOpen(true);
 
       try {
-        const { data, error } = await fetchClinet.GET(
+        const { data, error } = await fetchClient.GET(
           "/api/academic/semesters/{semesterId}",
           { params: { path: { semesterId: semester.id } } },
         );
@@ -147,7 +147,7 @@ export function SemestersClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.POST("/api/academic/semesters", {
+      const { error } = await fetchClient.POST("/api/academic/semesters", {
         body: {
           name: semesterForm.formName,
           startDate: semesterForm.formStartDate,
@@ -180,7 +180,7 @@ export function SemestersClient() {
     setIsSubmitting(true);
     try {
       // Update semester details
-      const { error: detailsError } = await fetchClinet.PATCH(
+      const { error: detailsError } = await fetchClient.PATCH(
         "/api/academic/semesters/{semesterId}",
         {
           params: { path: { semesterId: selectedSemester.id } },
@@ -198,7 +198,7 @@ export function SemestersClient() {
       }
 
       // Update courses
-      const { error: coursesError } = await fetchClinet.PATCH(
+      const { error: coursesError } = await fetchClient.PATCH(
         "/api/academic/semesters/{semesterId}/courses",
         {
           params: { path: { semesterId: selectedSemester.id } },
@@ -227,7 +227,7 @@ export function SemestersClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.DELETE(
+      const { error } = await fetchClient.DELETE(
         "/api/academic/semesters/{semesterId}",
         { params: { path: { semesterId: selectedSemester.id } } },
       );
@@ -253,7 +253,7 @@ export function SemestersClient() {
       if (semester.isCurrent) return;
 
       try {
-        const { error } = await fetchClinet.PATCH(
+        const { error } = await fetchClient.PATCH(
           "/api/academic/semesters/{semesterId}",
           {
             params: { path: { semesterId: semester.id } },

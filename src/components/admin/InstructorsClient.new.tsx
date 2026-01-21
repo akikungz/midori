@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import {
   usePagination,
   useDebounce,
@@ -125,7 +125,7 @@ export function InstructorsClient() {
 
     setIsSubmitting(true);
     try {
-      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: selectedInstructor.id },
         },
@@ -161,7 +161,7 @@ export function InstructorsClient() {
 
     setIsPromoting(true);
     try {
-      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: instructorToPromote.id },
         },
