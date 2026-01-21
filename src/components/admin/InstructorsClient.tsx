@@ -13,7 +13,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { useDebounce } from "@midori/hooks/useCommon";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
@@ -183,7 +183,7 @@ export function InstructorsClient() {
 
     setIsSubmitting(true);
     try {
-      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: selectedInstructor.id },
         },
@@ -219,7 +219,7 @@ export function InstructorsClient() {
 
     setIsPromoting(true);
     try {
-      await fetchClinet.PATCH("/api/academic/instructors/{instructorId}", {
+      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: instructorToPromote.id },
         },

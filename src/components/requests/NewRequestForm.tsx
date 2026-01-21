@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 
-import { fetchClinet } from "@midori/lib/api";
+import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -71,7 +71,7 @@ export function NewRequestForm() {
 
     setIsSubmitting(true);
     try {
-      await fetchClinet.POST("/api/requests/", {
+      await fetchClient.POST("/api/requests/", {
         body: {
           title,
           description,

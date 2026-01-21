@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { LoadingState } from "@midori/components/shared/LoadingState";
 import { SearchInput } from "@midori/components/shared/SearchInput";
@@ -67,7 +67,7 @@ export function MailingListClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.POST("/api/academic/mailing-list", {
+      const { error } = await fetchClient.POST("/api/academic/mailing-list", {
         body: { email: newEmail },
       });
 
@@ -91,7 +91,7 @@ export function MailingListClient() {
   const handleDeleteEmail = useCallback(
     async (mailingId: number) => {
       try {
-        const { error } = await fetchClinet.DELETE(
+        const { error } = await fetchClient.DELETE(
           "/api/academic/mailing-list/{mailingId}",
           {
             params: { path: { mailingId } },

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Server, ArrowUpCircle } from "lucide-react";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Badge } from "@midori/components/ui/badge";
@@ -112,7 +112,7 @@ export function InstanceDetailClient({
   const handlePromote = useCallback(async () => {
     submitState.startSubmit();
     try {
-      await fetchClinet.PATCH("/api/instances/{instanceId}/promote", {
+      await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
         params: { path: { instanceId } },
       });
       queryClient.invalidateQueries({
@@ -127,7 +127,7 @@ export function InstanceDetailClient({
 
   const handleDelete = useCallback(async () => {
     try {
-      await fetchClinet.DELETE("/api/instances/{instanceId}", {
+      await fetchClient.DELETE("/api/instances/{instanceId}", {
         params: { path: { instanceId } },
       });
       router.push("/dashboard/instances");
@@ -140,7 +140,7 @@ export function InstanceDetailClient({
     async (days: number, reason: string) => {
       submitState.startSubmit();
       try {
-        await fetchClinet.POST("/api/instances/{instanceId}/extended-request", {
+        await fetchClient.POST("/api/instances/{instanceId}/extended-request", {
           params: { path: { instanceId } },
           body: {
             title: `Extension Request - ${days} days`,
@@ -165,7 +165,7 @@ export function InstanceDetailClient({
     }) => {
       submitState.startSubmit();
       try {
-        await fetchClinet.POST("/api/instances/{instanceId}/reverse-proxies", {
+        await fetchClient.POST("/api/instances/{instanceId}/reverse-proxies", {
           params: { path: { instanceId } },
           body: {
             targetPort: data.port,
@@ -189,7 +189,7 @@ export function InstanceDetailClient({
   const handleDeleteProxy = useCallback(
     async (proxyId: number) => {
       try {
-        await fetchClinet.DELETE(
+        await fetchClient.DELETE(
           "/api/instances/{instanceId}/reverse-proxies/{proxyId}",
           {
             params: { path: { instanceId, proxyId } },

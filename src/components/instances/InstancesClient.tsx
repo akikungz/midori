@@ -13,8 +13,13 @@ import {
   ArrowUpCircle,
 } from "lucide-react";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
+import {
+  usePagination,
+  useDialogState,
+  useSubmitState,
+} from "@midori/hooks/useCommon";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import {
@@ -77,16 +82,17 @@ interface InstancesClientProps {
 
 export function InstancesClient({ userRole }: InstancesClientProps) {
   const queryClient = useQueryClient();
-  const [page, setPage] = useState(1);
-  const [pageSize] = useState(10);
 
-  // Create Instance Dialog state
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  // Use custom hooks for state management
+  const { page, pageSize, setPage } = usePagination(1, 10);
+  const createDialog = useDialogState();
+  const { isSubmitting, withSubmit } = useSubmitState();
+
+  // Form state for create dialog
   const [pveTemplateId, setPveTemplateId] = useState("1");
   const [cpus, setCpus] = useState("2");
   const [memoryGB, setMemoryGB] = useState("4");
   const [diskGB, setDiskGB] = useState("20");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const can = (permission: string) => {
     return hasPermission(
@@ -98,9 +104,8 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
   // Create instance handler
   const handleCreateInstance = async () => {
     if (!pveTemplateId) return;
-    setIsSubmitting(true);
-    try {
-      await fetchClinet.POST("/api/instances/", {
+    await withSubmit(async () => {
+      await fetchClient.POST("/api/instances/", {
         body: {
           pveTemplateId: Number(pveTemplateId),
           cpus: Number(cpus),
@@ -111,17 +116,13 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/instances/"],
       });
-      setIsCreateDialogOpen(false);
+      createDialog.close();
       // Reset form
       setPveTemplateId("1");
       setCpus("2");
       setMemoryGB("4");
       setDiskGB("20");
-    } catch (error) {
-      console.error("Failed to create instance:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   // Use role-appropriate endpoint
@@ -172,7 +173,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           </SelectContent>
         </Select>
         {can("CREATE_INSTANCE") && (
-          <Button onClick={() => setIsCreateDialogOpen(true)}>
+          <Button onClick={() => createDialog.open()}>
             <Plus className="mr-2 size-4" />
             Create Instance
           </Button>
@@ -193,7 +194,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           </EmptyHeader>
           <EmptyContent>
             {can("CREATE_INSTANCE") && (
-              <Button onClick={() => setIsCreateDialogOpen(true)}>
+              <Button onClick={() => createDialog.open()}>
                 <Plus className="mr-2 size-4" />
                 Create Instance
               </Button>
@@ -323,7 +324,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       )}
 
       {/* Create Instance Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog open={createDialog.isOpen} onOpenChange={createDialog.setIsOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create New Instance</DialogTitle>

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import type { Course, Instructor, Semester } from "@midori/types/admin";
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { LoadingState } from "@midori/components/shared/LoadingState";
 import { SearchInput } from "@midori/components/shared/SearchInput";
@@ -107,7 +107,7 @@ export function CoursesClient() {
       setIsEditDialogOpen(true);
 
       try {
-        const { data, error } = await fetchClinet.GET(
+        const { data, error } = await fetchClient.GET(
           "/api/academic/courses/{courseId}",
           { params: { path: { courseId: course.id } } },
         );
@@ -140,7 +140,7 @@ export function CoursesClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.POST("/api/academic/courses", {
+      const { error } = await fetchClient.POST("/api/academic/courses", {
         body: {
           code: courseForm.formCode,
           title: courseForm.formTitle,
@@ -173,7 +173,7 @@ export function CoursesClient() {
     setIsSubmitting(true);
     try {
       // Update course details
-      const { error: detailsError } = await fetchClinet.PATCH(
+      const { error: detailsError } = await fetchClient.PATCH(
         "/api/academic/courses/{courseId}",
         {
           params: { path: { courseId: selectedCourse.id } },
@@ -191,7 +191,7 @@ export function CoursesClient() {
       }
 
       // Update instructors
-      const { error: instructorsError } = await fetchClinet.PATCH(
+      const { error: instructorsError } = await fetchClient.PATCH(
         "/api/academic/courses/{courseId}/instructors",
         {
           params: { path: { courseId: selectedCourse.id } },
@@ -205,7 +205,7 @@ export function CoursesClient() {
       }
 
       // Update semesters
-      const { error: semestersError } = await fetchClinet.PATCH(
+      const { error: semestersError } = await fetchClient.PATCH(
         "/api/academic/courses/{courseId}/semesters",
         {
           params: { path: { courseId: selectedCourse.id } },
@@ -238,7 +238,7 @@ export function CoursesClient() {
   const handleToggleActive = useCallback(
     async (course: Course) => {
       try {
-        const { error } = await fetchClinet.PATCH(
+        const { error } = await fetchClient.PATCH(
           "/api/academic/courses/{courseId}",
           {
             params: { path: { courseId: course.id } },

@@ -14,7 +14,7 @@ import {
   FilePlus,
 } from "lucide-react";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -147,7 +147,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
   ) => {
     setActionLoading(requestId);
     try {
-      await fetchClinet.PATCH("/api/requests/{requestId}/status", {
+      await fetchClient.PATCH("/api/requests/{requestId}/status", {
         params: { path: { requestId } },
         body: { status: action },
       });
@@ -165,7 +165,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
   ) => {
     setActionLoading(extendedRequestId);
     try {
-      await fetchClinet.PATCH(
+      await fetchClient.PATCH(
         "/api/extended-requests/{extendedRequestId}/status",
         {
           params: { path: { extendedRequestId } },

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { api, fetchClinet } from "@midori/lib/api";
+import { api, fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -152,7 +152,7 @@ export function CoursesClient() {
     setIsEditDialogOpen(true);
 
     try {
-      const { data, error } = await fetchClinet.GET(
+      const { data, error } = await fetchClient.GET(
         "/api/academic/courses/{courseId}",
         {
           params: {
@@ -185,7 +185,7 @@ export function CoursesClient() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await fetchClinet.POST("/api/academic/courses", {
+      const { error } = await fetchClient.POST("/api/academic/courses", {
         body: {
           code: formCode,
           title: formTitle,
@@ -217,59 +217,62 @@ export function CoursesClient() {
 
     setIsSubmitting(true);
     try {
-      // Update course details
-      const { error: detailsError } = await fetchClinet.PATCH(
-        "/api/academic/courses/{courseId}",
-        {
-          params: {
-            path: { courseId: selectedCourse.id },
-          },
-          body: {
-            code: formCode,
-            title: formTitle,
-            description: formDescription || undefined,
-          },
-        },
-      );
+      // Execute all updates in parallel, allowing all to complete even if some fail
+      const [detailsResult, instructorsResult, semestersResult] =
+        await Promise.allSettled([
+          fetchClient.PATCH("/api/academic/courses/{courseId}", {
+            params: {
+              path: { courseId: selectedCourse.id },
+            },
+            body: {
+              code: formCode,
+              title: formTitle,
+              description: formDescription || undefined,
+            },
+          }),
+          fetchClient.PATCH("/api/academic/courses/{courseId}/instructors", {
+            params: {
+              path: { courseId: selectedCourse.id },
+            },
+            body: {
+              instructorIds: selectedInstructorIds,
+            },
+          }),
+          fetchClient.PATCH("/api/academic/courses/{courseId}/semesters", {
+            params: {
+              path: { courseId: selectedCourse.id },
+            },
+            body: {
+              semesterIds: selectedSemesterIds,
+            },
+          }),
+        ]);
 
-      if (detailsError) {
-        toast.error("Failed to update course details");
-        return;
+      // Collect all errors
+      const errors: string[] = [];
+
+      if (detailsResult.status === "rejected" || detailsResult.value.error) {
+        errors.push("Failed to update course details");
       }
 
-      // Update instructors
-      const { error: instructorsError } = await fetchClinet.PATCH(
-        "/api/academic/courses/{courseId}/instructors",
-        {
-          params: {
-            path: { courseId: selectedCourse.id },
-          },
-          body: {
-            instructorIds: selectedInstructorIds,
-          },
-        },
-      );
-
-      if (instructorsError) {
-        toast.error("Failed to update instructors");
-        return;
+      if (
+        instructorsResult.status === "rejected" ||
+        instructorsResult.value.error
+      ) {
+        errors.push("Failed to update instructors");
       }
 
-      // Update semesters
-      const { error: semestersError } = await fetchClinet.PATCH(
-        "/api/academic/courses/{courseId}/semesters",
-        {
-          params: {
-            path: { courseId: selectedCourse.id },
-          },
-          body: {
-            semesterIds: selectedSemesterIds,
-          },
-        },
-      );
+      if (
+        semestersResult.status === "rejected" ||
+        semestersResult.value.error
+      ) {
+        errors.push("Failed to update semesters");
+      }
 
-      if (semestersError) {
-        toast.error("Failed to update semesters");
+      if (errors.length > 0) {
+        for (const error of errors) {
+          toast.error(error);
+        }
         return;
       }
 
@@ -286,7 +289,7 @@ export function CoursesClient() {
 
   const handleToggleActive = async (course: Course) => {
     try {
-      const { error } = await fetchClinet.PATCH(
+      const { error } = await fetchClient.PATCH(
         "/api/academic/courses/{courseId}",
         {
           params: {
