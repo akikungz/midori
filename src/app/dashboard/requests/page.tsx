@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { getServerSession } from "@midori/lib/server-api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
-import { RequestsClient } from "@midori/components/requests/RequestsClient";
+import { RequestsClient } from "@midori/components/requests";
 
 export default async function RequestsPage() {
   const user = await getServerSession();

@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { Plus } from "lucide-react";
 
 import { getServerSession } from "@midori/lib/server-api";
 import type { Role } from "@midori/lib/roles";
-import { Button } from "@midori/components/ui/button";
 import { MailingListClient } from "@midori/components/admin/MailingListClient";
 
 export default async function MailingListPage() {
@@ -37,10 +35,6 @@ export default async function MailingListPage() {
             Manage instructor email addresses for notifications
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2 size-4" />
-          Add Email
-        </Button>
       </div>
 
       <MailingListClient />

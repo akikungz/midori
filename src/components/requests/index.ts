@@ -1,4 +1,4 @@
-export { RequestsClient } from "./RequestsClient.new";
+export { RequestsClient } from "./RequestsClient";
 
 export {
   InstanceRequestCard,

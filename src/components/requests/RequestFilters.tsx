@@ -6,6 +6,7 @@ import {
   Ban,
   FileText,
   FilePlus,
+  RefreshCw,
 } from "lucide-react";
 
 import { Button } from "@midori/components/ui/button";
@@ -104,22 +105,41 @@ interface RequestSearchProps {
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
 export function RequestSearch({
   value,
   onChange,
   placeholder = "Search requests...",
+  onRefresh,
+  isRefreshing,
 }: RequestSearchProps) {
   return (
-    <div className="relative">
-      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <Input
-        placeholder={placeholder}
-        className="pl-9"
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-      />
+    <div className="flex gap-2">
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder={placeholder}
+          className="pl-9"
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+      </div>
+      {onRefresh && (
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onRefresh}
+          disabled={isRefreshing}
+        >
+          <RefreshCw
+            className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
+          <span className="sr-only">Refresh</span>
+        </Button>
+      )}
     </div>
   );
 }

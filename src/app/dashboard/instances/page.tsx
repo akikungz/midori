@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { getServerSession } from "@midori/lib/server-api";
 import type { Role } from "@midori/lib/roles";
-import { InstancesClient } from "@midori/components/instances/InstancesClient.new";
+import { InstancesClient } from "@midori/components/instances/InstancesClient";
 
 export default async function InstancesPage() {
   const user = await getServerSession();
