@@ -1,5 +1,5 @@
-export { InstancesClient } from "./InstancesClient.new";
-export { InstanceDetailClient } from "./InstanceDetailClient.new";
+export { InstancesClient } from "./InstancesClient";
+export { InstanceDetailClient } from "./InstanceDetailClient";
 
 export {
   InstanceCard,

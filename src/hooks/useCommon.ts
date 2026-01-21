@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 
 /**
  * Hook for debouncing a value
@@ -181,14 +181,17 @@ export function useSelection<T extends number | string>(
 
   const isSelected = useCallback((id: T) => selected.includes(id), [selected]);
 
-  return {
-    selected,
-    toggle,
-    select,
-    deselect,
-    clear,
-    selectAll,
-    isSelected,
-    setSelected,
-  };
+  return useMemo(
+    () => ({
+      selected,
+      toggle,
+      select,
+      deselect,
+      clear,
+      selectAll,
+      isSelected,
+      setSelected,
+    }),
+    [selected, toggle, select, deselect, clear, selectAll, isSelected],
+  );
 }
