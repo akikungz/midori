@@ -42,11 +42,12 @@ export default function LoginPage() {
 
   // Redirect to dashboard if already authenticated
   // Don't redirect if there's a session error (e.g., after signout)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Route change only on auth status
   useEffect(() => {
     if (isAuthenticated && !isSessionLoading && !sessionError) {
       router.replace("/dashboard");
     }
-  }, [isAuthenticated, isSessionLoading, sessionError, router]);
+  }, [isAuthenticated, isSessionLoading, sessionError]);
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
