@@ -39,21 +39,46 @@ function createLoggerConfig(): LoggerOptions {
   const serviceName = process.env.OTEL_SERVICE_NAME || "midori";
   const lokiUrl = process.env.LOKI_URL;
   const isProduction = process.env.APP_ENV === "production";
+  const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
 
+  // Configure transports
+  const transports: pino.TransportTargetOptions[] = [];
+
+  // Pretty print for development, JSON for production
+  transports.push({
+    target: "pino/file",
+    options: { destination: 1 }, // stdout
+    level: logLevel,
+  });
+
+  // Loki transport if configured
+  if (lokiUrl) {
+    transports.push({
+      target: "pino-loki",
+      options: {
+        host: lokiUrl,
+        batching: true,
+        interval: 5, // seconds
+        labels: {
+          service: serviceName,
+          env: process.env.APP_ENV || "development",
+        },
+      },
+      level: logLevel,
+    });
+  }
+
+  // When using transports, formatters are not allowed
+  // Use mixin instead for adding trace context
   const baseConfig: LoggerOptions = {
-    level: process.env.LOG_LEVEL || (isProduction ? "info" : "debug"),
+    level: logLevel,
     base: {
       service: serviceName,
       env: process.env.APP_ENV || "development",
     },
     timestamp: pino.stdTimeFunctions.isoTime,
-    formatters: {
-      level: (label) => ({ level: label }),
-      log: (obj) => ({
-        ...obj,
-        ...getTraceContext(),
-      }),
-    },
+    // Use mixin to add trace context (compatible with transports)
+    mixin: () => getTraceContext(),
     hooks: {
       logMethod(inputArgs, method, level) {
         // Increment metrics for each log
@@ -72,52 +97,10 @@ function createLoggerConfig(): LoggerOptions {
         return method.apply(this, inputArgs);
       },
     },
+    transport: {
+      targets: transports,
+    },
   };
-
-  // Configure transports
-  const transports: pino.TransportTargetOptions[] = [];
-
-  // Pretty print for development
-  if (!isProduction) {
-    transports.push({
-      target: "pino/file",
-      options: { destination: 1 }, // stdout
-      level: baseConfig.level as string,
-    });
-  } else {
-    // JSON output for production
-    transports.push({
-      target: "pino/file",
-      options: { destination: 1 },
-      level: baseConfig.level as string,
-    });
-  }
-
-  // Loki transport if configured
-  if (lokiUrl) {
-    transports.push({
-      target: "pino-loki",
-      options: {
-        host: lokiUrl,
-        batching: true,
-        interval: 5, // seconds
-        labels: {
-          service: serviceName,
-          env: process.env.APP_ENV || "development",
-        },
-      },
-      level: baseConfig.level as string,
-    });
-  }
-
-  if (transports.length > 0) {
-    return {
-      ...baseConfig,
-      transport: {
-        targets: transports,
-      },
-    };
-  }
 
   return baseConfig;
 }
