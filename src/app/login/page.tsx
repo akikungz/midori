@@ -42,11 +42,17 @@ export default function LoginPage() {
 
   // Redirect to dashboard if already authenticated
   // Don't redirect if there's a session error (e.g., after signout)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Route change only on auth status
   useEffect(() => {
     if (isAuthenticated && !isSessionLoading && !sessionError) {
-      router.replace("/dashboard");
+      // Check agent is webkit-based
+      if (navigator.userAgent.includes("AppleWebKit")) {
+        window.location.href = "/dashboard";
+      } else {
+        router.replace("/dashboard");
+      }
     }
-  }, [isAuthenticated, isSessionLoading, sessionError, router]);
+  }, [isAuthenticated, isSessionLoading, sessionError]);
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
@@ -60,7 +66,6 @@ export default function LoginPage() {
       if (result.error) {
         throw new Error(result.error.message || "Failed to authenticate");
       }
-      router.push("/dashboard");
     } catch (err) {
       setError(
         err instanceof Error
