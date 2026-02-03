@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
       hmrRefreshes: true,
     },
   },
+  // Exclude pino and transports from bundling for proper runtime resolution
+  serverExternalPackages: ["pino", "pino-loki", "pino-pretty"],
   experimental: {
     proxyClientMaxBodySize: "1gb",
     optimizePackageImports: ["lucide-react"],

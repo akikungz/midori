@@ -51,21 +51,27 @@ function createLoggerConfig(): LoggerOptions {
     level: logLevel,
   });
 
-  // Loki transport if configured
+  // Loki transport if configured - use require.resolve for bundled environments
   if (lokiUrl) {
-    transports.push({
-      target: "pino-loki",
-      options: {
-        host: lokiUrl,
-        batching: true,
-        interval: 5, // seconds
-        labels: {
-          service: serviceName,
-          env: process.env.APP_ENV || "development",
+    try {
+      const lokiTransportPath = require.resolve("pino-loki");
+      transports.push({
+        target: lokiTransportPath,
+        options: {
+          host: lokiUrl,
+          batching: true,
+          interval: 5, // seconds
+          labels: {
+            service: serviceName,
+            env: process.env.APP_ENV || "development",
+          },
         },
-      },
-      level: logLevel,
-    });
+        level: logLevel,
+      });
+    } catch {
+      // pino-loki not available, skip Loki transport
+      console.warn("pino-loki transport not available, Loki logging disabled");
+    }
   }
 
   // When using transports, formatters are not allowed
