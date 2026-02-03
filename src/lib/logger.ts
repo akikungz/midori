@@ -37,11 +37,10 @@ function getTraceContext(): Record<string, string> {
 // Create logger configuration
 function createLoggerConfig(): LoggerOptions {
   const serviceName = process.env.OTEL_SERVICE_NAME || "midori";
-  const lokiUrl = process.env.LOKI_URL;
   const isProduction = process.env.APP_ENV === "production";
   const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
 
-  // Base config without transports (for fallback or simple logging)
+  // Base config - logs to stdout by default without transports
   const baseConfig: LoggerOptions = {
     level: logLevel,
     base: {
@@ -49,7 +48,7 @@ function createLoggerConfig(): LoggerOptions {
       env: process.env.APP_ENV || "development",
     },
     timestamp: pino.stdTimeFunctions.isoTime,
-    // Use mixin to add trace context (compatible with transports)
+    // Use mixin to add trace context
     mixin: () => getTraceContext(),
     hooks: {
       logMethod(inputArgs, method, level) {
@@ -71,42 +70,41 @@ function createLoggerConfig(): LoggerOptions {
     },
   };
 
-  // Only add Loki transport if configured
-  if (lokiUrl) {
-    try {
-      const lokiTransportPath = require.resolve("pino-loki");
-      return {
-        ...baseConfig,
-        transport: {
-          targets: [
-            {
-              target: "pino/file",
-              options: { destination: "/dev/stdout" },
-              level: logLevel,
-            },
-            {
-              target: lokiTransportPath,
-              options: {
-                host: lokiUrl,
-                batching: true,
-                interval: 5,
-                labels: {
-                  service: serviceName,
-                  env: process.env.APP_ENV || "development",
-                },
-              },
-              level: logLevel,
-            },
-          ],
-        },
-      };
-    } catch {
-      console.warn("pino-loki transport not available, Loki logging disabled");
-    }
-  }
-
-  // Return base config without transport (logs to stdout by default)
   return baseConfig;
+}
+
+// Create Loki transport if configured
+function createLokiTransport(): pino.DestinationStream | undefined {
+  const lokiUrl = process.env.LOKI_URL;
+  const serviceName = process.env.OTEL_SERVICE_NAME || "midori";
+  const isProduction = process.env.APP_ENV === "production";
+  const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
+
+  if (!lokiUrl) return undefined;
+
+  try {
+    const lokiTransportPath = require.resolve("pino-loki");
+    return pino.transport({
+      targets: [
+        {
+          target: lokiTransportPath,
+          options: {
+            host: lokiUrl,
+            batching: true,
+            interval: 5,
+            labels: {
+              service: serviceName,
+              env: process.env.APP_ENV || "development",
+            },
+          },
+          level: logLevel,
+        },
+      ],
+    });
+  } catch {
+    console.warn("pino-loki transport not available, Loki logging disabled");
+    return undefined;
+  }
 }
 
 // Create the main logger instance
@@ -114,7 +112,21 @@ let loggerInstance: Logger | null = null;
 
 export function getLogger(): Logger {
   if (!loggerInstance) {
-    loggerInstance = pino(createLoggerConfig());
+    const config = createLoggerConfig();
+    const lokiTransport = createLokiTransport();
+
+    // If Loki transport is available, use multistream to log to both stdout and Loki
+    if (lokiTransport) {
+      // Create a multistream that writes to both stdout (via pino default) and Loki
+      const streams = pino.multistream([
+        { stream: process.stdout },
+        { stream: lokiTransport },
+      ]);
+      loggerInstance = pino(config, streams);
+    } else {
+      // Just log to stdout
+      loggerInstance = pino(config);
+    }
   }
   return loggerInstance;
 }
