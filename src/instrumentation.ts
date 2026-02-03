@@ -13,7 +13,22 @@ export async function register() {
     try {
       // Dynamically import env to avoid blocking on validation errors
       const { env } = await import("@midori/lib/env");
-      if (!env.OTEL_EXPORTER_OTLP_ENDPOINT) return;
+
+      // Initialize logger
+      const { logger } = await import("@midori/lib/logger");
+      logger.info(
+        {
+          serviceName: env.OTEL_SERVICE_NAME,
+          lokiEnabled: !!env.LOKI_URL,
+          otelEnabled: !!env.OTEL_EXPORTER_OTLP_ENDPOINT,
+        },
+        "Initializing observability stack",
+      );
+
+      if (!env.OTEL_EXPORTER_OTLP_ENDPOINT) {
+        logger.warn("OTEL_EXPORTER_OTLP_ENDPOINT not set, tracing disabled");
+        return;
+      }
 
       const exporter = new OTLPTraceExporter({
         url: env.OTEL_EXPORTER_OTLP_ENDPOINT,
@@ -28,6 +43,7 @@ export async function register() {
       });
 
       sdk.start();
+      logger.info("OpenTelemetry SDK initialized successfully");
     } catch (error) {
       console.error(
         "⚠️  Failed to initialize OpenTelemetry instrumentation:",
