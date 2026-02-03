@@ -25,7 +25,8 @@ const nextConfig: NextConfig = {
         destination: `${env.AUTH_API_URL}/api/auth/:path*`,
       },
       {
-        source: "/api/:path*",
+        // Exclude /api/metrics from proxy - handled by Next.js
+        source: "/api/:path((?!metrics).*)",
         destination: `${env.SERVER_API_URL}/api/:path*`,
       },
     ];

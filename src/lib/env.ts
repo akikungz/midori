@@ -6,6 +6,10 @@ export const envSchema = z.object({
   AUTH_API_URL: z.url().default("http://arisu:3001"),
   OTEL_EXPORTER_OTLP_ENDPOINT: z.url().optional(),
   OTEL_SERVICE_NAME: z.string().default("midori-dev"),
+  LOKI_URL: z.url().optional(),
+  LOG_LEVEL: z
+    .enum(["trace", "debug", "info", "warn", "error", "fatal"])
+    .default("info"),
 });
 
 export type Env = z.infer<typeof envSchema>;
