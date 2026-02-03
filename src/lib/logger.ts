@@ -41,41 +41,7 @@ function createLoggerConfig(): LoggerOptions {
   const isProduction = process.env.APP_ENV === "production";
   const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
 
-  // Configure transports
-  const transports: pino.TransportTargetOptions[] = [];
-
-  // Pretty print for development, JSON for production
-  transports.push({
-    target: "pino/file",
-    options: { destination: 1 }, // stdout
-    level: logLevel,
-  });
-
-  // Loki transport if configured - use require.resolve for bundled environments
-  if (lokiUrl) {
-    try {
-      const lokiTransportPath = require.resolve("pino-loki");
-      transports.push({
-        target: lokiTransportPath,
-        options: {
-          host: lokiUrl,
-          batching: true,
-          interval: 5, // seconds
-          labels: {
-            service: serviceName,
-            env: process.env.APP_ENV || "development",
-          },
-        },
-        level: logLevel,
-      });
-    } catch {
-      // pino-loki not available, skip Loki transport
-      console.warn("pino-loki transport not available, Loki logging disabled");
-    }
-  }
-
-  // When using transports, formatters are not allowed
-  // Use mixin instead for adding trace context
+  // Base config without transports (for fallback or simple logging)
   const baseConfig: LoggerOptions = {
     level: logLevel,
     base: {
@@ -103,11 +69,43 @@ function createLoggerConfig(): LoggerOptions {
         return method.apply(this, inputArgs);
       },
     },
-    transport: {
-      targets: transports,
-    },
   };
 
+  // Only add Loki transport if configured
+  if (lokiUrl) {
+    try {
+      const lokiTransportPath = require.resolve("pino-loki");
+      return {
+        ...baseConfig,
+        transport: {
+          targets: [
+            {
+              target: "pino/file",
+              options: { destination: "/dev/stdout" },
+              level: logLevel,
+            },
+            {
+              target: lokiTransportPath,
+              options: {
+                host: lokiUrl,
+                batching: true,
+                interval: 5,
+                labels: {
+                  service: serviceName,
+                  env: process.env.APP_ENV || "development",
+                },
+              },
+              level: logLevel,
+            },
+          ],
+        },
+      };
+    } catch {
+      console.warn("pino-loki transport not available, Loki logging disabled");
+    }
+  }
+
+  // Return base config without transport (logs to stdout by default)
   return baseConfig;
 }
 
