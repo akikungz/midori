@@ -83,11 +83,10 @@ function createLokiTransport(): pino.DestinationStream | undefined {
   if (!lokiUrl) return undefined;
 
   try {
-    const lokiTransportPath = require.resolve("pino-loki");
     return pino.transport({
       targets: [
         {
-          target: lokiTransportPath,
+          target: "pino-loki",
           options: {
             host: lokiUrl,
             batching: true,
@@ -101,8 +100,11 @@ function createLokiTransport(): pino.DestinationStream | undefined {
         },
       ],
     });
-  } catch {
-    console.warn("pino-loki transport not available, Loki logging disabled");
+  } catch (error) {
+    console.warn(
+      "pino-loki transport not available, Loki logging disabled",
+      error instanceof Error ? error.message : String(error),
+    );
     return undefined;
   }
 }
