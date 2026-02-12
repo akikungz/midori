@@ -15,8 +15,6 @@ export async function GET(request: Request): Promise<NextResponse> {
   const path = new URL(request.url).pathname;
 
   try {
-    await getMetrics();
-
     const durationSeconds =
       Number(process.hrtime.bigint() - startTime) / 1_000_000_000;
     httpRequestsTotal.inc({ method, path, status: "200" });
@@ -24,7 +22,6 @@ export async function GET(request: Request): Promise<NextResponse> {
       { method, path, status: "200" },
       durationSeconds,
     );
-
     const metrics = await getMetrics();
 
     return new NextResponse(metrics, {
