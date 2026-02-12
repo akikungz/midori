@@ -4,6 +4,7 @@ import {
   MoreVertical,
   Trash2,
   ArrowUpCircle,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -73,10 +74,58 @@ export interface Instance {
     | "FAILED";
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
+  owner?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  user?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  requester?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  instructor?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  ownerName?: string;
+  ownerEmail?: string;
+}
+
+function getOwnerDisplay(instance: Instance) {
+  const candidate =
+    instance.owner ||
+    instance.user ||
+    instance.requester ||
+    instance.instructor;
+
+  const name = candidate?.name || instance.ownerName;
+  const email = candidate?.email || instance.ownerEmail;
+
+  if (name && email) {
+    return `${name} (${email})`;
+  }
+
+  if (name) {
+    return name;
+  }
+
+  if (email) {
+    return email;
+  }
+
+  return null;
 }
 
 interface InstanceCardProps {
   instance: Instance;
+  showOwner?: boolean;
   canPromote: boolean;
   canDelete: boolean;
   onReprovision?: (instanceId: number) => void;
@@ -89,12 +138,15 @@ interface InstanceCardProps {
  */
 export function InstanceCard({
   instance,
+  showOwner = false,
   canPromote,
   canDelete,
   onReprovision,
   onPromote,
   onDelete,
 }: InstanceCardProps) {
+  const ownerDisplay = getOwnerDisplay(instance);
+
   const handleMenuAction =
     (action?: (instanceId: number) => void) => (event: Event) => {
       event.preventDefault();
@@ -106,7 +158,7 @@ export function InstanceCard({
 
   return (
     <Card className="group transition-colors hover:border-primary/50">
-      <CardHeader className="flex flex-row items-start justify-between pb-2">
+      <CardHeader className="flex flex-row items-start justify-between">
         <Link href={`/dashboard/instances/${instance.id}`}>
           <div className="space-y-1">
             <CardTitle className="text-base">
@@ -117,6 +169,12 @@ export function InstanceCard({
                 ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
                 : "No course assigned"}
             </CardDescription>
+            {showOwner && ownerDisplay && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <User className="size-3" />
+                <span className="truncate">Owner: {ownerDisplay}</span>
+              </div>
+            )}
           </div>
         </Link>
         <DropdownMenu>
@@ -222,6 +280,7 @@ export function VmSpecs({ cpus, memoryMB, diskGB }: VmSpecsProps) {
 
 interface InstancesGridProps {
   instances: Instance[];
+  showOwner?: boolean;
   canPromote: boolean;
   canDelete: boolean;
   onReprovision?: (instanceId: number) => void;
@@ -234,6 +293,7 @@ interface InstancesGridProps {
  */
 export function InstancesGrid({
   instances,
+  showOwner = false,
   canPromote,
   canDelete,
   onReprovision,
@@ -246,6 +306,7 @@ export function InstancesGrid({
         <InstanceCard
           key={instance.id}
           instance={instance}
+          showOwner={showOwner}
           canPromote={canPromote}
           canDelete={canDelete}
           onReprovision={onReprovision}

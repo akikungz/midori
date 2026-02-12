@@ -12,6 +12,13 @@ import {
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@midori/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@midori/components/ui/select";
 
 import { statusConfig, type RequestStatus } from "./RequestCard";
 
@@ -58,9 +65,10 @@ const statusOptions: Array<RequestStatus | "all"> = [
 interface StatusFilterProps {
   value: string;
   onChange: (status: string) => void;
+  disabled?: boolean;
 }
 
-export function StatusFilter({ value, onChange }: StatusFilterProps) {
+export function StatusFilter({ value, onChange, disabled }: StatusFilterProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {statusOptions.map((status) => (
@@ -68,6 +76,7 @@ export function StatusFilter({ value, onChange }: StatusFilterProps) {
           key={status}
           variant={value === status ? "default" : "outline"}
           size="sm"
+          disabled={disabled}
           onClick={() => onChange(status)}
         >
           {status === "all" ? (
@@ -99,6 +108,45 @@ function StatusFilterIcon({ status }: { status: RequestStatus }) {
   }
 }
 
+// ==================== Course Filter ====================
+
+export interface CourseFilterOption {
+  code: string;
+  name?: string;
+}
+
+interface CourseFilterProps {
+  value: string;
+  options: CourseFilterOption[];
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}
+
+export function CourseFilter({
+  value,
+  options,
+  onChange,
+  disabled,
+}: CourseFilterProps) {
+  return (
+    <div className="w-full sm:w-72">
+      <Select value={value} onValueChange={onChange} disabled={disabled}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Filter by course" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All courses</SelectItem>
+          {options.map((course) => (
+            <SelectItem key={course.code} value={course.code}>
+              {course.name ? `${course.code} - ${course.name}` : course.code}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 // ==================== Search Input ====================
 
 interface RequestSearchProps {
@@ -107,6 +155,7 @@ interface RequestSearchProps {
   placeholder?: string;
   onRefresh?: () => void;
   isRefreshing?: boolean;
+  disabled?: boolean;
 }
 
 export function RequestSearch({
@@ -115,6 +164,7 @@ export function RequestSearch({
   placeholder = "Search requests...",
   onRefresh,
   isRefreshing,
+  disabled,
 }: RequestSearchProps) {
   return (
     <div className="flex gap-2">
@@ -124,6 +174,7 @@ export function RequestSearch({
           placeholder={placeholder}
           className="pl-9"
           value={value}
+          disabled={disabled}
           onChange={(e) => onChange?.(e.target.value)}
         />
       </div>
@@ -132,7 +183,7 @@ export function RequestSearch({
           variant="outline"
           size="icon"
           onClick={onRefresh}
-          disabled={isRefreshing}
+          disabled={disabled || isRefreshing}
         >
           <RefreshCw
             className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}

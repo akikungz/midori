@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   FileText,
@@ -7,9 +9,13 @@ import {
   XCircle,
   Ban,
   FilePlus,
+  Pencil,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 
 import { Button } from "@midori/components/ui/button";
+import { Input } from "@midori/components/ui/input";
 import {
   Card,
   CardContent,
@@ -64,6 +70,7 @@ export interface InstanceRequestSpecs {
 
 export interface CourseOffering {
   courseCode: string;
+  courseTitle?: string;
   semester: string;
 }
 
@@ -84,6 +91,7 @@ export interface ExtendedRequest {
   reason?: string;
   status: RequestStatus;
   targetInstanceId: number;
+  courseOffering?: CourseOffering;
 }
 
 // ==================== Instance Request Card ====================
@@ -92,7 +100,9 @@ interface InstanceRequestCardProps {
   request: InstanceRequest;
   canReview: boolean;
   isActionLoading: boolean;
-  onApprove: () => void;
+  isSelected: boolean;
+  onToggleSelect: () => void;
+  onApprove: (specs?: InstanceRequestSpecs) => void;
   onReject: () => void;
 }
 
@@ -100,10 +110,33 @@ export function InstanceRequestCard({
   request,
   canReview,
   isActionLoading,
+  isSelected,
+  onToggleSelect,
   onApprove,
   onReject,
 }: InstanceRequestCardProps) {
   const StatusIcon = statusConfig[request.status].icon;
+  const isPendingReview = canReview && request.status === "PENDING";
+
+  const [isEditingSpecs, setIsEditingSpecs] = useState(false);
+  const [draftSpecs, setDraftSpecs] = useState<InstanceRequestSpecs>(
+    request.specs,
+  );
+
+  useEffect(() => {
+    setDraftSpecs(request.specs);
+    setIsEditingSpecs(false);
+  }, [request.specs]);
+
+  const handleSpecChange = (
+    field: keyof InstanceRequestSpecs,
+    value: number,
+  ) => {
+    setDraftSpecs((previous) => ({
+      ...previous,
+      [field]: Number.isFinite(value) ? Math.max(1, value) : previous[field],
+    }));
+  };
 
   return (
     <Card className="transition-colors hover:border-primary/50">
@@ -123,20 +156,66 @@ export function InstanceRequestCard({
                 : "No course assigned"}
             </CardDescription>
           </div>
-          {canReview && request.status === "PENDING" && (
-            <RequestActionButtons
-              isLoading={isActionLoading}
-              onApprove={onApprove}
-              onReject={onReject}
-            />
+          {isPendingReview && (
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onToggleSelect}
+                disabled={isActionLoading}
+              >
+                {isSelected ? (
+                  <CheckSquare className="mr-1.5 size-3.5" />
+                ) : (
+                  <Square className="mr-1.5 size-3.5" />
+                )}
+                {isSelected ? "Selected" : "Select"}
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={isActionLoading}
+                onClick={() => setIsEditingSpecs((value) => !value)}
+              >
+                <Pencil className="mr-1.5 size-3.5" />
+                {isEditingSpecs ? "Close edit" : "Edit specs"}
+              </Button>
+
+              <Button
+                variant="default"
+                size="sm"
+                disabled={isActionLoading}
+                onClick={() => onApprove(draftSpecs)}
+              >
+                <CheckCircle className="mr-1.5 size-3.5" />
+                {isActionLoading ? "..." : "Approve"}
+              </Button>
+
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={isActionLoading}
+                onClick={onReject}
+              >
+                <XCircle className="mr-1.5 size-3.5" />
+                Reject
+              </Button>
+            </div>
           )}
         </div>
       </CardHeader>
       <CardContent>
+        {isEditingSpecs && isPendingReview ? (
+          <EditableRequestSpecs
+            specs={draftSpecs}
+            onChange={handleSpecChange}
+          />
+        ) : null}
         <RequestSpecs
-          cpus={request.specs.cpus}
-          memoryMB={request.specs.memoryMB}
-          diskGB={request.specs.diskGB}
+          cpus={draftSpecs.cpus}
+          memoryMB={draftSpecs.memoryMB}
+          diskGB={draftSpecs.diskGB}
           templateName={request.templateName}
         />
         {request.description && (
@@ -247,6 +326,52 @@ function RequestSpecs({
   );
 }
 
+interface EditableRequestSpecsProps {
+  specs: InstanceRequestSpecs;
+  onChange: (field: keyof InstanceRequestSpecs, value: number) => void;
+}
+
+function EditableRequestSpecs({ specs, onChange }: EditableRequestSpecsProps) {
+  return (
+    <div className="mb-3 grid gap-3 rounded-md border p-3 sm:grid-cols-3">
+      <label htmlFor="review-spec-cpus" className="space-y-1 text-sm">
+        <span className="text-muted-foreground">vCPU</span>
+        <Input
+          id="review-spec-cpus"
+          type="number"
+          min={1}
+          value={specs.cpus}
+          onChange={(event) => onChange("cpus", Number(event.target.value))}
+        />
+      </label>
+
+      <label htmlFor="review-spec-memory" className="space-y-1 text-sm">
+        <span className="text-muted-foreground">Memory (MB)</span>
+        <Input
+          id="review-spec-memory"
+          type="number"
+          min={1024}
+          step={512}
+          value={specs.memoryMB}
+          onChange={(event) => onChange("memoryMB", Number(event.target.value))}
+        />
+      </label>
+
+      <label htmlFor="review-spec-disk" className="space-y-1 text-sm">
+        <span className="text-muted-foreground">Disk (GB)</span>
+        <Input
+          id="review-spec-disk"
+          type="number"
+          min={16}
+          step={1}
+          value={specs.diskGB}
+          onChange={(event) => onChange("diskGB", Number(event.target.value))}
+        />
+      </label>
+    </div>
+  );
+}
+
 // ==================== Request Action Buttons ====================
 
 interface RequestActionButtonsProps {
@@ -289,14 +414,22 @@ function RequestActionButtons({
 interface InstanceRequestsListProps {
   requests: InstanceRequest[];
   canReview: boolean;
-  actionLoadingId: number | null;
-  onAction: (requestId: number, action: "APPROVED" | "REJECTED") => void;
+  actionLoadingIds: Set<number>;
+  selectedRequestIds: Set<number>;
+  onToggleSelect: (requestId: number) => void;
+  onAction: (
+    requestId: number,
+    action: "APPROVED" | "REJECTED",
+    specs?: InstanceRequestSpecs,
+  ) => void;
 }
 
 export function InstanceRequestsList({
   requests,
   canReview,
-  actionLoadingId,
+  actionLoadingIds,
+  selectedRequestIds,
+  onToggleSelect,
   onAction,
 }: InstanceRequestsListProps) {
   return (
@@ -306,8 +439,10 @@ export function InstanceRequestsList({
           key={request.id}
           request={request}
           canReview={canReview}
-          isActionLoading={actionLoadingId === request.id}
-          onApprove={() => onAction(request.id, "APPROVED")}
+          isActionLoading={actionLoadingIds.has(request.id)}
+          isSelected={selectedRequestIds.has(request.id)}
+          onToggleSelect={() => onToggleSelect(request.id)}
+          onApprove={(specs) => onAction(request.id, "APPROVED", specs)}
           onReject={() => onAction(request.id, "REJECTED")}
         />
       ))}
@@ -318,27 +453,50 @@ export function InstanceRequestsList({
 interface ExtendedRequestsListProps {
   requests: ExtendedRequest[];
   canReview: boolean;
-  actionLoadingId: number | null;
+  actionLoadingIds: Set<number>;
+  selectedRequestIds: Set<number>;
+  onToggleSelect: (requestId: number) => void;
   onAction: (requestId: number, action: "APPROVED" | "REJECTED") => void;
 }
 
 export function ExtendedRequestsList({
   requests,
   canReview,
-  actionLoadingId,
+  actionLoadingIds,
+  selectedRequestIds,
+  onToggleSelect,
   onAction,
 }: ExtendedRequestsListProps) {
   return (
     <div className="space-y-4">
       {requests.map((request) => (
-        <ExtendedRequestCard
-          key={request.id}
-          request={request}
-          canReview={canReview}
-          isActionLoading={actionLoadingId === request.id}
-          onApprove={() => onAction(request.id, "APPROVED")}
-          onReject={() => onAction(request.id, "REJECTED")}
-        />
+        <div key={request.id} className="space-y-2">
+          {canReview && request.status === "PENDING" ? (
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onToggleSelect(request.id)}
+                disabled={actionLoadingIds.has(request.id)}
+              >
+                {selectedRequestIds.has(request.id) ? (
+                  <CheckSquare className="mr-1.5 size-3.5" />
+                ) : (
+                  <Square className="mr-1.5 size-3.5" />
+                )}
+                {selectedRequestIds.has(request.id) ? "Selected" : "Select"}
+              </Button>
+            </div>
+          ) : null}
+
+          <ExtendedRequestCard
+            request={request}
+            canReview={canReview}
+            isActionLoading={actionLoadingIds.has(request.id)}
+            onApprove={() => onAction(request.id, "APPROVED")}
+            onReject={() => onAction(request.id, "REJECTED")}
+          />
+        </div>
       ))}
     </div>
   );

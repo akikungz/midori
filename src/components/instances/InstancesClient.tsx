@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Plus, Search, Filter, RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -26,6 +26,7 @@ const ITEMS_PER_PAGE = 10;
 
 interface InstancesClientProps {
   userRole: Role;
+  listScope?: "self" | "admin";
 }
 
 interface InstancesResponse {
@@ -36,11 +37,19 @@ interface InstancesResponse {
 /**
  * Main instances list client component
  */
-export function InstancesClient({ userRole }: InstancesClientProps) {
+export function InstancesClient({
+  userRole,
+  listScope = "self",
+}: InstancesClientProps) {
   const queryClient = useQueryClient();
   const pagination = usePagination(1, ITEMS_PER_PAGE);
   const submitState = useSubmitState();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "ACTIVE" | "PENDING" | "PROMOTED" | "INACTIVE" | "DELETED"
+  >("all");
+  const isAdminScope = listScope === "admin";
 
   // Permission helpers
   const can = useCallback(
@@ -52,19 +61,22 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
     [userRole],
   );
 
-  const canCreateInstance = can("CREATE_INSTANCE");
-  const canCreateRequest = can("CREATE_REQUEST");
+  const canCreateInstance = !isAdminScope && can("CREATE_INSTANCE");
+  const canCreateRequest = !isAdminScope && can("CREATE_REQUEST");
   const canPromote = can("PROMOTE_INSTANCE");
   const canDelete = can("DELETE_INSTANCE");
 
   // Data fetching
-  const { data, isLoading, refetch, isFetching } = api.useQuery(
+  const selfInstancesQuery = api.useQuery(
     "get",
     "/api/instances/",
     {
       params: {
         query: { page: pagination.page, pageSize: ITEMS_PER_PAGE },
       },
+    },
+    {
+      enabled: !isAdminScope,
     },
   ) as {
     data: InstancesResponse | undefined;
@@ -73,8 +85,77 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
     isFetching: boolean;
   };
 
+  const adminInstancesQuery = api.useQuery(
+    "get",
+    "/api/instances/admin",
+    {
+      params: {
+        query: { page: pagination.page, pageSize: ITEMS_PER_PAGE },
+      },
+    },
+    {
+      enabled: isAdminScope,
+    },
+  ) as {
+    data: InstancesResponse | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+    isFetching: boolean;
+  };
+
+  const { data, isLoading, refetch, isFetching } = isAdminScope
+    ? adminInstancesQuery
+    : selfInstancesQuery;
+
+  const listQueryKey = isAdminScope
+    ? (["get", "/api/instances/admin"] as const)
+    : (["get", "/api/instances/"] as const);
+
   const instances = data?.values || [];
   const totalPages = data?.totalPages || 1;
+
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+  const filteredInstances = useMemo(() => {
+    return instances.filter((instance) => {
+      const matchesStatus =
+        statusFilter === "all" || instance.status === statusFilter;
+
+      if (!matchesStatus) {
+        return false;
+      }
+
+      if (!normalizedSearchTerm) {
+        return true;
+      }
+
+      const searchableText = [
+        String(instance.id),
+        instance.status,
+        instance.vmDetails?.hostname,
+        instance.vmDetails?.ip,
+        instance.vmDetails?.os,
+        instance.courseOffering?.courseCode,
+        instance.courseOffering?.courseTitle,
+        instance.courseOffering?.semester,
+        instance.owner?.name,
+        instance.owner?.email,
+        instance.user?.name,
+        instance.user?.email,
+        instance.requester?.name,
+        instance.requester?.email,
+        instance.instructor?.name,
+        instance.instructor?.email,
+        instance.ownerName,
+        instance.ownerEmail,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(normalizedSearchTerm);
+    });
+  }, [instances, normalizedSearchTerm, statusFilter]);
 
   // Create instance handler
   const handleCreateInstance = useCallback(
@@ -97,7 +178,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           },
         });
         queryClient.invalidateQueries({
-          queryKey: ["get", "/api/instances/"],
+          queryKey: listQueryKey,
         });
         setIsCreateDialogOpen(false);
       } catch (error) {
@@ -106,7 +187,7 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
         submitState.endSubmit();
       }
     },
-    [queryClient, submitState],
+    [queryClient, submitState, listQueryKey],
   );
 
   // Re-provision instance handler
@@ -119,13 +200,13 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           },
         });
         queryClient.invalidateQueries({
-          queryKey: ["get", "/api/instances/"],
+          queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to re-provision instance:", error);
       }
     },
-    [queryClient],
+    [queryClient, listQueryKey],
   );
 
   const handlePromote = useCallback(
@@ -137,13 +218,13 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           },
         });
         queryClient.invalidateQueries({
-          queryKey: ["get", "/api/instances/"],
+          queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to promote instance:", error);
       }
     },
-    [queryClient],
+    [queryClient, listQueryKey],
   );
 
   const handleDelete = useCallback(
@@ -155,13 +236,13 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           },
         });
         queryClient.invalidateQueries({
-          queryKey: ["get", "/api/instances/"],
+          queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to delete instance:", error);
       }
     },
-    [queryClient],
+    [queryClient, listQueryKey],
   );
 
   if (isLoading) {
@@ -176,6 +257,20 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
         onCreateClick={() => setIsCreateDialogOpen(true)}
         onRefresh={refetch}
         isRefreshing={isFetching}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusFilterChange={(value) =>
+          setStatusFilter(
+            value as
+              | "all"
+              | "ACTIVE"
+              | "PENDING"
+              | "PROMOTED"
+              | "INACTIVE"
+              | "DELETED",
+          )
+        }
       />
 
       {/* Instances Grid */}
@@ -185,9 +280,15 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
           canCreateRequest={canCreateRequest}
           onCreateInstance={() => setIsCreateDialogOpen(true)}
         />
+      ) : filteredInstances.length === 0 ? (
+        <NoMatchingInstances
+          searchTerm={searchTerm}
+          statusFilter={statusFilter}
+        />
       ) : (
         <InstancesGrid
-          instances={instances}
+          instances={filteredInstances}
+          showOwner={isAdminScope}
           canPromote={canPromote}
           canDelete={canDelete}
           onReprovision={handleReprovision}
@@ -206,12 +307,14 @@ export function InstancesClient({ userRole }: InstancesClientProps) {
       )}
 
       {/* Create Instance Dialog */}
-      <CreateInstanceDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        onSubmit={handleCreateInstance}
-        isSubmitting={submitState.isSubmitting}
-      />
+      {canCreateInstance && (
+        <CreateInstanceDialog
+          open={isCreateDialogOpen}
+          onOpenChange={setIsCreateDialogOpen}
+          onSubmit={handleCreateInstance}
+          isSubmitting={submitState.isSubmitting}
+        />
+      )}
     </>
   );
 }
@@ -223,6 +326,16 @@ interface InstanceFiltersProps {
   onCreateClick: () => void;
   onRefresh: () => void;
   isRefreshing: boolean;
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  statusFilter:
+    | "all"
+    | "ACTIVE"
+    | "PENDING"
+    | "PROMOTED"
+    | "INACTIVE"
+    | "DELETED";
+  onStatusFilterChange: (value: string) => void;
 }
 
 function InstanceFilters({
@@ -230,14 +343,23 @@ function InstanceFilters({
   onCreateClick,
   onRefresh,
   isRefreshing,
+  searchTerm,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
 }: InstanceFiltersProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search instances..." className="pl-9" />
+        <Input
+          placeholder="Search by ID, hostname, IP, course..."
+          className="pl-9"
+          value={searchTerm}
+          onChange={(event) => onSearchChange(event.target.value)}
+        />
       </div>
-      <Select defaultValue="all">
+      <Select value={statusFilter} onValueChange={onStatusFilterChange}>
         <SelectTrigger className="w-full sm:w-45">
           <Filter className="mr-2 size-4" />
           <SelectValue placeholder="Status" />
@@ -248,6 +370,7 @@ function InstanceFilters({
           <SelectItem value="PENDING">Pending</SelectItem>
           <SelectItem value="PROMOTED">Promoted</SelectItem>
           <SelectItem value="INACTIVE">Inactive</SelectItem>
+          <SelectItem value="DELETED">Deleted</SelectItem>
         </SelectContent>
       </Select>
       <Button
@@ -265,6 +388,26 @@ function InstanceFilters({
           Create Instance
         </Button>
       )}
+    </div>
+  );
+}
+
+function NoMatchingInstances({
+  searchTerm,
+  statusFilter,
+}: {
+  searchTerm: string;
+  statusFilter: string;
+}) {
+  const hasSearch = searchTerm.trim().length > 0;
+  const hasStatusFilter = statusFilter !== "all";
+
+  return (
+    <div className="rounded-md border border-dashed p-8 text-center text-sm text-muted-foreground">
+      No instances match the current filters
+      {hasSearch ? ` (search: "${searchTerm.trim()}")` : ""}
+      {hasSearch && hasStatusFilter ? " and " : ""}
+      {hasStatusFilter ? `status: ${statusFilter}` : ""}.
     </div>
   );
 }

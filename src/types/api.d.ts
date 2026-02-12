@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+  "/metrics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getMetrics"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/user/me": {
     parameters: {
       query?: never;
@@ -860,6 +876,23 @@ export interface paths {
     put?: never;
     /** @description Reset the password for a user */
     post: operations["resetPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/verify-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** @description Verify the current user's password */
+    post: operations["verifyPassword"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1858,11 +1891,8 @@ export interface paths {
               tokenType?: string;
               idToken?: string;
               accessToken?: string;
-              refreshToken?: string;
               /** Format: date-time */
               accessTokenExpiresAt?: string;
-              /** Format: date-time */
-              refreshTokenExpiresAt?: string;
             };
           };
         };
@@ -2260,7 +2290,7 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
-    GetMeResponse: {
+    UserGetMeResponse: {
       /** @description Unique identifier for the user */
       id: number;
       /** @description Full name of the user */
@@ -2271,7 +2301,7 @@ export interface components {
       /** @enum {string} */
       role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
     };
-    GetSSHKeyData: {
+    UserGetSSHKeyData: {
       /** @description Unique identifier for the SSH key */
       id: number;
       /** @description Name of the SSH key */
@@ -2283,7 +2313,7 @@ export interface components {
       /** @description Timestamp when the record was last updated */
       updatedAt?: Record<string, never> | string | number;
     };
-    GetSSHKeyResponse: {
+    UserGetSSHKeyResponse: {
       /** @description List of SSH keys */
       values: {
         /** @description Unique identifier for the SSH key */
@@ -2306,7 +2336,7 @@ export interface components {
       /** @description Number of items per page */
       pageSize: number;
     };
-    GetSSHKeyRequestQuery: {
+    UserGetSSHKeyRequestQuery: {
       /**
        * @description Page number for pagination
        * @default 1
@@ -2318,13 +2348,13 @@ export interface components {
        */
       pageSize: number;
     };
-    AddSSHKeyRequestBody: {
+    UserAddSSHKeyRequestBody: {
       /** @description Name of the SSH key */
       name: string;
       /** @description Public key string */
       publicKey: string;
     };
-    AddSSHKeyResponse: {
+    UserAddSSHKeyResponse: {
       /** @description Unique identifier for the SSH key */
       id: number;
       /** @description Name of the SSH key */
@@ -2336,7 +2366,7 @@ export interface components {
       /** @description Timestamp when the record was last updated */
       updatedAt?: Record<string, never> | string | number;
     };
-    RemoveSSHKeyRequestBody: {
+    UserRemoveSSHKeyRequestBody: {
       /** @description Unique identifiers for the SSH keys to be removed */
       keyIds: number[];
     };
@@ -2627,6 +2657,20 @@ export interface components {
       provisionStatus: string;
       /** @description Success message */
       message: string;
+    };
+    InstanceIdParams: {
+      /** @description Unique identifier for the instance */
+      instanceId: number;
+    };
+    AuditLogsQuery: {
+      /** @default 1 */
+      page: number;
+      /** @default 10 */
+      pageSize: number;
+    };
+    InstanceExtendedRequestParams: {
+      /** @description Instance ID to get extended requests for */
+      instanceId: number;
     };
     /** @enum {string} */
     ApprovalStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
@@ -3872,6 +3916,16 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  getMetrics: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: never;
+  };
   getApiUserMe: {
     parameters: {
       query?: never;
@@ -3887,7 +3941,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["GetMeResponse"];
+          "application/json": components["schemas"]["UserGetMeResponse"];
         };
       };
     };
@@ -3910,7 +3964,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["GetSSHKeyResponse"];
+          "application/json": components["schemas"]["UserGetSSHKeyResponse"];
         };
       };
     };
@@ -3924,9 +3978,9 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddSSHKeyRequestBody"];
-        "application/x-www-form-urlencoded": components["schemas"]["AddSSHKeyRequestBody"];
-        "multipart/form-data": components["schemas"]["AddSSHKeyRequestBody"];
+        "application/json": components["schemas"]["UserAddSSHKeyRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UserAddSSHKeyRequestBody"];
+        "multipart/form-data": components["schemas"]["UserAddSSHKeyRequestBody"];
       };
     };
     responses: {
@@ -3936,7 +3990,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["AddSSHKeyResponse"];
+          "application/json": components["schemas"]["UserAddSSHKeyResponse"];
         };
       };
     };
@@ -3950,9 +4004,9 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RemoveSSHKeyRequestBody"];
-        "application/x-www-form-urlencoded": components["schemas"]["RemoveSSHKeyRequestBody"];
-        "multipart/form-data": components["schemas"]["RemoveSSHKeyRequestBody"];
+        "application/json": components["schemas"]["UserRemoveSSHKeyRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UserRemoveSSHKeyRequestBody"];
+        "multipart/form-data": components["schemas"]["UserRemoveSSHKeyRequestBody"];
       };
     };
     responses: {
@@ -5700,7 +5754,11 @@ export interface operations {
           password: string;
           /** @description Callback URL to use as a redirect for email verification */
           callbackURL?: string | null;
-          rememberMe?: string | null;
+          /**
+           * @description If this is false, the session will not be remembered. Default is `true`.
+           * @default true
+           */
+          rememberMe?: boolean | null;
         };
       };
     };
@@ -5803,6 +5861,101 @@ export interface operations {
           newPassword: string;
           /** @description The token to reset the password */
           token?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            status?: boolean;
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  verifyPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The password to verify */
+          password: string;
         };
       };
     };

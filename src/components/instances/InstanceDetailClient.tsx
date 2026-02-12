@@ -8,6 +8,7 @@ import { ArrowLeft, Server, ArrowUpCircle } from "lucide-react";
 
 import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
+import { useSession } from "@midori/hooks/useSession";
 import { Button } from "@midori/components/ui/button";
 import { Badge } from "@midori/components/ui/badge";
 import { Skeleton } from "@midori/components/ui/skeleton";
@@ -43,6 +44,72 @@ interface InstanceData {
   status: keyof typeof statusColors;
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
+  owner?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  user?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  requester?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  instructor?: {
+    id?: number;
+    name?: string;
+    email?: string;
+  };
+  ownerName?: string;
+  ownerEmail?: string;
+  ownerId?: number;
+  requesterId?: number;
+}
+
+function getOwnerInfo(instance: InstanceData) {
+  const candidate =
+    instance.owner ||
+    instance.user ||
+    instance.requester ||
+    instance.instructor;
+
+  const id = candidate?.id || instance.ownerId || instance.requesterId;
+  const name = candidate?.name || instance.ownerName;
+  const email = candidate?.email || instance.ownerEmail;
+
+  if (!id && !name && !email) {
+    return null;
+  }
+
+  return { id, name, email };
+}
+
+function getOwnerDisplay(owner: {
+  id?: number;
+  name?: string;
+  email?: string;
+}) {
+  if (owner.name && owner.email) {
+    return `${owner.name} (${owner.email})`;
+  }
+
+  if (owner.name) {
+    return owner.name;
+  }
+
+  if (owner.email) {
+    return owner.email;
+  }
+
+  if (owner.id) {
+    return `User #${owner.id}`;
+  }
+
+  return null;
 }
 
 interface InstanceDetailClientProps {
@@ -63,6 +130,7 @@ export function InstanceDetailClient({
 
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
   const [isProxyDialogOpen, setIsProxyDialogOpen] = useState(false);
+  const { user: currentUser } = useSession();
 
   // Permission helpers
   const can = useCallback(
@@ -213,6 +281,16 @@ export function InstanceDetailClient({
     return <InstanceNotFound />;
   }
 
+  const ownerInfo = getOwnerInfo(instance);
+  const ownerDisplay = ownerInfo ? getOwnerDisplay(ownerInfo) : null;
+  const isOwner =
+    !!ownerInfo &&
+    !!currentUser &&
+    ((ownerInfo.id !== undefined && ownerInfo.id === currentUser.id) ||
+      (!!ownerInfo.email && ownerInfo.email === currentUser.email));
+
+  const shouldShowOwner = !!ownerDisplay && !isOwner;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -227,6 +305,8 @@ export function InstanceDetailClient({
         onPromote={handlePromote}
         onDelete={handleDelete}
         isSubmitting={submitState.isSubmitting}
+        ownerDisplay={ownerDisplay}
+        shouldShowOwner={shouldShowOwner}
       />
 
       {/* Tabs */}
@@ -279,6 +359,8 @@ interface InstanceDetailHeaderProps {
   onPromote: () => Promise<void>;
   onDelete: () => Promise<void>;
   isSubmitting: boolean;
+  ownerDisplay: string | null;
+  shouldShowOwner: boolean;
 }
 
 function InstanceDetailHeader({
@@ -292,6 +374,8 @@ function InstanceDetailHeader({
   onPromote,
   onDelete,
   isSubmitting,
+  ownerDisplay,
+  shouldShowOwner,
 }: InstanceDetailHeaderProps) {
   const showPromote = canPromote && instance.status !== "PROMOTED";
 
@@ -317,6 +401,11 @@ function InstanceDetailHeader({
               ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.courseTitle}`
               : "No course assigned"}
           </p>
+          {shouldShowOwner && ownerDisplay && (
+            <p className="text-sm text-muted-foreground">
+              Owner: {ownerDisplay}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex gap-2">
