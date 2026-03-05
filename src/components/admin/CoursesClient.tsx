@@ -307,7 +307,11 @@ export function CoursesClient() {
 
       {/* Pagination */}
       {!isLoading && (
-        <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+        />
       )}
 
       {/* Dialogs */}

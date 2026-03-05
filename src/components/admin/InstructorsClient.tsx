@@ -221,7 +221,11 @@ export function InstructorsClient() {
 
       {/* Pagination */}
       {!isLoading && (
-        <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+        />
       )}
 
       {/* Dialogs */}

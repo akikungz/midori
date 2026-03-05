@@ -27,10 +27,7 @@ function getFileType(
   if (mimeType.startsWith("image/")) return "image";
   if (mimeType.startsWith("video/")) return "video";
   if (mimeType.startsWith("audio/")) return "audio";
-  if (
-    mimeType === "application/pdf" ||
-    mimeType.includes("pdf")
-  ) {
+  if (mimeType === "application/pdf" || mimeType.includes("pdf")) {
     return "pdf";
   }
 
@@ -87,9 +84,7 @@ export function FilePreview({
             >
               <track kind="captions" srcLang="en" label="English" />
             </audio>
-            <p className="text-sm text-muted-foreground">
-              Playing: {fileName}
-            </p>
+            <p className="text-sm text-muted-foreground">Playing: {fileName}</p>
           </div>
         ) : fileType === "pdf" ? (
           <PdfPreview fileName={fileName} downloadUrl={downloadUrl} />

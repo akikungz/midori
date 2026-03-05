@@ -11,7 +11,9 @@ export function PdfPreview({ fileName, downloadUrl }: PdfPreviewProps) {
   if (!downloadUrl) {
     return (
       <div className="flex items-center justify-center rounded-lg bg-muted p-8">
-        <p className="text-sm text-muted-foreground">PDF preview is loading...</p>
+        <p className="text-sm text-muted-foreground">
+          PDF preview is loading...
+        </p>
       </div>
     );
   }
@@ -27,11 +29,7 @@ export function PdfPreview({ fileName, downloadUrl }: PdfPreviewProps) {
       </div>
 
       <Button asChild className="w-full">
-        <a
-          href={downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
           Open PDF in new tab
         </a>
       </Button>

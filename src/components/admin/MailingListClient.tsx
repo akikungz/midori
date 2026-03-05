@@ -42,8 +42,8 @@ export function MailingListClient() {
   // Filter locally based on search query
   const filteredMailingList = searchQuery
     ? mailingList.filter((entry) =>
-      entry.email.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+        entry.email.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
     : mailingList;
 
   // ============================================================================

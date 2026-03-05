@@ -134,7 +134,8 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainNavItems
                 .filter(
-                  (item) => !(item.url === "/dashboard/storage" && role === "STUDENT"),
+                  (item) =>
+                    !(item.url === "/dashboard/storage" && role === "STUDENT"),
                 )
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>

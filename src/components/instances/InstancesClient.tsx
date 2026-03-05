@@ -260,12 +260,12 @@ export function InstancesClient({
         onStatusFilterChange={(value) =>
           setStatusFilter(
             value as
-            | "all"
-            | "ACTIVE"
-            | "PENDING"
-            | "PROMOTED"
-            | "INACTIVE"
-            | "DELETED",
+              | "all"
+              | "ACTIVE"
+              | "PENDING"
+              | "PROMOTED"
+              | "INACTIVE"
+              | "DELETED",
           )
         }
       />
@@ -329,12 +329,12 @@ interface InstanceFiltersProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   statusFilter:
-  | "all"
-  | "ACTIVE"
-  | "PENDING"
-  | "PROMOTED"
-  | "INACTIVE"
-  | "DELETED";
+    | "all"
+    | "ACTIVE"
+    | "PENDING"
+    | "PROMOTED"
+    | "INACTIVE"
+    | "DELETED";
   onStatusFilterChange: (value: string) => void;
 }
 

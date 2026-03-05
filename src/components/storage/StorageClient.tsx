@@ -223,28 +223,64 @@ export function StorageClient() {
       setIsUploading(true);
 
       try {
-        const formData = new FormData();
-        formData.append("file", selectedFile);
+        const contentType = selectedFile.type || "application/octet-stream";
 
-        const uploadResponse = await fetch("/internal/storage/upload", {
-          method: "POST",
-          body: formData,
+        // Step 1: Get presigned upload URL from API
+        const { data: uploadData, error: uploadUrlError } =
+          await fetchClient.POST("/api/storage/files/upload-url", {
+            body: {
+              filename: selectedFile.name,
+              contentType,
+            },
+          });
+
+        if (uploadUrlError || !uploadData?.uploadUrl || !uploadData.objectKey) {
+          throw new Error("Unable to create upload URL");
+        }
+
+        // Step 2: Upload file directly to S3 using presigned URL
+        const uploadResponse = await fetch(uploadData.uploadUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": contentType,
+          },
+          body: selectedFile,
         });
 
         if (!uploadResponse.ok) {
-          let message = "Failed to upload file";
-          try {
-            const errorData = (await uploadResponse.json()) as {
-              message?: string;
-            };
-            if (errorData?.message) {
-              message = errorData.message;
-            }
-          } catch {
-            // Keep default message when response body is not JSON.
+          let message = `Upload failed with status ${uploadResponse.status}`;
+
+          if (uploadResponse.status === 413) {
+            message =
+              "File is too large for the storage backend. Please try a smaller file.";
+          } else if (uploadResponse.status === 400) {
+            message =
+              "Invalid file format or upload request rejected by storage backend.";
           }
 
           throw new Error(message);
+        }
+
+        // Step 3: Create file metadata in the API
+        const extension = selectedFile.name.includes(".")
+          ? selectedFile.name.split(".").pop()?.toLowerCase()
+          : undefined;
+
+        const { data: createdFile, error: createFileError } =
+          await fetchClient.POST("/api/storage/files/", {
+            body: {
+              name: selectedFile.name,
+              type: "FILE",
+              mimeType: contentType,
+              sizeBytes: selectedFile.size,
+              storagePath: uploadData.objectKey,
+              visibility: "PRIVATE",
+              ...(extension ? { extension } : {}),
+            },
+          });
+
+        if (createFileError || !createdFile) {
+          throw new Error("Upload completed but metadata creation failed");
         }
 
         toast.success(`Uploaded ${selectedFile.name}`);
@@ -284,10 +320,7 @@ export function StorageClient() {
   );
 
   const handleDeleteClick = useCallback(
-    (
-      event: React.MouseEvent<HTMLButtonElement>,
-      file: StorageFileItem,
-    ) => {
+    (event: React.MouseEvent<HTMLButtonElement>, file: StorageFileItem) => {
       if (event.shiftKey) {
         void handleDelete(file.id);
         return;
@@ -334,30 +367,27 @@ export function StorageClient() {
     [withActionLoading],
   );
 
-  const handlePreview = useCallback(
-    async (file: StorageFileItem) => {
-      setPreviewFileName(file.name);
-      setPreviewMimeType(file.mimeType);
-      setIsPreviewOpen(true);
+  const handlePreview = useCallback(async (file: StorageFileItem) => {
+    setPreviewFileName(file.name);
+    setPreviewMimeType(file.mimeType);
+    setIsPreviewOpen(true);
 
-      try {
-        const { data } = await fetchClient.GET(
-          "/api/storage/files/{fileId}/download-url",
-          {
-            params: {
-              path: { fileId: file.id },
-            },
+    try {
+      const { data } = await fetchClient.GET(
+        "/api/storage/files/{fileId}/download-url",
+        {
+          params: {
+            path: { fileId: file.id },
           },
-        );
+        },
+      );
 
-        setPreviewUrl(data?.downloadUrl);
-      } catch (error) {
-        console.error("Failed to generate preview URL:", error);
-        toast.error("Failed to load file preview");
-      }
-    },
-    [],
-  );
+      setPreviewUrl(data?.downloadUrl);
+    } catch (error) {
+      console.error("Failed to generate preview URL:", error);
+      toast.error("Failed to load file preview");
+    }
+  }, []);
 
   const isPreviewable = (file: StorageFileItem): boolean => {
     if (!file.mimeType) return false;

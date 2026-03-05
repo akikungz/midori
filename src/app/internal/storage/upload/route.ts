@@ -56,16 +56,14 @@ export async function POST(request: Request) {
       let message = `Upload target rejected file with status ${uploadResponse.status}`;
 
       if (uploadResponse.status === 413) {
-        message = "File is too large for the storage backend. Please try a smaller file.";
+        message =
+          "File is too large for the storage backend. Please try a smaller file.";
       } else if (uploadResponse.status === 400) {
         message =
           "Invalid file format or upload request rejected by storage backend.";
       }
 
-      return NextResponse.json(
-        { message },
-        { status: 502 },
-      );
+      return NextResponse.json({ message }, { status: 502 });
     }
 
     const extension = file.name.includes(".")
