@@ -7,7 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Server, ArrowUpCircle } from "lucide-react";
 
 import { api, fetchClient } from "@midori/lib/api";
-import { hasPermission, type Role } from "@midori/lib/roles";
+import { hasPermission, isAdmin, type Role } from "@midori/lib/roles";
 import { useSession } from "@midori/hooks/useSession";
 import { Button } from "@midori/components/ui/button";
 import { Badge } from "@midori/components/ui/badge";
@@ -42,6 +42,8 @@ const statusColors = {
 interface InstanceData {
   id: number;
   status: keyof typeof statusColors;
+  defaultUser?: string;
+  defaultPassword?: string;
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
   owner?: {
@@ -288,6 +290,8 @@ export function InstanceDetailClient({
     !!currentUser &&
     ((ownerInfo.id !== undefined && ownerInfo.id === currentUser.id) ||
       (!!ownerInfo.email && ownerInfo.email === currentUser.email));
+  const canViewDefaultCredentials =
+    isOwner || (isAdmin(userRole) && instance.status === "PROMOTED");
 
   const shouldShowOwner = !!ownerDisplay && !isOwner;
 
@@ -319,7 +323,12 @@ export function InstanceDetailClient({
 
         <TabsContent value="overview" className="space-y-4">
           {instance.vmDetails && (
-            <VmDetailsCard vmDetails={instance.vmDetails} />
+            <VmDetailsCard
+              vmDetails={instance.vmDetails}
+              showCredentials={canViewDefaultCredentials}
+              defaultUser={instance.defaultUser}
+              defaultPassword={instance.defaultPassword}
+            />
           )}
           {instance.courseOffering && (
             <CourseInfoCard courseOffering={instance.courseOffering} />

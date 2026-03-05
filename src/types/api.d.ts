@@ -680,6 +680,290 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/storage/files/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List files
+     * @description List owned files by default, or files shared with the current user when sharedWithMe=true
+     */
+    get: operations["getApiStorageFiles"];
+    put?: never;
+    /**
+     * Create file/folder
+     * @description Create a new file or folder in storage
+     */
+    post: operations["postApiStorageFiles"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Search owned files
+     * @description Search files and folders owned by the current user
+     */
+    get: operations["getApiStorageFilesSearch"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/upload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create upload URL
+     * @description Generate a presigned upload URL for S3-compatible storage
+     */
+    post: operations["postApiStorageFilesUpload-url"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get file detail
+     * @description Get file/folder detail with ACL check
+     */
+    get: operations["getApiStorageFilesByFileId"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete file/folder
+     * @description Move file/folder to trash
+     */
+    delete: operations["deleteApiStorageFilesByFileId"];
+    options?: never;
+    head?: never;
+    /**
+     * Update file metadata
+     * @description Rename or update file/folder metadata
+     */
+    patch: operations["patchApiStorageFilesByFileId"];
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/download-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Create latest version download URL
+     * @description Generate a signed download URL for the latest file version
+     */
+    get: operations["getApiStorageFilesByFileIdDownload-url"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/move": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Move file/folder
+     * @description Move file/folder to another parent folder
+     */
+    post: operations["postApiStorageFilesByFileIdMove"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/copy": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Copy file/folder
+     * @description Create a copy of a file/folder
+     */
+    post: operations["postApiStorageFilesByFileIdCopy"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List file versions
+     * @description List version history for a file
+     */
+    get: operations["getApiStorageFilesByFileIdVersions"];
+    put?: never;
+    /**
+     * Create file version
+     * @description Create a new version for a file
+     */
+    post: operations["postApiStorageFilesByFileIdVersions"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/upload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create file version upload URL
+     * @description Generate a presigned upload URL for a new file version
+     */
+    post: operations["postApiStorageFilesByFileIdUpload-url"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions/{versionId}/download-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Create file version download URL
+     * @description Generate a signed download URL for a specific file version
+     */
+    get: operations["getApiStorageFilesByFileIdVersionsByVersionIdDownload-url"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/versions/{versionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete file version
+     * @description Delete a specific file version
+     */
+    delete: operations["deleteApiStorageFilesByFileIdVersionsByVersionId"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List file permissions
+     * @description List sharing permissions for a file (owner only)
+     */
+    get: operations["getApiStorageFilesByFileIdPermissions"];
+    put?: never;
+    /**
+     * Create file permission
+     * @description Share file with a user or email (owner only)
+     */
+    post: operations["postApiStorageFilesByFileIdPermissions"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/storage/files/{fileId}/permissions/{permissionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete file permission
+     * @description Remove a specific file permission (owner only)
+     */
+    delete: operations["deleteApiStorageFilesByFileIdPermissionsByPermissionId"];
+    options?: never;
+    head?: never;
+    /**
+     * Update file permission
+     * @description Update a specific file permission (owner only)
+     */
+    patch: operations["patchApiStorageFilesByFileIdPermissionsByPermissionId"];
+    trace?: never;
+  };
   "/api/autocomplete/courses": {
     parameters: {
       query?: never;
@@ -797,6 +1081,178 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/auth/callback/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      responses: {
+        /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Unauthorized. Due to missing or invalid authentication. */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message: string;
+            };
+          };
+        };
+        /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Not Found. The requested resource was not found. */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+        429: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+        /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              message?: string;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/auth/get-session": {
     parameters: {
       query?: never;
@@ -807,7 +1263,8 @@ export interface paths {
     /** @description Get the current session */
     get: operations["getSession"];
     put?: never;
-    post?: never;
+    /** @description Get the current session */
+    post: operations["getSession"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1054,6 +1511,23 @@ export interface paths {
     put?: never;
     /** @description Change the password of the user */
     post: operations["changePassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/update-session": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** @description Update the current session */
+    post: operations["updateSession"];
     delete?: never;
     options?: never;
     head?: never;
@@ -2391,6 +2865,15 @@ export interface components {
       values: {
         /** @description Unique identifier for the instance */
         id: number;
+        /** @description Details of the instance owner */
+        owner: {
+          /** @description Platform user ID of the instance owner */
+          id: number;
+          /** @description Name of the instance owner */
+          name: string;
+          /** @description Email of the instance owner */
+          email: string;
+        };
         /** @description Details of the course offering associated with the instance */
         courseOffering?: {
           /** @description Course code associated with the offering */
@@ -2447,6 +2930,15 @@ export interface components {
     GetInstanceResponse: {
       /** @description Unique identifier for the instance */
       id: number;
+      /** @description Details of the instance owner */
+      owner: {
+        /** @description Platform user ID of the instance owner */
+        id: number;
+        /** @description Name of the instance owner */
+        name: string;
+        /** @description Email of the instance owner */
+        email: string;
+      };
       /** @description Details of the course offering associated with the instance */
       courseOffering?: {
         /** @description Course code associated with the offering */
@@ -2486,6 +2978,10 @@ export interface components {
       createdAt?: Record<string, never> | string | number;
       /** @description Timestamp when the record was last updated */
       updatedAt?: Record<string, never> | string | number;
+      /** @description Default username for instance login */
+      defaultUser: string;
+      /** @description Default password generated during provisioning */
+      defaultPassword?: string;
       /** @description List of reverse proxy configurations associated with the instance */
       reverseProxy: {
         /** @description Unique identifier for the reverse proxy configuration */
@@ -3809,6 +4305,217 @@ export interface components {
     DeleteSemesterByIdResponse: {
       /** @description Indicates if the deletion was successful */
       success: boolean;
+    };
+    StorageFileItem: {
+      id: string;
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      mimeType?: string;
+      extension?: string;
+      description?: string;
+      parentId?: string;
+      ownerId: number;
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "PRIVATE" | "SHARED" | "PUBLIC";
+      createdAt: Record<string, never> | string | number;
+      updatedAt: Record<string, never> | string | number;
+    };
+    StorageFileListResponse: {
+      values: {
+        id: string;
+        name: string;
+        /** @enum {string} */
+        type: "FILE" | "FOLDER";
+        mimeType?: string;
+        extension?: string;
+        description?: string;
+        parentId?: string;
+        ownerId: number;
+        sizeBytes: number;
+        /** @enum {string} */
+        visibility: "PRIVATE" | "SHARED" | "PUBLIC";
+        createdAt: Record<string, never> | string | number;
+        updatedAt: Record<string, never> | string | number;
+      }[];
+      /** @description Total number of items available */
+      totalItems: number;
+      /** @description Total number of pages available */
+      totalPages: number;
+      /** @description Current page number */
+      currentPage: number;
+      /** @description Number of items per page */
+      pageSize: number;
+    };
+    GetStorageFilesRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      parentId?: string;
+      /** @enum {string} */
+      type?: "FILE" | "FOLDER";
+      sharedWithMe?: boolean;
+    };
+    SearchStorageFilesRequestQuery: {
+      /**
+       * @description Page number for pagination
+       * @default 1
+       */
+      page: number;
+      /**
+       * @description Number of items per page
+       * @default 10
+       */
+      pageSize: number;
+      query: string;
+      /** @enum {string} */
+      type?: "FILE" | "FOLDER";
+    };
+    StorageFileDetailResponse: {
+      id: string;
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      mimeType?: string;
+      extension?: string;
+      description?: string;
+      parentId?: string;
+      ownerId: number;
+      sizeBytes: number;
+      /** @enum {string} */
+      visibility: "PRIVATE" | "SHARED" | "PUBLIC";
+      createdAt: Record<string, never> | string | number;
+      updatedAt: Record<string, never> | string | number;
+      /** @enum {string} */
+      accessRole: "VIEWER" | "COMMENTER" | "EDITOR" | "OWNER";
+    };
+    CreateStorageFileRequestBody: {
+      name: string;
+      /** @enum {string} */
+      type: "FILE" | "FOLDER";
+      parentId?: string;
+      mimeType?: string;
+      extension?: string;
+      description?: string;
+      /** @enum {string} */
+      visibility?: "PRIVATE" | "SHARED" | "PUBLIC";
+      storagePath?: string;
+      sizeBytes?: number;
+      checksumSha256?: string;
+    };
+    UpdateStorageFileRequestBody: {
+      name?: string;
+      description?: string;
+      /** @enum {string} */
+      visibility?: "PRIVATE" | "SHARED" | "PUBLIC";
+    };
+    MoveStorageFileRequestBody: {
+      parentId?: string;
+    };
+    CopyStorageFileRequestBody: {
+      parentId?: string;
+      name?: string;
+    };
+    StorageFileVersionItem: {
+      id: number;
+      platformFileId: string;
+      versionNumber: number;
+      sizeBytes: number;
+      mimeType?: string;
+      storagePath: string;
+      checksumSha256?: string;
+      createdById?: number;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    };
+    GetStorageFileVersionsResponse: {
+      values: {
+        id: number;
+        platformFileId: string;
+        versionNumber: number;
+        sizeBytes: number;
+        mimeType?: string;
+        storagePath: string;
+        checksumSha256?: string;
+        createdById?: number;
+        /** @description Timestamp when the record was created */
+        createdAt?: Record<string, never> | string | number;
+        /** @description Timestamp when the record was last updated */
+        updatedAt?: Record<string, never> | string | number;
+      }[];
+    };
+    CreateStorageFileVersionRequestBody: {
+      storagePath: string;
+      sizeBytes: number;
+      mimeType?: string;
+      checksumSha256?: string;
+    };
+    CreateStorageUploadUrlRequestBody: {
+      filename?: string;
+      contentType?: string;
+    };
+    StorageUploadUrlResponse: {
+      objectKey: string;
+      uploadUrl: string;
+      expiresAt: Record<string, never> | string | number;
+    };
+    StorageDownloadUrlResponse: {
+      objectKey: string;
+      downloadUrl: string;
+      expiresAt: Record<string, never> | string | number;
+    };
+    StorageFilePermissionItem: {
+      id: number;
+      platformFileId: string;
+      platformUserId?: number;
+      email?: string;
+      /** @enum {string} */
+      permission: "VIEWER" | "COMMENTER" | "EDITOR" | "OWNER";
+      canReshare: boolean;
+      expiresAt?: Record<string, never> | string | number;
+      grantedById?: number;
+      createdAt: Record<string, never> | string | number;
+      updatedAt: Record<string, never> | string | number;
+    };
+    GetStorageFilePermissionsResponse: {
+      values: {
+        id: number;
+        platformFileId: string;
+        platformUserId?: number;
+        email?: string;
+        /** @enum {string} */
+        permission: "VIEWER" | "COMMENTER" | "EDITOR" | "OWNER";
+        canReshare: boolean;
+        expiresAt?: Record<string, never> | string | number;
+        grantedById?: number;
+        createdAt: Record<string, never> | string | number;
+        updatedAt: Record<string, never> | string | number;
+      }[];
+    };
+    CreateStorageFilePermissionRequestBody: {
+      platformUserId?: number;
+      /** Format: email */
+      email?: string;
+      /** @enum {string} */
+      permission: "VIEWER" | "COMMENTER" | "EDITOR" | "OWNER";
+      canReshare?: boolean;
+      expiresAt?: Record<string, never> | string | number;
+    };
+    UpdateStorageFilePermissionRequestBody: {
+      /** @enum {string} */
+      permission?: "VIEWER" | "COMMENTER" | "EDITOR" | "OWNER";
+      canReshare?: boolean;
+      expiresAt?: Record<string, never> | string | number;
     };
     /** @description Query parameters for autocomplete endpoints */
     AutocompleteQuery: {
@@ -5173,6 +5880,559 @@ export interface operations {
       };
     };
   };
+  getApiStorageFiles: {
+    parameters: {
+      query?: {
+        page?: number;
+        pageSize?: number;
+        parentId?: string;
+        type?: "FILE" | "FOLDER";
+        sharedWithMe?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileListResponse"];
+        };
+      };
+    };
+  };
+  postApiStorageFiles: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageFileRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateStorageFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileItem"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesSearch: {
+    parameters: {
+      query: {
+        page?: number;
+        pageSize?: number;
+        query: string;
+        type?: "FILE" | "FOLDER";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileListResponse"];
+        };
+      };
+    };
+  };
+  "postApiStorageFilesUpload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageUploadUrlResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileDetailResponse"];
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileItem"];
+        };
+      };
+    };
+  };
+  patchApiStorageFilesByFileId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateStorageFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateStorageFileRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateStorageFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileItem"];
+        };
+      };
+    };
+  };
+  "getApiStorageFilesByFileIdDownload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageDownloadUrlResponse"];
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdMove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MoveStorageFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["MoveStorageFileRequestBody"];
+        "multipart/form-data": components["schemas"]["MoveStorageFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileItem"];
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdCopy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CopyStorageFileRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CopyStorageFileRequestBody"];
+        "multipart/form-data": components["schemas"]["CopyStorageFileRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileItem"];
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileIdVersions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetStorageFileVersionsResponse"];
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdVersions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageFileVersionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageFileVersionRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateStorageFileVersionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFileVersionItem"];
+        };
+      };
+    };
+  };
+  "postApiStorageFilesByFileIdUpload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateStorageUploadUrlRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageUploadUrlResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "getApiStorageFilesByFileIdVersionsByVersionIdDownload-url": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        versionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageDownloadUrlResponse"];
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileIdVersionsByVersionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        versionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            success: boolean;
+          };
+        };
+      };
+    };
+  };
+  getApiStorageFilesByFileIdPermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetStorageFilePermissionsResponse"];
+        };
+      };
+    };
+  };
+  postApiStorageFilesByFileIdPermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageFilePermissionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageFilePermissionRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateStorageFilePermissionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFilePermissionItem"];
+        };
+      };
+    };
+  };
+  deleteApiStorageFilesByFileIdPermissionsByPermissionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        permissionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            success: boolean;
+          };
+        };
+      };
+    };
+  };
+  patchApiStorageFilesByFileIdPermissionsByPermissionId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        fileId: string;
+        permissionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateStorageFilePermissionRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateStorageFilePermissionRequestBody"];
+        "multipart/form-data": components["schemas"]["UpdateStorageFilePermissionRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorageFilePermissionItem"];
+        };
+      };
+    };
+  };
   getApiAutocompleteCourses: {
     parameters: {
       query?: {
@@ -5420,6 +6680,99 @@ export interface operations {
       cookie?: never;
     };
     requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            session: components["schemas"]["Session"];
+            user: components["schemas"]["User"];
+          } | null;
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  getSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": Record<string, never>;
+      };
+    };
     responses: {
       /** @description Success */
       200: {
@@ -6230,17 +7583,6 @@ export interface operations {
           };
         };
       };
-      /** @description Unprocessable Entity. Email already exists */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            message?: string;
-          };
-        };
-      };
       /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
       429: {
         headers: {
@@ -6322,6 +7664,98 @@ export interface operations {
                */
               updatedAt: string;
             };
+          };
+        };
+      };
+      /** @description Bad Request. Usually due to missing parameters, or invalid parameters. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Unauthorized. Due to missing or invalid authentication. */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message: string;
+          };
+        };
+      };
+      /** @description Forbidden. You do not have permission to access this resource or to perform this action. */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Not Found. The requested resource was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Too Many Requests. You have exceeded the rate limit. Try again later. */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+      /** @description Internal Server Error. This is a problem with the server that you cannot fix. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  updateSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": Record<string, never>;
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            session?: components["schemas"]["Session"];
           };
         };
       };

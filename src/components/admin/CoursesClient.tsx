@@ -274,10 +274,6 @@ export function CoursesClient() {
   // Render
   // ============================================================================
 
-  if (isLoading) {
-    return <LoadingState variant="cards" count={6} />;
-  }
-
   return (
     <>
       {/* Header Actions */}
@@ -287,24 +283,32 @@ export function CoursesClient() {
           value={searchQuery}
           onChange={handleSearchChange}
           containerClassName="max-w-md flex-1"
+          disabled={false}
+          showClear={!isLoading}
         />
-        <Button onClick={handleOpenAddDialog}>
+        <Button onClick={handleOpenAddDialog} disabled={isLoading}>
           <Plus className="mr-2 size-4" />
           Add Course
         </Button>
       </div>
 
       {/* Courses Grid */}
-      <CoursesGrid
-        courses={courses}
-        searchQuery={searchQuery}
-        onEdit={handleOpenEditDialog}
-        onToggleActive={handleToggleActive}
-        onAdd={handleOpenAddDialog}
-      />
+      {isLoading ? (
+        <LoadingState variant="cards" count={6} />
+      ) : (
+        <CoursesGrid
+          courses={courses}
+          searchQuery={searchQuery}
+          onEdit={handleOpenEditDialog}
+          onToggleActive={handleToggleActive}
+          onAdd={handleOpenAddDialog}
+        />
+      )}
 
       {/* Pagination */}
-      <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      {!isLoading && (
+        <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      )}
 
       {/* Dialogs */}
       <AddCourseDialog

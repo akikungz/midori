@@ -42,8 +42,8 @@ export function MailingListClient() {
   // Filter locally based on search query
   const filteredMailingList = searchQuery
     ? mailingList.filter((entry) =>
-        entry.email.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      entry.email.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : mailingList;
 
   // ============================================================================
@@ -117,10 +117,6 @@ export function MailingListClient() {
   // Render
   // ============================================================================
 
-  if (isLoading) {
-    return <LoadingState variant="list" count={5} />;
-  }
-
   return (
     <>
       {/* Header Actions */}
@@ -130,19 +126,25 @@ export function MailingListClient() {
           value={searchQuery}
           onChange={handleSearchChange}
           containerClassName="max-w-md flex-1"
+          disabled={false}
+          showClear={!isLoading}
         />
-        <Button onClick={handleOpenAddDialog}>
+        <Button onClick={handleOpenAddDialog} disabled={isLoading}>
           <Plus className="mr-2 size-4" />
           Add Email
         </Button>
       </div>
 
       {/* Mailing List */}
-      <MailingList
-        entries={filteredMailingList}
-        onDelete={handleDeleteEmail}
-        onAdd={handleOpenAddDialog}
-      />
+      {isLoading ? (
+        <LoadingState variant="list" count={5} />
+      ) : (
+        <MailingList
+          entries={filteredMailingList}
+          onDelete={handleDeleteEmail}
+          onAdd={handleOpenAddDialog}
+        />
+      )}
 
       {/* Dialogs */}
       <AddEmailDialog

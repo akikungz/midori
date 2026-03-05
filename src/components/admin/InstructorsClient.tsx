@@ -195,10 +195,6 @@ export function InstructorsClient() {
   // Render
   // ============================================================================
 
-  if (isLoading) {
-    return <LoadingState variant="list" count={5} />;
-  }
-
   return (
     <>
       {/* Search */}
@@ -207,18 +203,26 @@ export function InstructorsClient() {
         value={inputValue}
         onChange={handleSearchChange}
         containerClassName="max-w-md"
+        disabled={false}
+        showClear={!isLoading}
       />
 
       {/* Instructors List */}
-      <InstructorsList
-        instructors={instructors}
-        searchQuery={searchQuery}
-        onEdit={handleOpenEditDialog}
-        onPromote={handleOpenPromoteDialog}
-      />
+      {isLoading ? (
+        <LoadingState variant="list" count={5} />
+      ) : (
+        <InstructorsList
+          instructors={instructors}
+          searchQuery={searchQuery}
+          onEdit={handleOpenEditDialog}
+          onPromote={handleOpenPromoteDialog}
+        />
+      )}
 
       {/* Pagination */}
-      <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      {!isLoading && (
+        <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      )}
 
       {/* Dialogs */}
       <EditInstructorDialog

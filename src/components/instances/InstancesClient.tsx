@@ -245,10 +245,6 @@ export function InstancesClient({
     [queryClient, listQueryKey],
   );
 
-  if (isLoading) {
-    return <InstancesLoadingState />;
-  }
-
   return (
     <>
       {/* Filters */}
@@ -260,21 +256,24 @@ export function InstancesClient({
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         statusFilter={statusFilter}
+        isDisabled={false}
         onStatusFilterChange={(value) =>
           setStatusFilter(
             value as
-              | "all"
-              | "ACTIVE"
-              | "PENDING"
-              | "PROMOTED"
-              | "INACTIVE"
-              | "DELETED",
+            | "all"
+            | "ACTIVE"
+            | "PENDING"
+            | "PROMOTED"
+            | "INACTIVE"
+            | "DELETED",
           )
         }
       />
 
       {/* Instances Grid */}
-      {instances.length === 0 ? (
+      {isLoading ? (
+        <InstancesLoadingState />
+      ) : instances.length === 0 ? (
         <EmptyInstances
           canCreateInstance={canCreateInstance}
           canCreateRequest={canCreateRequest}
@@ -326,15 +325,16 @@ interface InstanceFiltersProps {
   onCreateClick: () => void;
   onRefresh: () => void;
   isRefreshing: boolean;
+  isDisabled: boolean;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   statusFilter:
-    | "all"
-    | "ACTIVE"
-    | "PENDING"
-    | "PROMOTED"
-    | "INACTIVE"
-    | "DELETED";
+  | "all"
+  | "ACTIVE"
+  | "PENDING"
+  | "PROMOTED"
+  | "INACTIVE"
+  | "DELETED";
   onStatusFilterChange: (value: string) => void;
 }
 
@@ -343,6 +343,7 @@ function InstanceFilters({
   onCreateClick,
   onRefresh,
   isRefreshing,
+  isDisabled,
   searchTerm,
   onSearchChange,
   statusFilter,
@@ -357,9 +358,14 @@ function InstanceFilters({
           className="pl-9"
           value={searchTerm}
           onChange={(event) => onSearchChange(event.target.value)}
+          disabled={isDisabled}
         />
       </div>
-      <Select value={statusFilter} onValueChange={onStatusFilterChange}>
+      <Select
+        value={statusFilter}
+        onValueChange={onStatusFilterChange}
+        disabled={isDisabled}
+      >
         <SelectTrigger className="w-full sm:w-45">
           <Filter className="mr-2 size-4" />
           <SelectValue placeholder="Status" />
@@ -377,13 +383,13 @@ function InstanceFilters({
         variant="outline"
         size="icon"
         onClick={onRefresh}
-        disabled={isRefreshing}
+        disabled={isRefreshing || isDisabled}
       >
         <RefreshCw className={`size-4 ${isRefreshing ? "animate-spin" : ""}`} />
         <span className="sr-only">Refresh</span>
       </Button>
       {canCreateInstance && (
-        <Button onClick={onCreateClick}>
+        <Button onClick={onCreateClick} disabled={isDisabled}>
           <Plus className="mr-2 size-4" />
           Create Instance
         </Button>

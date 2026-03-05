@@ -15,9 +15,17 @@ import type { VmDetails, CourseOffering } from "./InstanceCard";
 
 interface VmDetailsCardProps {
   vmDetails: VmDetails;
+  showCredentials?: boolean;
+  defaultUser?: string;
+  defaultPassword?: string;
 }
 
-export function VmDetailsCard({ vmDetails }: VmDetailsCardProps) {
+export function VmDetailsCard({
+  vmDetails,
+  showCredentials = false,
+  defaultUser,
+  defaultPassword,
+}: VmDetailsCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -35,6 +43,24 @@ export function VmDetailsCard({ vmDetails }: VmDetailsCardProps) {
           />
           <DetailItem label="Disk Size" value={`${vmDetails.diskGB} GB`} />
         </div>
+
+        {showCredentials && (defaultUser || defaultPassword) && (
+          <>
+            <Separator className="my-4" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <DetailItem
+                label="Default User"
+                value={defaultUser || "-"}
+                mono
+              />
+              <DetailItem
+                label="Default Password"
+                value={defaultPassword || "-"}
+                mono
+              />
+            </div>
+          </>
+        )}
 
         <Separator className="my-4" />
 

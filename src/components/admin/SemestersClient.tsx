@@ -287,10 +287,6 @@ export function SemestersClient() {
   // Render
   // ============================================================================
 
-  if (isLoading) {
-    return <LoadingState variant="cards" count={4} />;
-  }
-
   return (
     <>
       {/* Header Actions */}
@@ -300,25 +296,33 @@ export function SemestersClient() {
           value={searchQuery}
           onChange={handleSearchChange}
           containerClassName="max-w-md flex-1"
+          disabled={false}
+          showClear={!isLoading}
         />
-        <Button onClick={handleOpenAddDialog}>
+        <Button onClick={handleOpenAddDialog} disabled={isLoading}>
           <Plus className="mr-2 size-4" />
           Add Semester
         </Button>
       </div>
 
       {/* Semesters Grid */}
-      <SemestersGrid
-        semesters={semesters}
-        searchQuery={searchQuery}
-        onEdit={handleOpenEditDialog}
-        onDelete={handleOpenDeleteDialog}
-        onSetAsCurrent={handleSetAsCurrent}
-        onAdd={handleOpenAddDialog}
-      />
+      {isLoading ? (
+        <LoadingState variant="cards" count={4} />
+      ) : (
+        <SemestersGrid
+          semesters={semesters}
+          searchQuery={searchQuery}
+          onEdit={handleOpenEditDialog}
+          onDelete={handleOpenDeleteDialog}
+          onSetAsCurrent={handleSetAsCurrent}
+          onAdd={handleOpenAddDialog}
+        />
+      )}
 
       {/* Pagination */}
-      <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      {!isLoading && (
+        <Pagination page={page} totalPages={totalPages} onPageChange={goToPage} />
+      )}
 
       {/* Dialogs */}
       <AddSemesterDialog
