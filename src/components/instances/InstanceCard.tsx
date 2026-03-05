@@ -67,11 +67,11 @@ export interface Instance {
   id: number;
   status: keyof typeof statusColors;
   provisionStatus?:
-    | "NOT_STARTED"
-    | "QUEUED"
-    | "PROVISIONING"
-    | "COMPLETED"
-    | "FAILED";
+  | "NOT_STARTED"
+  | "QUEUED"
+  | "PROVISIONING"
+  | "COMPLETED"
+  | "FAILED";
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
   owner?: {
@@ -158,28 +158,32 @@ export function InstanceCard({
 
   return (
     <Card className="group transition-colors hover:border-primary/50">
-      <CardHeader className="flex flex-row items-start justify-between">
-        <Link href={`/dashboard/instances/${instance.id}`}>
-          <div className="space-y-1">
-            <CardTitle className="text-base">
+      <CardHeader className="flex flex-row items-start justify-between gap-2">
+        <Link
+          href={`/dashboard/instances/${instance.id}`}
+          className="block min-w-0 flex-1"
+        >
+          <div className="min-w-0 space-y-1">
+            <CardTitle className="truncate text-base">
               {instance.vmDetails?.hostname || `Instance #${instance.id}`}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="truncate">
               {instance.courseOffering
                 ? `${instance.courseOffering.courseCode} - ${instance.courseOffering.semester}`
                 : "No course assigned"}
             </CardDescription>
             {showOwner && ownerDisplay && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <User className="size-3" />
-                <span className="truncate">Owner: {ownerDisplay}</span>
+              <div className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
+                <User className="size-3 shrink-0" />
+                <span className="shrink-0">Owner:</span>
+                <span className="min-w-0 flex-1 truncate">{ownerDisplay}</span>
               </div>
             )}
           </div>
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-8">
+            <Button variant="ghost" size="icon" className="size-8 shrink-0">
               <MoreVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
