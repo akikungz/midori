@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "perf:test": "node scripts/performance-test.js",
     "lint": "biome check",
     "format": "biome format --write",
     "api:gen": "openapi-typescript http://localhost:3000/api/openapi/json --output ./src/types/api.d.ts && biome check --write ./src/types/api.d.ts"

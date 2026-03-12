@@ -1,0 +1,48 @@
+{
+  "target": "https://dev.fitm.cloud",
+  "startedAt": "2026-03-12T02:08:19.490Z",
+  "durationSec": 30,
+  "concurrencyPerPath": 100,
+  "logFile": "midori-perf-requests.log",
+  "summary": {
+    "requests": 3506,
+    "ok": 3385,
+    "fail": 121,
+    "throughputRps": 109.67,
+    "transferredMB": 106.222
+  },
+  "results": [
+    {
+      "path": "/",
+      "url": "https://dev.fitm.cloud/",
+      "total": 1730,
+      "ok": 1670,
+      "fail": 60,
+      "bytes": 65879830,
+      "elapsedSec": 31.968,
+      "rps": 54.12,
+      "min": 79.92049999999995,
+      "p50": 699.1810999999998,
+      "p90": 2191.1557200000775,
+      "p95": 12858.73061,
+      "p99": 15008.657347999999,
+      "max": 15015.25
+    },
+    {
+      "path": "/login",
+      "url": "https://dev.fitm.cloud/login",
+      "total": 1776,
+      "ok": 1715,
+      "fail": 61,
+      "bytes": 45502380,
+      "elapsedSec": 31.823,
+      "rps": 55.81,
+      "min": 88.80040000000008,
+      "p50": 705.8130500000007,
+      "p90": 2692.24205,
+      "p95": 11971.095999999998,
+      "p99": 15006.543950000001,
+      "max": 15016.4782
+    }
+  ]
+}
