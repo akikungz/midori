@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Server, ArrowUpCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, isAdmin, type Role } from "@midori/lib/roles";
@@ -182,14 +183,22 @@ export function InstanceDetailClient({
   const handlePromote = useCallback(async () => {
     submitState.startSubmit();
     try {
-      await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
+      const { error } = await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
         params: { path: { instanceId } },
       });
+
+      if (error) {
+        toast.error("Failed to promote instance");
+        return;
+      }
+
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/instances/{instanceId}"],
       });
+      toast.success("Instance promoted successfully");
     } catch (error) {
       console.error("Failed to promote instance:", error);
+      toast.error("Failed to promote instance");
     } finally {
       submitState.endSubmit();
     }
@@ -197,12 +206,20 @@ export function InstanceDetailClient({
 
   const handleDelete = useCallback(async () => {
     try {
-      await fetchClient.DELETE("/api/instances/{instanceId}", {
+      const { error } = await fetchClient.DELETE("/api/instances/{instanceId}", {
         params: { path: { instanceId } },
       });
+
+      if (error) {
+        toast.error("Failed to delete instance");
+        return;
+      }
+
+      toast.success("Instance deleted successfully");
       router.push("/dashboard/instances");
     } catch (error) {
       console.error("Failed to delete instance:", error);
+      toast.error("Failed to delete instance");
     }
   }, [instanceId, router]);
 
@@ -210,16 +227,27 @@ export function InstanceDetailClient({
     async (days: number, reason: string) => {
       submitState.startSubmit();
       try {
-        await fetchClient.POST("/api/instances/{instanceId}/extended-request", {
-          params: { path: { instanceId } },
-          body: {
-            title: `Extension Request - ${days} days`,
-            description: reason,
+        const { error } = await fetchClient.POST(
+          "/api/instances/{instanceId}/extended-request",
+          {
+            params: { path: { instanceId } },
+            body: {
+              title: `Extension Request - ${days} days`,
+              description: reason,
+            },
           },
-        });
+        );
+
+        if (error) {
+          toast.error("Failed to submit extension request");
+          return;
+        }
+
         setIsExtensionDialogOpen(false);
+        toast.success("Extension request submitted");
       } catch (error) {
         console.error("Failed to submit extension request:", error);
+        toast.error("Failed to submit extension request");
       } finally {
         submitState.endSubmit();
       }
@@ -235,20 +263,31 @@ export function InstanceDetailClient({
     }) => {
       submitState.startSubmit();
       try {
-        await fetchClient.POST("/api/instances/{instanceId}/reverse-proxies", {
-          params: { path: { instanceId } },
-          body: {
-            targetPort: data.port,
-            type: data.type,
-            description: data.description,
+        const { error } = await fetchClient.POST(
+          "/api/instances/{instanceId}/reverse-proxies",
+          {
+            params: { path: { instanceId } },
+            body: {
+              targetPort: data.port,
+              type: data.type,
+              description: data.description,
+            },
           },
-        });
+        );
+
+        if (error) {
+          toast.error("Failed to add reverse proxy");
+          return;
+        }
+
         queryClient.invalidateQueries({
           queryKey: ["get", "/api/instances/{instanceId}/reverse-proxies"],
         });
         setIsProxyDialogOpen(false);
+        toast.success("Reverse proxy added successfully");
       } catch (error) {
         console.error("Failed to add proxy:", error);
+        toast.error("Failed to add reverse proxy");
       } finally {
         submitState.endSubmit();
       }
@@ -259,17 +298,25 @@ export function InstanceDetailClient({
   const handleDeleteProxy = useCallback(
     async (proxyId: number) => {
       try {
-        await fetchClient.DELETE(
+        const { error } = await fetchClient.DELETE(
           "/api/instances/{instanceId}/reverse-proxies/{proxyId}",
           {
             params: { path: { instanceId, proxyId } },
           },
         );
+
+        if (error) {
+          toast.error("Failed to delete reverse proxy");
+          return;
+        }
+
+        toast.success("Reverse proxy deleted successfully");
         queryClient.invalidateQueries({
           queryKey: ["get", "/api/instances/{instanceId}/reverse-proxies"],
         });
       } catch (error) {
         console.error("Failed to delete proxy:", error);
+        toast.error("Failed to delete reverse proxy");
       }
     },
     [instanceId, queryClient],

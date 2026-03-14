@@ -9,20 +9,68 @@
 
 ## Table of Contents
 
-1. [Project Overview](#1-project-overview)
-2. [Architecture](#2-architecture)
-3. [Technology Stack](#3-technology-stack)
-4. [Project Structure](#4-project-structure)
-5. [Features & Modules](#5-features--modules)
-6. [Role-Based Access Control](#6-role-based-access-control)
-7. [API Integration](#7-api-integration)
-8. [Authentication](#8-authentication)
-9. [Observability Stack](#9-observability-stack)
-10. [Environment Variables](#10-environment-variables)
-11. [Development Setup](#11-development-setup)
-12. [Build & Deployment](#12-build--deployment)
-13. [Code Quality](#13-code-quality)
-14. [Dependency Versions](#14-dependency-versions)
+- [Midori — FITM Cloud Frontend](#midori--fitm-cloud-frontend)
+  - [Table of Contents](#table-of-contents)
+  - [1. Project Overview](#1-project-overview)
+  - [2. Architecture](#2-architecture)
+    - [Server vs. Client Rendering](#server-vs-client-rendering)
+  - [3. Technology Stack](#3-technology-stack)
+    - [Core](#core)
+    - [UI \& Styling](#ui--styling)
+    - [Data Fetching \& State](#data-fetching--state)
+    - [Authentication](#authentication)
+    - [Validation](#validation)
+    - [Date Utilities](#date-utilities)
+    - [Observability](#observability)
+    - [Dev Dependencies](#dev-dependencies)
+  - [4. Project Structure](#4-project-structure)
+  - [5. Features \& Modules](#5-features--modules)
+    - [Landing Page](#landing-page)
+    - [Authentication (`/login`)](#authentication-login)
+    - [Dashboard Overview (`/dashboard`)](#dashboard-overview-dashboard)
+    - [Instances (`/dashboard/instances`)](#instances-dashboardinstances)
+    - [Requests (`/dashboard/requests`)](#requests-dashboardrequests)
+    - [Storage (`/dashboard/storage`)](#storage-dashboardstorage)
+    - [Settings (`/dashboard/settings`)](#settings-dashboardsettings)
+    - [Admin Panel (`/dashboard/admin/*`)](#admin-panel-dashboardadmin)
+  - [6. Role-Based Access Control](#6-role-based-access-control)
+    - [Permission Matrix](#permission-matrix)
+  - [7. API Integration](#7-api-integration)
+    - [Client-Side (React)](#client-side-react)
+    - [Server-Side (RSC)](#server-side-rsc)
+    - [Available API Endpoints](#available-api-endpoints)
+  - [8. Authentication](#8-authentication)
+  - [9. Observability Stack](#9-observability-stack)
+    - [Metrics (Prometheus)](#metrics-prometheus)
+    - [Traces (OpenTelemetry / Jaeger)](#traces-opentelemetry--jaeger)
+    - [Logs (Pino + Loki)](#logs-pino--loki)
+    - [Grafana](#grafana)
+  - [10. Environment Variables](#10-environment-variables)
+  - [11. Development Setup](#11-development-setup)
+    - [Prerequisites](#prerequisites)
+    - [Install \& Run](#install--run)
+    - [Regenerate API Types](#regenerate-api-types)
+    - [Scripts](#scripts)
+  - [12. Build \& Deployment](#12-build--deployment)
+    - [Docker (Multi-Stage)](#docker-multi-stage)
+    - [Next.js Standalone Mode](#nextjs-standalone-mode)
+  - [13. Code Quality](#13-code-quality)
+    - [Biome (`2.2.0`)](#biome-220)
+    - [TypeScript](#typescript)
+    - [React Compiler](#react-compiler)
+  - [14. Dependency Versions](#14-dependency-versions)
+    - [Runtime Dependencies](#runtime-dependencies)
+    - [Dev Dependencies](#dev-dependencies-1)
+  - [15. Platform Usage Appendix](#15-platform-usage-appendix)
+    - [A. Quick Start](#a-quick-start)
+    - [B. Student Workflow](#b-student-workflow)
+    - [C. Instructor Workflow](#c-instructor-workflow)
+    - [D. Admin Workflow](#d-admin-workflow)
+    - [E. SSH \& Access](#e-ssh--access)
+    - [F. Reverse Proxies](#f-reverse-proxies)
+    - [G. Storage](#g-storage)
+    - [H. Troubleshooting](#h-troubleshooting)
+    - [I. Glossary](#i-glossary)
 
 ---
 
@@ -627,6 +675,160 @@ tw-animate-css                         ^1.4.0
 typescript                             ^5.9.3
 ```
 
+## 15. Platform Usage Appendix
+
+This appendix is a **how-to** for using FITM Cloud through the Midori web UI (the dashboard), written for end users (students/instructors/admins).
+
+### A. Quick Start
+
+1. **Sign in** at `/login`.
+2. Go to **Dashboard → Settings** and verify your **role** (Student / Instructor / Admin).
+3. In **Settings → SSH Keys**, add at least one SSH public key.
+4. If you are a student, go to **Dashboard → Requests → New Request** and submit an instance request.
+5. Once approved and provisioned, go to **Dashboard → Instances**, open your instance, and use the **IP address** (and your SSH key) to connect.
+
+### B. Student Workflow
+
+**Create a new VM request**
+- Navigate to **Dashboard → Requests → New Request**.
+- Fill in:
+  - **Title** (short name)
+  - **Course** (course offering)
+  - **Operating System** (template)
+  - **Description** (why you need the VM)
+  - **CPU / Memory / Disk** (resource sliders)
+- Click **Submit Request**.
+
+**Track request status**
+- Navigate to **Dashboard → Requests**.
+- Status meanings:
+  - **Pending**: waiting for instructor/admin review
+  - **Approved**: will be provisioned (or already provisioned)
+  - **Rejected**: not approved; adjust and resubmit if needed
+  - **Cancelled**: cancelled by the system or reviewer
+
+**Use your VM**
+- Navigate to **Dashboard → Instances** and open the instance.
+- In **Overview**, note the **IP Address**, **Hostname**, and VM specs.
+- Connect using SSH (see section E).
+
+**Request more time (extension request)**
+- Navigate to **Dashboard → Instances → (select an instance)**.
+- Use **Extension Request** (if available for your role) and provide:
+  - number of days
+  - reason
+- Track the extension request status in **Dashboard → Requests → Extended**.
+
+### C. Instructor Workflow
+
+**Review incoming requests**
+- Navigate to **Dashboard → Requests**.
+- Review **Pending** requests and either **Approve** or **Reject**.
+- Optional: adjust resource specs before approving (per-request “Edit specs”, or bulk “Modify specs”).
+
+**Manage instances**
+- Navigate to **Dashboard → Instances** to view and manage instances you have access to.
+- Use **Promote** for instances that should be long-term (if your course/policy allows it).
+- Use **Audit Logs** (in the instance detail) when you need to trace actions and changes.
+
+**Review extension requests**
+- Navigate to **Dashboard → Requests → Extended**.
+- Approve or reject based on course policy and usage.
+
+### D. Admin Workflow
+
+**System-wide administration**
+- Navigate to **Dashboard → Admin**.
+- Common tasks:
+  - **Courses**: create/update course records
+  - **Semesters**: manage semesters and set the current semester
+  - **Instructors**: manage instructor accounts
+  - **Mailing List**: manage announcements/subscriptions
+  - **Instances**: review overall instance inventory
+
+**Operational notes**
+- When users report access issues, first verify role and permissions, then confirm backend services (momoi/arisu) are reachable.
+
+### E. SSH & Access
+
+**Add your SSH key (recommended)**
+- Navigate to **Dashboard → Settings → SSH Keys → Add Key**.
+- Paste your **public key** (e.g., `ssh-ed25519 AAAA...`) and give it a recognizable name.
+
+**Connect to an instance**
+- From the instance detail page, find the **IP Address** and **Default User** (if shown).
+- Use your terminal:
+
+```bash
+ssh <username>@<ip-address>
+```
+
+If your local SSH config uses a non-default key, specify it explicitly:
+
+```bash
+ssh -i ~/.ssh/<private_key> <username>@<ip-address>
+```
+
+**If you see a default password in the UI**
+- Treat it as sensitive and rotate it after first login if your OS image supports it.
+- Prefer SSH keys over passwords.
+
+### F. Reverse Proxies
+
+Reverse proxies expose a service running **inside** your VM to the outside via an HTTP/HTTPS endpoint.
+
+**Create a reverse proxy**
+- Navigate to **Dashboard → Instances → (select an instance) → Reverse Proxies**.
+- Add a proxy with:
+  - **Target port**: the port your app listens on inside the VM (e.g., 3000)
+  - **Type**: HTTP or HTTPS
+  - **Description** (optional)
+
+**Delete a reverse proxy**
+- In the same tab, remove a proxy you no longer need to reduce exposure.
+
+### G. Storage
+
+Storage is a web file browser for your account.
+
+**Common operations**
+- Navigate to **Dashboard → Storage**.
+- Browse folders, preview supported files (e.g., PDFs), and manage your content.
+
+**Recommended practices**
+- Keep course/project data in a clearly named folder per course/semester.
+- Avoid storing secrets (private keys, API tokens) in shared storage.
+
+### H. Troubleshooting
+
+**I can’t create a request**
+- You likely don’t have the `CREATE_REQUEST` permission (role mismatch) or there are no active course offerings.
+- Confirm your role in **Settings** and contact an admin if your account is misclassified.
+
+**“No Courses Available” on the request form**
+- There are no active course offerings (or none visible to your account). Contact your admin/instructor.
+
+**My request is approved but I don’t see an instance yet**
+- Provisioning is asynchronous. Wait and refresh **Instances**.
+- If it stays stuck, ask an instructor/admin to check the request and backend job processing.
+
+**SSH connection refused / timed out**
+- Ensure the instance status is **Active** and you’re using the correct **IP Address**.
+- Confirm your SSH key is added in **Settings → SSH Keys**.
+- If a firewall or course template blocks SSH, contact your instructor/admin.
+
+**I can’t see reverse proxy / audit log tabs**
+- Your role may not include that permission, or the instance is not in a state where the feature is enabled.
+
+### I. Glossary
+
+- **Instance**: a VM allocated to a user/course.
+- **Template**: an OS image used to create instances (e.g., Ubuntu, Debian).
+- **Request**: a submission to create an instance (reviewed by instructor/admin).
+- **Extended Request**: a request to extend an instance’s allowed lifetime.
+- **Promote**: mark an instance as long-term (policy-driven; typically staff-only).
+- **Reverse Proxy**: an HTTP/HTTPS mapping from an external URL to a port on your instance.
+
 ---
 
-*Last updated: March 9, 2026 — Midori v0.1.0*
+*Last updated: March 13, 2026 — Midori v0.1.0*

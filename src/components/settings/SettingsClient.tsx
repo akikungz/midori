@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Key, Plus, Trash2, User, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { api, fetchClient } from "@midori/lib/api";
 import {
@@ -86,23 +87,35 @@ export function SettingsClient({ user }: SettingsClientProps) {
   const sshKeys = sshKeysData?.values || [];
 
   const handleAddSshKey = async () => {
-    if (!sshKeyName || !sshPublicKey) return;
+    if (!sshKeyName || !sshPublicKey) {
+      toast.error("Please provide both key name and public key");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await fetchClient.POST("/api/user/ssh-keys", {
+      const { error } = await fetchClient.POST("/api/user/ssh-keys", {
         body: {
           name: sshKeyName,
           publicKey: sshPublicKey,
         },
       });
+
+      if (error) {
+        toast.error("Failed to add SSH key");
+        return;
+      }
+
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/user/ssh-keys"],
       });
       setSshKeyName("");
       setSshPublicKey("");
       setIsAddDialogOpen(false);
+      toast.success("SSH key added successfully");
     } catch (error) {
       console.error("Failed to add SSH key:", error);
+      toast.error("Failed to add SSH key");
     } finally {
       setIsSubmitting(false);
     }
@@ -110,16 +123,24 @@ export function SettingsClient({ user }: SettingsClientProps) {
 
   const handleDeleteSshKey = async (keyId: number) => {
     try {
-      await fetchClient.DELETE("/api/user/ssh-keys", {
+      const { error } = await fetchClient.DELETE("/api/user/ssh-keys", {
         body: {
           keyIds: [keyId],
         },
       });
+
+      if (error) {
+        toast.error("Failed to delete SSH key");
+        return;
+      }
+
       queryClient.invalidateQueries({
         queryKey: ["get", "/api/user/ssh-keys"],
       });
+      toast.success("SSH key deleted successfully");
     } catch (error) {
       console.error("Failed to delete SSH key:", error);
+      toast.error("Failed to delete SSH key");
     }
   };
 

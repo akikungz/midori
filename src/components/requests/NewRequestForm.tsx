@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
+import { toast } from "sonner";
 
 import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
@@ -71,7 +72,7 @@ export function NewRequestForm() {
 
     setIsSubmitting(true);
     try {
-      await fetchClient.POST("/api/requests/", {
+      const { error } = await fetchClient.POST("/api/requests/", {
         body: {
           title,
           description,
@@ -82,9 +83,18 @@ export function NewRequestForm() {
           pveTemplateId: selectedTemplateId,
         },
       });
+
+      if (error) {
+        toast.error("Failed to create request");
+        return;
+      }
+
+      toast.success("Request created successfully");
       router.push("/dashboard/requests");
     } catch (error) {
       console.error("Failed to create request:", error);
+      toast.error("Failed to create request");
+    } finally {
       setIsSubmitting(false);
     }
   };

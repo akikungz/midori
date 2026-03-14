@@ -6,6 +6,7 @@ import "@midori/styles/globals.css";
 
 import { QueryProvider } from "@midori/components/QueryProvider";
 import { ThemeProvider } from "@midori/components/ThemeProvider";
+import { Toaster } from "@midori/components/ui/sonner";
 import { cn } from "@midori/lib/utils";
 
 const geistSans = Geist({
@@ -32,7 +33,10 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         suppressHydrationWarning
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {children}
+            <Toaster />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

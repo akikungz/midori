@@ -304,14 +304,22 @@ export function StorageClient() {
     async (fileId: string) => {
       withActionLoading(fileId, true);
       try {
-        await fetchClient.DELETE("/api/storage/files/{fileId}", {
+        const { error } = await fetchClient.DELETE("/api/storage/files/{fileId}", {
           params: {
             path: { fileId },
           },
         });
+
+        if (error) {
+          toast.error("Failed to delete file");
+          return;
+        }
+
+        toast.success("File deleted successfully");
         invalidateStorageQueries();
       } catch (error) {
         console.error("Failed to delete storage item:", error);
+        toast.error("Failed to delete file");
       } finally {
         withActionLoading(fileId, false);
       }

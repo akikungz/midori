@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Plus, Search, Filter, RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { api, fetchClient } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
@@ -168,7 +169,7 @@ export function InstancesClient({
     }) => {
       submitState.startSubmit();
       try {
-        await fetchClient.POST("/api/instances/", {
+        const { error } = await fetchClient.POST("/api/instances/", {
           body: {
             pveTemplateId: formData.pveTemplateId,
             courseOfferingId: formData.courseOfferingId,
@@ -177,12 +178,20 @@ export function InstancesClient({
             diskGB: formData.diskGB,
           },
         });
+
+        if (error) {
+          toast.error("Failed to create instance");
+          return;
+        }
+
         queryClient.invalidateQueries({
           queryKey: listQueryKey,
         });
         setIsCreateDialogOpen(false);
+        toast.success("Instance created successfully");
       } catch (error) {
         console.error("Failed to create instance:", error);
+        toast.error("Failed to create instance");
       } finally {
         submitState.endSubmit();
       }
@@ -194,16 +203,27 @@ export function InstancesClient({
   const handleReprovision = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClient.POST("/api/instances/{instanceId}/reprovision", {
-          params: {
-            path: { instanceId },
+        const { error } = await fetchClient.POST(
+          "/api/instances/{instanceId}/reprovision",
+          {
+            params: {
+              path: { instanceId },
+            },
           },
-        });
+        );
+
+        if (error) {
+          toast.error("Failed to re-provision instance");
+          return;
+        }
+
+        toast.success("Re-provision started");
         queryClient.invalidateQueries({
           queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to re-provision instance:", error);
+        toast.error("Failed to re-provision instance");
       }
     },
     [queryClient, listQueryKey],
@@ -212,16 +232,27 @@ export function InstancesClient({
   const handlePromote = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
-          params: {
-            path: { instanceId },
+        const { error } = await fetchClient.PATCH(
+          "/api/instances/{instanceId}/promote",
+          {
+            params: {
+              path: { instanceId },
+            },
           },
-        });
+        );
+
+        if (error) {
+          toast.error("Failed to promote instance");
+          return;
+        }
+
+        toast.success("Instance promoted successfully");
         queryClient.invalidateQueries({
           queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to promote instance:", error);
+        toast.error("Failed to promote instance");
       }
     },
     [queryClient, listQueryKey],
@@ -230,16 +261,24 @@ export function InstancesClient({
   const handleDelete = useCallback(
     async (instanceId: number) => {
       try {
-        await fetchClient.DELETE("/api/instances/{instanceId}", {
+        const { error } = await fetchClient.DELETE("/api/instances/{instanceId}", {
           params: {
             path: { instanceId },
           },
         });
+
+        if (error) {
+          toast.error("Failed to delete instance");
+          return;
+        }
+
+        toast.success("Instance deleted successfully");
         queryClient.invalidateQueries({
           queryKey: listQueryKey,
         });
       } catch (error) {
         console.error("Failed to delete instance:", error);
+        toast.error("Failed to delete instance");
       }
     },
     [queryClient, listQueryKey],
