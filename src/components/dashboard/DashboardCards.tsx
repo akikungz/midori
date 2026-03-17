@@ -113,7 +113,7 @@ export function DashboardCards({ user }: DashboardCardsProps) {
         </Card>
 
         {/* Storage */}
-        {can("VIEW_STORAGE") && (
+        {can("ACCESS_STORAGE") && (
           <Card className="group cursor-pointer transition-colors hover:border-primary/50">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Storage</CardTitle>
