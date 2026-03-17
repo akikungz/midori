@@ -42,7 +42,7 @@ export const PERMISSIONS = {
   MANAGE_MAILING_LIST: ["ADMIN"] as const,
 
   // Storage
-  ACCESS_STORAGE: ["STUDENT", "INSTRUCTOR", "ADMIN"] as const,
+  ACCESS_STORAGE: ["INSTRUCTOR", "ADMIN"] as const,
 } as const;
 
 export type Permission = keyof typeof PERMISSIONS;

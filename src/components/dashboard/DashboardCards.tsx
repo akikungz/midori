@@ -113,25 +113,27 @@ export function DashboardCards({ user }: DashboardCardsProps) {
         </Card>
 
         {/* Storage */}
-        <Card className="group cursor-pointer transition-colors hover:border-primary/50">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Storage</CardTitle>
-            <FolderOpen className="size-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Manage your files and shared documents
-            </CardDescription>
-            <Button
-              variant="link"
-              className="mt-2 h-auto p-0"
-              onClick={() => router.push("/dashboard/storage")}
-            >
-              Open Storage
-              <ArrowRight className="ml-1 size-3" />
-            </Button>
-          </CardContent>
-        </Card>
+        {can("VIEW_STORAGE") && (
+          <Card className="group cursor-pointer transition-colors hover:border-primary/50">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Storage</CardTitle>
+              <FolderOpen className="size-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Manage your files and shared documents
+              </CardDescription>
+              <Button
+                variant="link"
+                className="mt-2 h-auto p-0"
+                onClick={() => router.push("/dashboard/storage")}
+              >
+                Open Storage
+                <ArrowRight className="ml-1 size-3" />
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* SSH Keys */}
         <Card className="group cursor-pointer transition-colors hover:border-primary/50">
