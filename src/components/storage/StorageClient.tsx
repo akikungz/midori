@@ -522,13 +522,13 @@ export function StorageClient() {
               return (
                 <Card key={file.id}>
                   <CardHeader className="pb-3">
-                    <CardTitle className="flex items-start gap-2 text-base sm:items-center">
+                    <CardTitle className="flex items-start gap-2 text-base sm:items-center overflow-hidden">
                       {isFile ? (
-                        <File className="size-4 text-muted-foreground" />
+                        <File className="size-4 shrink-0 text-muted-foreground" />
                       ) : (
-                        <Folder className="size-4 text-muted-foreground" />
+                        <Folder className="size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <span className="break-all sm:truncate">{file.name}</span>
+                      <span className="truncate min-w-0" title={file.name}>{file.name}</span>
                     </CardTitle>
                     <CardDescription className="flex flex-wrap gap-2">
                       <Badge variant="outline">{file.type}</Badge>

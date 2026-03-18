@@ -47,7 +47,7 @@ export function FilePreview({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] sm:max-w-2xl">
-        <DialogHeader>
+        <DialogHeader className="min-w-0 sm:text-left text-center">
           <DialogTitle className="truncate">{fileName}</DialogTitle>
         </DialogHeader>
 
