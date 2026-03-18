@@ -531,7 +531,7 @@ function ReverseProxyItem({
       </div>
       <div className="flex gap-2">
         <a
-          href={`https://p${proxy.targetPort}-${hostname}.fitm.cloud`}
+          href={proxy.type === "TCP" ? `#` : `https://${hostname}:${proxy.targetPort}`}
           target="_blank"
           rel="noopener noreferrer"
         >
