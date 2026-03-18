@@ -390,6 +390,7 @@ export function InstanceDetailClient({
 
         <TabsContent value="proxies" className="space-y-4">
           <ReverseProxyList
+            hostname={instance.vmDetails?.hostname || `instance-${instance.id}`}
             proxies={reverseProxies || []}
             onDelete={handleDeleteProxy}
             onAddClick={() => setIsProxyDialogOpen(true)}

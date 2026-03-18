@@ -457,6 +457,7 @@ interface ReverseProxyListProps {
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
+  hostname: string;
 }
 
 export function ReverseProxyList({
@@ -466,6 +467,7 @@ export function ReverseProxyList({
   onAddDialogChange,
   onAddProxy,
   isSubmitting,
+  hostname,
 }: ReverseProxyListProps) {
   return (
     <Card>
@@ -490,6 +492,7 @@ export function ReverseProxyList({
               <ReverseProxyItem
                 key={proxy.id}
                 proxy={proxy}
+                hostname={hostname}
                 onDelete={onDelete}
               />
             ))}
@@ -505,11 +508,16 @@ export function ReverseProxyList({
 }
 
 interface ReverseProxyItemProps {
+  hostname: string;
   proxy: ReverseProxy;
   onDelete: (proxyId: number) => Promise<void>;
 }
 
-function ReverseProxyItem({ proxy, onDelete }: ReverseProxyItemProps) {
+function ReverseProxyItem({
+  hostname,
+  proxy,
+  onDelete,
+}: ReverseProxyItemProps) {
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="flex items-center gap-3">
@@ -522,9 +530,15 @@ function ReverseProxyItem({ proxy, onDelete }: ReverseProxyItemProps) {
         </div>
       </div>
       <div className="flex gap-2">
-        <Button variant="ghost" size="icon">
-          <ExternalLink className="size-4" />
-        </Button>
+        <a
+          href={`https://p${proxy.targetPort}-${hostname}.fitm.cloud`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button variant="ghost" size="icon">
+            <ExternalLink className="size-4" />
+          </Button>
+        </a>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="ghost" size="icon" className="text-destructive">
