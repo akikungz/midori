@@ -67,11 +67,11 @@ export interface Instance {
   id: number;
   status: keyof typeof statusColors;
   provisionStatus?:
-  | "NOT_STARTED"
-  | "QUEUED"
-  | "PROVISIONING"
-  | "COMPLETED"
-  | "FAILED";
+    | "NOT_STARTED"
+    | "QUEUED"
+    | "PROVISIONING"
+    | "COMPLETED"
+    | "FAILED";
   vmDetails?: VmDetails;
   courseOffering?: CourseOffering;
   owner?: {

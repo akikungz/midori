@@ -304,11 +304,14 @@ export function StorageClient() {
     async (fileId: string) => {
       withActionLoading(fileId, true);
       try {
-        const { error } = await fetchClient.DELETE("/api/storage/files/{fileId}", {
-          params: {
-            path: { fileId },
+        const { error } = await fetchClient.DELETE(
+          "/api/storage/files/{fileId}",
+          {
+            params: {
+              path: { fileId },
+            },
           },
-        });
+        );
 
         if (error) {
           toast.error("Failed to delete file");

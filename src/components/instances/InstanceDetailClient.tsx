@@ -183,9 +183,12 @@ export function InstanceDetailClient({
   const handlePromote = useCallback(async () => {
     submitState.startSubmit();
     try {
-      const { error } = await fetchClient.PATCH("/api/instances/{instanceId}/promote", {
-        params: { path: { instanceId } },
-      });
+      const { error } = await fetchClient.PATCH(
+        "/api/instances/{instanceId}/promote",
+        {
+          params: { path: { instanceId } },
+        },
+      );
 
       if (error) {
         toast.error("Failed to promote instance");
@@ -206,9 +209,12 @@ export function InstanceDetailClient({
 
   const handleDelete = useCallback(async () => {
     try {
-      const { error } = await fetchClient.DELETE("/api/instances/{instanceId}", {
-        params: { path: { instanceId } },
-      });
+      const { error } = await fetchClient.DELETE(
+        "/api/instances/{instanceId}",
+        {
+          params: { path: { instanceId } },
+        },
+      );
 
       if (error) {
         toast.error("Failed to delete instance");
@@ -258,7 +264,7 @@ export function InstanceDetailClient({
   const handleAddProxy = useCallback(
     async (data: {
       port: number;
-      type: "HTTP" | "HTTPS";
+      type: "HTTP" | "HTTPS" | "TCP";
       description?: string;
     }) => {
       submitState.startSubmit();

@@ -26,7 +26,10 @@ function parseArgs(argv) {
         i += 1;
         break;
       case "--paths":
-        args.paths = n.split(",").map((s) => s.trim()).filter(Boolean);
+        args.paths = n
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
         i += 1;
         break;
       case "--duration":
@@ -68,7 +71,9 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  console.log(`\nMidori Performance Test\n\nUsage:\n  node scripts/performance-test.js [options]\n\nOptions:\n  --base <url>          Base URL (default: ${DEFAULTS.base})\n  --paths <list>        Comma-separated paths (default: ${DEFAULTS.paths.join(",")})\n  --duration <sec>      Test duration in seconds (default: ${DEFAULTS.durationSec})\n  --concurrency <n>     Concurrent workers per path (default: ${DEFAULTS.concurrency})\n  --timeout <ms>        Request timeout in ms (default: ${DEFAULTS.timeoutMs})\n  --header k=v          Extra header, can be repeated\n  --out <file>          Write JSON report to file\n  --log <file>          Write per-request JSONL log (default: ${DEFAULTS.log})\n`);
+  console.log(
+    `\nMidori Performance Test\n\nUsage:\n  node scripts/performance-test.js [options]\n\nOptions:\n  --base <url>          Base URL (default: ${DEFAULTS.base})\n  --paths <list>        Comma-separated paths (default: ${DEFAULTS.paths.join(",")})\n  --duration <sec>      Test duration in seconds (default: ${DEFAULTS.durationSec})\n  --concurrency <n>     Concurrent workers per path (default: ${DEFAULTS.concurrency})\n  --timeout <ms>        Request timeout in ms (default: ${DEFAULTS.timeoutMs})\n  --header k=v          Extra header, can be repeated\n  --out <file>          Write JSON report to file\n  --log <file>          Write per-request JSONL log (default: ${DEFAULTS.log})\n`,
+  );
 }
 
 function nowMs() {
@@ -108,7 +113,11 @@ async function httpFetch(url, timeoutMs, headers) {
   const start = nowMs();
 
   try {
-    const res = await fetch(url, { method: "GET", headers, signal: controller.signal });
+    const res = await fetch(url, {
+      method: "GET",
+      headers,
+      signal: controller.signal,
+    });
     const dur = nowMs() - start;
 
     let size = 0;
@@ -141,9 +150,19 @@ async function httpFetch(url, timeoutMs, headers) {
   }
 }
 
-async function runPath({ base, path, concurrency, timeoutMs, headers, deadline, logRequest }) {
+async function runPath({
+  base,
+  path,
+  concurrency,
+  timeoutMs,
+  headers,
+  deadline,
+  logRequest,
+}) {
   const safePath = fixGitBashPath(path);
-  const url = base.replace(/\/$/, "") + (safePath.startsWith("/") ? safePath : `/${safePath}`);
+  const url =
+    base.replace(/\/$/, "") +
+    (safePath.startsWith("/") ? safePath : `/${safePath}`);
   const latencies = [];
   let ok = 0;
   let fail = 0;
@@ -204,7 +223,10 @@ async function runPath({ base, path, concurrency, timeoutMs, headers, deadline, 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const { createWriteStream } = await import("node:fs");
-  const logStream = createWriteStream(args.log, { flags: "w", encoding: "utf8" });
+  const logStream = createWriteStream(args.log, {
+    flags: "w",
+    encoding: "utf8",
+  });
 
   const logRequest = (entry) => {
     logStream.write(`${JSON.stringify(entry)}\n`);
@@ -223,7 +245,9 @@ async function main() {
   console.log(`\nMidori perf: ${args.base}`);
   const displayPaths = args.paths.map((p) => fixGitBashPath(p));
   console.log(`Paths: ${displayPaths.join(", ")}`);
-  console.log(`Duration: ${args.durationSec}s  Concurrency: ${args.concurrency}`);
+  console.log(
+    `Duration: ${args.durationSec}s  Concurrency: ${args.concurrency}`,
+  );
   console.log(`Per-request log: ${args.log}`);
 
   try {
@@ -238,8 +262,8 @@ async function main() {
           headers: args.headers,
           deadline,
           logRequest,
-        })
-      )
+        }),
+      ),
     );
 
     const totals = perPath.reduce(
@@ -251,7 +275,7 @@ async function main() {
         acc.elapsedSec = Math.max(acc.elapsedSec, r.elapsedSec);
         return acc;
       },
-      { total: 0, ok: 0, fail: 0, bytes: 0, elapsedSec: 0 }
+      { total: 0, ok: 0, fail: 0, bytes: 0, elapsedSec: 0 },
     );
 
     const overall = {
@@ -264,7 +288,9 @@ async function main() {
         requests: totals.total,
         ok: totals.ok,
         fail: totals.fail,
-        throughputRps: Number((totals.total / (totals.elapsedSec || 1)).toFixed(2)),
+        throughputRps: Number(
+          (totals.total / (totals.elapsedSec || 1)).toFixed(2),
+        ),
         transferredMB: Number((totals.bytes / (1024 * 1024)).toFixed(3)),
       },
       results: perPath,
@@ -281,15 +307,15 @@ async function main() {
         p90: Number(r.p90.toFixed(1)),
         p95: Number(r.p95.toFixed(1)),
         p99: Number(r.p99.toFixed(1)),
-      }))
+      })),
     );
     console.log(
-      `Total: ${overall.summary.requests} | OK: ${overall.summary.ok} | Fail: ${overall.summary.fail} | RPS: ${overall.summary.throughputRps}`
+      `Total: ${overall.summary.requests} | OK: ${overall.summary.ok} | Fail: ${overall.summary.fail} | RPS: ${overall.summary.throughputRps}`,
     );
 
     if (args.out) {
       await import("node:fs/promises").then((fs) =>
-        fs.writeFile(args.out, JSON.stringify(overall, null, 2), "utf8")
+        fs.writeFile(args.out, JSON.stringify(overall, null, 2), "utf8"),
       );
       console.log(`Report written to ${args.out}`);
     }

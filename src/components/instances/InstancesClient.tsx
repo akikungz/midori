@@ -261,11 +261,14 @@ export function InstancesClient({
   const handleDelete = useCallback(
     async (instanceId: number) => {
       try {
-        const { error } = await fetchClient.DELETE("/api/instances/{instanceId}", {
-          params: {
-            path: { instanceId },
+        const { error } = await fetchClient.DELETE(
+          "/api/instances/{instanceId}",
+          {
+            params: {
+              path: { instanceId },
+            },
           },
-        });
+        );
 
         if (error) {
           toast.error("Failed to delete instance");

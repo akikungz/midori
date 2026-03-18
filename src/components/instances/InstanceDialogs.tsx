@@ -310,7 +310,7 @@ interface AddProxyDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: {
     port: number;
-    type: "HTTP" | "HTTPS";
+    type: "HTTP" | "HTTPS" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
@@ -323,7 +323,7 @@ export function AddProxyDialog({
   isSubmitting,
 }: AddProxyDialogProps) {
   const [proxyPort, setProxyPort] = useState("");
-  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS">("HTTP");
+  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS" | "TCP">("HTTP");
   const [proxyDescription, setProxyDescription] = useState("");
 
   const handleSubmit = async () => {
@@ -368,7 +368,7 @@ export function AddProxyDialog({
             <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
             <Select
               value={proxyType}
-              onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS")}
+              onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS" | "TCP")}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -376,6 +376,7 @@ export function AddProxyDialog({
               <SelectContent>
                 <SelectItem value="HTTP">HTTP</SelectItem>
                 <SelectItem value="HTTPS">HTTPS</SelectItem>
+                <SelectItem value="TCP">TCP</SelectItem>
               </SelectContent>
             </Select>
           </Field>
@@ -440,7 +441,7 @@ export function DeleteInstanceDialog({ onConfirm }: DeleteInstanceDialogProps) {
 export interface ReverseProxy {
   id: number;
   targetPort: number;
-  type: "HTTP" | "HTTPS";
+  type: "HTTP" | "HTTPS" | "TCP";
   description?: string;
 }
 
@@ -452,7 +453,7 @@ interface ReverseProxyListProps {
   onAddDialogChange: (open: boolean) => void;
   onAddProxy: (data: {
     port: number;
-    type: "HTTP" | "HTTPS";
+    type: "HTTP" | "HTTPS" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;

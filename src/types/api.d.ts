@@ -3057,7 +3057,7 @@ export interface components {
       /** @description Target port on the instance */
       targetPort: number;
       /** @enum {string} */
-      type: "HTTPS" | "HTTP";
+      type: "HTTPS" | "HTTP" | "TCP";
       /** @description Description of the reverse proxy */
       description?: string;
     };
@@ -3068,7 +3068,7 @@ export interface components {
       /** @description Target port on the instance */
       targetPort: number;
       /** @enum {string} */
-      type: "HTTPS" | "HTTP";
+      type: "HTTPS" | "HTTP" | "TCP";
       /** @description Description of the reverse proxy */
       description?: string;
       /** @description Timestamp when the record was created */
@@ -3083,7 +3083,7 @@ export interface components {
       /** @description Target port on the instance */
       targetPort: number;
       /** @enum {string} */
-      type: "HTTPS" | "HTTP";
+      type: "HTTPS" | "HTTP" | "TCP";
       /** @description Description of the reverse proxy */
       description?: string;
       /** @description Timestamp when the record was created */
@@ -6577,6 +6577,14 @@ export interface operations {
             refreshToken?: string | null;
             /** @description Expiry date of the token */
             expiresAt?: number | null;
+            /** @description The user object from the provider. Only available for some providers like Apple. */
+            user?: {
+              name?: {
+                firstName?: string | null;
+                lastName?: string | null;
+              } | null;
+              email?: string | null;
+            } | null;
           } | null;
           /** @description Array of scopes to request from the provider. This will override the default scopes passed. */
           scopes?: unknown[] | null;
