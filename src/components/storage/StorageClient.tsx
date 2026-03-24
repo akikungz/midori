@@ -54,35 +54,15 @@ import {
   AlertDialogTitle,
 } from "@midori/components/ui/alert-dialog";
 import { Pagination } from "@midori/components/shared";
+import type { components } from "@midori/types/api";
 
 const ITEMS_PER_PAGE = 10;
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
-type StorageType = "FILE" | "FOLDER";
-type StorageVisibility = "PRIVATE" | "SHARED" | "PUBLIC";
-
-interface StorageFileItem {
-  id: string;
-  name: string;
-  type: StorageType;
-  mimeType?: string;
-  extension?: string;
-  description?: string;
-  parentId?: string;
-  ownerId: number;
-  sizeBytes: number;
-  visibility: StorageVisibility;
-  createdAt: string | number | Record<string, never>;
-  updatedAt: string | number | Record<string, never>;
-}
-
-interface StorageFileListResponse {
-  values: StorageFileItem[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-  pageSize: number;
-}
+type StorageType = components["schemas"]["StorageFileItem"]["type"];
+type StorageFileItem =
+  components["schemas"]["StorageFileListResponse"]["values"][number];
+type StorageFileListResponse = components["schemas"]["StorageFileListResponse"];
 
 interface PendingDeleteItem {
   id: string;

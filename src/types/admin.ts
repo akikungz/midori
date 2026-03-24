@@ -2,47 +2,29 @@
  * Shared types for admin components
  */
 
+import type { components } from "@midori/types/api";
+
+type SchemaName = keyof components["schemas"];
+type Schema<T extends SchemaName> = components["schemas"][T];
+type PaginatedValue<T extends SchemaName> = Schema<T> extends {
+  values: readonly (infer Item)[];
+}
+  ? Item
+  : never;
+
 // Date type that can come from API in various formats
 export type ApiDate = Record<string, never> | string | number;
 
 // Course related types
-export interface Course {
-  id: number;
-  code: string;
-  title: string;
-  description?: string;
-  isActive: boolean;
-  createdAt?: ApiDate;
-  updatedAt?: ApiDate;
-}
-
-export interface CourseDetails extends Course {
-  instructors?: Instructor[];
-  semesters?: Semester[];
-}
+export type Course = PaginatedValue<"GetCoursesResponse">;
+export type CourseDetails = Schema<"GetCourseByIdResponse">;
 
 // Instructor related types
-export interface Instructor {
-  id: number;
-  name: string;
-  email: string;
-  role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-}
+export type Instructor = PaginatedValue<"GetInstructorsResponse">;
 
 // Semester related types
-export interface Semester {
-  id: number;
-  name: string;
-  startDate: ApiDate;
-  endDate: ApiDate;
-  isCurrent: boolean;
-  createdAt?: ApiDate;
-  updatedAt?: ApiDate;
-}
-
-export interface SemesterDetails extends Semester {
-  courses?: Course[];
-}
+export type Semester = PaginatedValue<"GetSemestersResponse">;
+export type SemesterDetails = Schema<"GetSemesterByIdResponse">;
 
 // Mailing list types
 export interface MailingListEntry {
@@ -98,74 +80,20 @@ export interface AuditLog {
 }
 
 // Request related types
-export type RequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
-
-export interface RequestSpecs {
-  cpus: number;
-  memoryMB: number;
-  diskGB: number;
-}
-
-export interface InstanceRequest {
-  id: number;
-  title: string;
-  description?: string;
-  status: RequestStatus;
-  specs: RequestSpecs;
-  templateName?: string;
-  courseOffering?: CourseOffering;
-  createdAt?: ApiDate;
-}
-
-export interface ExtendedRequest {
-  id: number;
-  title: string;
-  description?: string;
-  reason?: string;
-  status: RequestStatus;
-  targetInstanceId: number;
-  createdAt?: ApiDate;
-}
+export type RequestStatus =
+  Schema<"GetRequestsResponse">["values"][number]["status"];
+export type RequestSpecs =
+  Schema<"GetRequestsResponse">["values"][number]["specs"];
+export type InstanceRequest = PaginatedValue<"GetRequestsResponse">;
+export type ExtendedRequest = PaginatedValue<"GetExtendedRequestsResponse">;
 
 // Storage related types
 export type FileType = "FILE" | "FOLDER";
-export type FileVisibility = "VIEWER" | "EDITOR" | "OWNER";
-
-export interface FileData {
-  id: string;
-  name: string;
-  type: FileType;
-  sizeBytes: number;
-  visibility: FileVisibility;
-  parentId?: string | null;
-  isPublic: boolean;
-  createdAt?: ApiDate;
-  updatedAt?: ApiDate;
-}
-
-export interface FilePermission {
-  id: number;
-  platformUserId: number;
-  permission: FileVisibility;
-  user?: {
-    name?: string;
-    email?: string;
-  };
-}
-
-export interface FileVersion {
-  id: number;
-  versionNumber: number;
-  sizeBytes: number;
-  storagePath: string;
-  createdAt?: ApiDate;
-}
-
-export interface FileDetails extends FileData {
-  path?: string;
-  permissions?: FilePermission[];
-  versions?: FileVersion[];
-}
+export type FileVisibility = Schema<"StorageFilePermissionItem">["permission"];
+export type FileData = PaginatedValue<"StorageFileListResponse">;
+export type FilePermission = Schema<"StorageFilePermissionItem">;
+export type FileVersion = Schema<"StorageFileVersionItem">;
+export type FileDetails = Schema<"StorageFileDetailResponse">;
 
 export interface BreadcrumbItem {
   id: string | null;
