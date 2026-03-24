@@ -230,7 +230,7 @@ export function InstanceDetailClient({
   }, [instanceId, router]);
 
   const handleSubmitExtension = useCallback(
-    async (days: number, reason: string) => {
+    async (reason: string) => {
       submitState.startSubmit();
       try {
         const { error } = await fetchClient.POST(
@@ -238,7 +238,7 @@ export function InstanceDetailClient({
           {
             params: { path: { instanceId } },
             body: {
-              title: `Extension Request - ${days} days`,
+              title: "Extension Request",
               description: reason,
             },
           },
@@ -418,7 +418,7 @@ interface InstanceDetailHeaderProps {
   canDelete: boolean;
   isExtensionDialogOpen: boolean;
   onExtensionDialogChange: (open: boolean) => void;
-  onSubmitExtension: (days: number, reason: string) => Promise<void>;
+  onSubmitExtension: (reason: string) => Promise<void>;
   onPromote: () => Promise<void>;
   onDelete: () => Promise<void>;
   isSubmitting: boolean;

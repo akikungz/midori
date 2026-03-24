@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleOff } from "lucide-react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { useRole } from "@midori/hooks/useRole";
 import type { Permission, Role } from "@midori/lib/roles";
@@ -136,10 +137,13 @@ export function withRoleCheck<P extends object>(
         permission={options.permission}
         fallback={
           <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
-            <div className="text-6xl">🚫</div>
+            <CircleOff
+              className="size-16 text-muted-foreground"
+              aria-hidden="true"
+            />
             <h2 className="text-xl font-semibold">Access Denied</h2>
             <p className="text-muted-foreground">
-              You don't have permission to access this page.
+              You don&apos;t have permission to access this page.
             </p>
           </div>
         }

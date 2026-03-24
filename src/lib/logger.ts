@@ -1,25 +1,35 @@
-import pino, { type Logger, type LoggerOptions } from "pino";
 import { trace, context, SpanStatusCode } from "@opentelemetry/api";
-import { Counter } from "prom-client";
-import { metricsRegistry } from "./metrics";
+
+import { emitOtelLog } from "@midori/lib/otel-logging";
+import { recordLogMetric } from "@midori/lib/metrics";
+import {
+  getOtelDeploymentEnvironment,
+  getOtelServiceName,
+} from "@midori/lib/otel-config";
 
 // Log level type
 export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal";
+type LogMethod = (message: unknown, detail?: unknown) => void;
+type LogBindings = Record<string, unknown>;
 
-// Metrics for logs
-export const logsTotal = new Counter({
-  name: "logs_total",
-  help: "Total number of log messages",
-  labelNames: ["level", "service"] as const,
-  registers: [metricsRegistry],
-});
+export interface Logger {
+  trace: LogMethod;
+  debug: LogMethod;
+  info: LogMethod;
+  warn: LogMethod;
+  error: LogMethod;
+  fatal: LogMethod;
+  child(bindings: LogBindings): Logger;
+}
 
-export const logErrorsTotal = new Counter({
-  name: "log_errors_total",
-  help: "Total number of error and fatal log messages",
-  labelNames: ["service", "error_type"] as const,
-  registers: [metricsRegistry],
-});
+const LOG_LEVEL_ORDER: Record<LogLevel, number> = {
+  trace: 10,
+  debug: 20,
+  info: 30,
+  warn: 40,
+  error: 50,
+  fatal: 60,
+};
 
 // Get trace context from OpenTelemetry
 function getTraceContext(): Record<string, string> {
@@ -34,101 +44,116 @@ function getTraceContext(): Record<string, string> {
   };
 }
 
-// Create logger configuration
-function createLoggerConfig(): LoggerOptions {
-  const serviceName = process.env.OTEL_SERVICE_NAME || "midori";
+function shouldLog(level: LogLevel): boolean {
   const isProduction = process.env.APP_ENV === "production";
-  const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
+  const configuredLevel = (process.env.LOG_LEVEL ||
+    (isProduction ? "info" : "debug")) as LogLevel;
 
-  // Base config - logs to stdout by default without transports
-  const baseConfig: LoggerOptions = {
-    level: logLevel,
-    base: {
-      service: serviceName,
-      env: process.env.APP_ENV || "development",
-    },
-    timestamp: pino.stdTimeFunctions.isoTime,
-    // Use mixin to add trace context
-    mixin: () => getTraceContext(),
-    hooks: {
-      logMethod(inputArgs, method, level) {
-        // Increment metrics for each log
-        const levelName = pino.levels.labels[level] as LogLevel;
-        logsTotal.inc({ level: levelName, service: serviceName });
-
-        // Track errors separately
-        if (levelName === "error" || levelName === "fatal") {
-          const firstArg = inputArgs[0] as Record<string, unknown> | undefined;
-          const err = firstArg?.err as { name?: string } | undefined;
-          const error = firstArg?.error as { name?: string } | undefined;
-          const errorType = err?.name || error?.name || "UnknownError";
-          logErrorsTotal.inc({ service: serviceName, error_type: errorType });
-        }
-
-        return method.apply(this, inputArgs);
-      },
-    },
-  };
-
-  return baseConfig;
+  return LOG_LEVEL_ORDER[level] >= LOG_LEVEL_ORDER[configuredLevel];
 }
 
-// Create Loki transport if configured
-function createLokiTransport(): pino.DestinationStream | undefined {
-  const lokiUrl = process.env.LOKI_URL;
-  const serviceName = process.env.OTEL_SERVICE_NAME || "midori";
-  const isProduction = process.env.APP_ENV === "production";
-  const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
+function extractLogMessage(inputArgs: [unknown, unknown?]): {
+  message: unknown;
+  attributes?: Record<string, unknown>;
+} {
+  const [firstArg, secondArg] = inputArgs;
 
-  if (!lokiUrl) return undefined;
+  if (typeof firstArg === "string") {
+    return { message: firstArg };
+  }
 
-  try {
-    return pino.transport({
-      targets: [
-        {
-          target: "pino-loki",
-          options: {
-            host: lokiUrl,
-            batching: true,
-            interval: 5,
-            labels: {
-              service: serviceName,
-              env: process.env.APP_ENV || "development",
-            },
-          },
-          level: logLevel,
+  if (firstArg instanceof Error) {
+    return {
+      message: firstArg.message,
+      attributes: {
+        err: {
+          name: firstArg.name,
+          message: firstArg.message,
+          stack: firstArg.stack,
         },
-      ],
-    });
-  } catch (error) {
-    console.warn(
-      "pino-loki transport not available, Loki logging disabled",
-      error instanceof Error ? error.message : String(error),
-    );
-    return undefined;
+      },
+    };
+  }
+
+  if (firstArg && typeof firstArg === "object") {
+    return {
+      message: typeof secondArg === "string" ? secondArg : "Structured log",
+      attributes: firstArg as Record<string, unknown>,
+    };
+  }
+
+  return { message: secondArg ?? firstArg };
+}
+
+function createConsoleMethod(level: LogLevel): (...args: unknown[]) => void {
+  switch (level) {
+    case "trace":
+      return console.trace.bind(console);
+    case "debug":
+      return console.debug.bind(console);
+    case "info":
+      return console.info.bind(console);
+    case "warn":
+      return console.warn.bind(console);
+    case "error":
+    case "fatal":
+      return console.error.bind(console);
   }
 }
 
-// Create the main logger instance
+function createLogger(bindings: LogBindings = {}): Logger {
+  const baseAttributes = {
+    service: getOtelServiceName(),
+    env: getOtelDeploymentEnvironment(),
+    ...bindings,
+  };
+
+  const log = (level: LogLevel, firstArg: unknown, secondArg?: unknown) => {
+    if (!shouldLog(level)) {
+      return;
+    }
+
+    const { message, attributes } = extractLogMessage([firstArg, secondArg]);
+    const mergedAttributes = {
+      ...baseAttributes,
+      ...attributes,
+      ...getTraceContext(),
+    };
+    const errorType =
+      level === "error" || level === "fatal"
+        ? ((attributes?.err as { name?: string } | undefined)?.name ??
+          (attributes?.error as { name?: string } | undefined)?.name ??
+          "UnknownError")
+        : undefined;
+
+    recordLogMetric({ level, errorType });
+    emitOtelLog(level, message, mergedAttributes);
+
+    const consoleMethod = createConsoleMethod(level);
+    if (attributes) {
+      consoleMethod(message, mergedAttributes);
+      return;
+    }
+
+    consoleMethod(message);
+  };
+
+  return {
+    trace: (firstArg, secondArg) => log("trace", firstArg, secondArg),
+    debug: (firstArg, secondArg) => log("debug", firstArg, secondArg),
+    info: (firstArg, secondArg) => log("info", firstArg, secondArg),
+    warn: (firstArg, secondArg) => log("warn", firstArg, secondArg),
+    error: (firstArg, secondArg) => log("error", firstArg, secondArg),
+    fatal: (firstArg, secondArg) => log("fatal", firstArg, secondArg),
+    child: (childBindings) => createLogger({ ...bindings, ...childBindings }),
+  };
+}
+
 let loggerInstance: Logger | null = null;
 
 export function getLogger(): Logger {
   if (!loggerInstance) {
-    const config = createLoggerConfig();
-    const lokiTransport = createLokiTransport();
-
-    // If Loki transport is available, use multistream to log to both stdout and Loki
-    if (lokiTransport) {
-      // Create a multistream that writes to both stdout (via pino default) and Loki
-      const streams = pino.multistream([
-        { stream: process.stdout },
-        { stream: lokiTransport },
-      ]);
-      loggerInstance = pino(config, streams);
-    } else {
-      // Just log to stdout
-      loggerInstance = pino(config);
-    }
+    loggerInstance = createLogger();
   }
   return loggerInstance;
 }
@@ -138,7 +163,7 @@ export const logger = getLogger();
 
 // Create child logger with additional context
 export function createChildLogger(bindings: Record<string, unknown>): Logger {
-  return logger.child(bindings);
+  return getLogger().child(bindings);
 }
 
 // Helper to log with trace context explicitly
@@ -152,7 +177,7 @@ export function logWithTrace(
     ...getTraceContext(),
   };
 
-  logger[level](logData, message);
+  getLogger()[level](logData, message);
 }
 
 // Helper to create a span and log together

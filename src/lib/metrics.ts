@@ -1,64 +1,107 @@
-import {
-  Registry,
-  collectDefaultMetrics,
-  Counter,
-  Histogram,
-} from "prom-client";
+import { metrics } from "@opentelemetry/api";
 
-// Create a new registry for metrics
-export const metricsRegistry = new Registry();
+import { getOtelServiceName } from "@midori/lib/otel-config";
 
-// Add default metrics (CPU, memory, event loop, etc.)
-collectDefaultMetrics({
-  register: metricsRegistry,
+const meter = metrics.getMeter("midori.telemetry");
+const serviceName = getOtelServiceName();
+
+const otelHttpRequestsTotal = meter.createCounter("http_requests_total", {
+  description: "Total number of HTTP requests",
 });
 
-// Custom metrics for HTTP requests
-export const httpRequestsTotal = new Counter({
-  name: "http_requests_total",
-  help: "Total number of HTTP requests",
-  labelNames: ["method", "path", "status"] as const,
-  registers: [metricsRegistry],
+const otelHttpRequestDuration = meter.createHistogram(
+  "http_request_duration_seconds",
+  {
+    description: "Duration of HTTP requests in seconds",
+    unit: "s",
+  },
+);
+
+const otelApiCallsTotal = meter.createCounter("api_calls_total", {
+  description: "Total number of API calls to backend services",
 });
 
-export const httpRequestDuration = new Histogram({
-  name: "http_request_duration_seconds",
-  help: "Duration of HTTP requests in seconds",
-  labelNames: ["method", "path", "status"] as const,
-  buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
-  registers: [metricsRegistry],
+const otelApiCallDuration = meter.createHistogram("api_call_duration_seconds", {
+  description: "Duration of API calls to backend services in seconds",
+  unit: "s",
 });
 
-// Custom metrics for API calls to backend
-export const apiCallsTotal = new Counter({
-  name: "api_calls_total",
-  help: "Total number of API calls to backend services",
-  labelNames: ["service", "endpoint", "status"] as const,
-  registers: [metricsRegistry],
+const otelAuthEventsTotal = meter.createCounter("auth_events_total", {
+  description: "Total number of authentication events",
 });
 
-export const apiCallDuration = new Histogram({
-  name: "api_call_duration_seconds",
-  help: "Duration of API calls to backend services in seconds",
-  labelNames: ["service", "endpoint", "status"] as const,
-  buckets: [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
-  registers: [metricsRegistry],
+const otelLogsTotal = meter.createCounter("logs_total", {
+  description: "Total number of log messages",
 });
 
-// Auth metrics
-export const authEventsTotal = new Counter({
-  name: "auth_events_total",
-  help: "Total number of authentication events",
-  labelNames: ["event", "status"] as const,
-  registers: [metricsRegistry],
+const otelLogErrorsTotal = meter.createCounter("log_errors_total", {
+  description: "Total number of error and fatal log messages",
 });
 
-// Get all metrics
-export async function getMetrics(): Promise<string> {
-  return await metricsRegistry.metrics();
+interface HttpRequestMetric {
+  method: string;
+  path: string;
+  status: string;
+  durationSeconds: number;
 }
 
-// Get content type for metrics
-export function getMetricsContentType(): string {
-  return metricsRegistry.contentType;
+interface ApiCallMetric {
+  service: string;
+  endpoint: string;
+  status: string;
+  durationSeconds: number;
+}
+
+interface AuthEventMetric {
+  event: string;
+  status: string;
+}
+
+interface LogMetric {
+  level: string;
+  errorType?: string;
+}
+
+export function recordHttpRequest(metric: HttpRequestMetric): void {
+  otelHttpRequestsTotal.add(1, {
+    method: metric.method,
+    path: metric.path,
+    status: metric.status,
+  });
+  otelHttpRequestDuration.record(metric.durationSeconds, {
+    method: metric.method,
+    path: metric.path,
+    status: metric.status,
+  });
+}
+
+export function recordApiCall(metric: ApiCallMetric): void {
+  otelApiCallsTotal.add(1, {
+    service: metric.service,
+    endpoint: metric.endpoint,
+    status: metric.status,
+  });
+  otelApiCallDuration.record(metric.durationSeconds, {
+    service: metric.service,
+    endpoint: metric.endpoint,
+    status: metric.status,
+  });
+}
+
+export function recordAuthEvent(metric: AuthEventMetric): void {
+  otelAuthEventsTotal.add(1, {
+    event: metric.event,
+    status: metric.status,
+  });
+}
+
+export function recordLogMetric(metric: LogMetric): void {
+  otelLogsTotal.add(1, { level: metric.level, service: serviceName });
+
+  if (metric.errorType) {
+    otelLogErrorsTotal.add(1, {
+      service: serviceName,
+      error_type: metric.errorType,
+    });
+  }
 }

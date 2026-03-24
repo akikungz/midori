@@ -12,8 +12,6 @@ const nextConfig: NextConfig = {
       hmrRefreshes: true,
     },
   },
-  // Exclude pino and transports from bundling for proper runtime resolution
-  serverExternalPackages: ["pino", "pino-loki", "pino-pretty"],
   experimental: {
     proxyClientMaxBodySize: "1gb",
     optimizePackageImports: ["lucide-react"],
@@ -27,8 +25,7 @@ const nextConfig: NextConfig = {
         destination: `${env.AUTH_API_URL}/api/auth/:path*`,
       },
       {
-        // Exclude /api/metrics from proxy - handled by Next.js
-        source: "/api/:path((?!metrics).*)",
+        source: "/api/:path*",
         destination: `${env.SERVER_API_URL}/api/:path*`,
       },
     ];

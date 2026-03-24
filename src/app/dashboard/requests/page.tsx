@@ -1,20 +1,13 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
-import { getServerSession } from "@midori/lib/server-api";
-import { hasPermission, type Role } from "@midori/lib/roles";
+import { hasPermission } from "@midori/lib/roles";
+import { requireServerSession } from "@midori/lib/server-auth";
 import { Button } from "@midori/components/ui/button";
 import { RequestsClient } from "@midori/components/requests";
 
 export default async function RequestsPage() {
-  const user = await getServerSession();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const role = user.role as Role;
+  const { role } = await requireServerSession();
   const isStudent = role === "STUDENT";
   const canCreateRequest = hasPermission(role, "CREATE_REQUEST");
 

@@ -1,24 +1,26 @@
 # Observability Analysis & Grafana Provisioning Guide
 
 ## Purpose
-This document explains how to analyze metrics, traces (Jaeger), and logs to design a Grafana dashboard, and how to provision Grafana to load data sources and dashboards automatically. It is written for the Midori project observability stack.
+This document explains how to analyze metrics, traces, and logs exported through an OpenTelemetry Collector, and how to provision Grafana to load data sources and dashboards automatically. It is written for the Midori project observability stack.
 
 ## Table of Contents
 1. Data sources overview
-2. Metrics analysis (Prometheus)
-3. Traces analysis (Jaeger)
-4. Logs analysis (Loki)
+2. Metrics analysis
+3. Traces analysis
+4. Logs analysis
 5. Dashboard design checklist
 6. Grafana provisioning guide
 7. Validation steps
 
 ## 1) Data sources overview
-Metrics: Prometheus scrapes application and system metrics exposed by the service.
-Traces: Jaeger collects distributed traces from the application.
-Logs: Loki stores logs shipped from the application or infrastructure.
-Grafana: Visualizes all three and correlates signals.
+The application exports traces, metrics, and logs to an OpenTelemetry Collector over OTLP.
+The collector can then forward:
+- metrics to Prometheus, Grafana Cloud, or another metrics backend
+- traces to Jaeger, Tempo, or another tracing backend
+- logs to Loki or another logging backend
+Grafana visualizes the downstream backends and correlates signals.
 
-## 2) Metrics analysis (Prometheus)
+## 2) Metrics analysis
 Goal: identify service health, latency, throughput, and errors.
 
 Suggested metric categories:
@@ -29,7 +31,7 @@ Suggested metric categories:
 - Saturation: CPU, memory, file descriptors, GC time
 
 Analysis workflow:
-1. Validate scrape targets are up in Prometheus.
+1. Validate the collector is receiving metrics and forwarding them to your metrics backend.
 2. Inspect metric labels for service, route, method, status_code, instance.
 3. Build a baseline dashboard: 
    - request rate
@@ -45,11 +47,11 @@ Example PromQL patterns (adapt to your metric names):
 - p95 latency: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))
 - CPU usage: sum(rate(process_cpu_seconds_total[5m]))
 
-## 3) Traces analysis (Jaeger)
+## 3) Traces analysis
 Goal: identify slow paths and dependency bottlenecks.
 
 Analysis workflow:
-1. Confirm trace export from the service (OTLP or Jaeger exporter).
+1. Confirm trace export from the service to the collector and from the collector to your tracing backend.
 2. Inspect trace IDs for error requests captured in metrics.
 3. Identify top slow spans by duration and service.
 4. Map dependency graph to confirm upstream/downstream latency.
@@ -61,11 +63,11 @@ Dashboard ideas:
 - Top N slow operations
 - Dependency latency heatmap
 
-## 4) Logs analysis (Loki)
+## 4) Logs analysis
 Goal: correlate logs with spikes in errors or latency.
 
 Analysis workflow:
-1. Ensure log labels include service, environment, instance, and level.
+1. Ensure OTEL log attributes include service, environment, trace_id, and severity.
 2. Build log volume panel by service and level.
 3. Add error log count panel to correlate with HTTP error rate.
 4. Create log panels with filters for request_id or trace_id.
@@ -126,13 +128,13 @@ Checklist:
 4. Use templated variables for data sources to keep dashboards portable.
 
 ## 7) Validation steps
-1. Start observability stack (Grafana, Prometheus, Loki, Jaeger).
-2. Visit Grafana and confirm data sources show as healthy.
-3. Open dashboards and verify panels render without errors.
-4. Trigger a test request and confirm metrics, logs, and traces appear.
+1. Start the application and the OpenTelemetry Collector.
+2. Confirm OTLP traces, metrics, and logs are accepted by the collector.
+3. Visit Grafana and confirm downstream data sources show as healthy.
+4. Trigger a test request and confirm metrics, logs, and traces appear in the target backends.
 5. Add links between panels to navigate from metrics to logs and traces.
 
 ## Notes
-- Keep metric, log, and trace labels consistent to improve correlation.
+- Keep metric, log, and trace attributes consistent to improve correlation.
 - Prefer standardized labels: service, environment, instance, trace_id.
 - Revisit dashboards after deployment changes to keep them current.

@@ -32,6 +32,12 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@midori/components/ui/empty";
+import type { components } from "@midori/types/api";
+
+type InstanceRequestItem =
+  components["schemas"]["GetRequestsResponse"]["values"][number];
+type ExtendedRequestItem =
+  components["schemas"]["GetExtendedRequestsResponse"]["values"][number];
 
 // ==================== Status Config ====================
 
@@ -58,41 +64,14 @@ export const statusConfig = {
   },
 };
 
-export type RequestStatus = keyof typeof statusConfig;
+export type RequestStatus = InstanceRequestItem["status"];
 
 // ==================== Instance Request Types ====================
 
-export interface InstanceRequestSpecs {
-  cpus: number;
-  memoryMB: number;
-  diskGB: number;
-}
-
-export interface CourseOffering {
-  courseCode: string;
-  courseTitle?: string;
-  semester: string;
-}
-
-export interface InstanceRequest {
-  id: number;
-  title: string;
-  description?: string;
-  status: RequestStatus;
-  specs: InstanceRequestSpecs;
-  templateName?: string;
-  courseOffering?: CourseOffering;
-}
-
-export interface ExtendedRequest {
-  id: number;
-  title: string;
-  description?: string;
-  reason?: string;
-  status: RequestStatus;
-  targetInstanceId: number;
-  courseOffering?: CourseOffering;
-}
+export type InstanceRequestSpecs = InstanceRequestItem["specs"];
+export type CourseOffering = NonNullable<InstanceRequestItem["courseOffering"]>;
+export type InstanceRequest = InstanceRequestItem;
+export type ExtendedRequest = ExtendedRequestItem;
 
 // ==================== Instance Request Card ====================
 

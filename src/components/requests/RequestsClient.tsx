@@ -19,8 +19,6 @@ import {
   ExtendedRequestsList,
   EmptyInstanceRequests,
   EmptyExtendedRequests,
-  type InstanceRequest,
-  type ExtendedRequest,
   type InstanceRequestSpecs,
 } from "./RequestCard";
 import {
@@ -30,17 +28,16 @@ import {
   CourseFilter,
   type CourseFilterOption,
 } from "./RequestFilters";
+import type { components } from "@midori/types/api";
 
 const ITEMS_PER_PAGE = 10;
+type InstanceRequestsResponse = components["schemas"]["GetRequestsResponse"];
+type ExtendedRequestsResponse =
+  components["schemas"]["GetExtendedRequestsResponse"];
 
 interface RequestsClientProps {
   userRole: Role;
   isStudent: boolean;
-}
-
-interface RequestsResponse<T> {
-  values: T[];
-  totalPages: number;
 }
 
 /**
@@ -113,7 +110,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
       query: getQueryParams(),
     },
   }) as {
-    data: RequestsResponse<InstanceRequest> | undefined;
+    data: InstanceRequestsResponse | undefined;
     isLoading: boolean;
     refetch: () => void;
     isFetching: boolean;
@@ -130,7 +127,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
       query: getQueryParams(),
     },
   }) as {
-    data: RequestsResponse<ExtendedRequest> | undefined;
+    data: ExtendedRequestsResponse | undefined;
     isLoading: boolean;
     refetch: () => void;
     isFetching: boolean;

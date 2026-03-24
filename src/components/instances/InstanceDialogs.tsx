@@ -6,8 +6,10 @@ import {
   Globe,
   ExternalLink,
   History,
+  LoaderCircle,
 } from "lucide-react";
 
+import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import {
@@ -52,6 +54,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@midori/components/ui/card";
+import type { components } from "@midori/types/api";
+
+type NextSemester = components["schemas"]["GetNextSemesterResponse"] | null;
 
 // ==================== Create Instance Dialog ====================
 
@@ -223,7 +228,7 @@ export function CreateInstanceDialog({
 interface ExtensionRequestDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (days: number, reason: string) => Promise<void>;
+  onSubmit: (reason: string) => Promise<void>;
   isSubmitting: boolean;
 }
 
@@ -233,15 +238,76 @@ export function ExtensionRequestDialog({
   onSubmit,
   isSubmitting,
 }: ExtensionRequestDialogProps) {
-  const [extensionDays, setExtensionDays] = useState("7");
   const [extensionReason, setExtensionReason] = useState("");
+  const [nextSemester, setNextSemester] = useState<NextSemester>(null);
+  const [isLoadingNextSemester, setIsLoadingNextSemester] = useState(false);
+  const [nextSemesterError, setNextSemesterError] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (!open) {
+      setExtensionReason("");
+      setNextSemester(null);
+      setNextSemesterError(null);
+      setIsLoadingNextSemester(false);
+      return;
+    }
+
+    let isActive = true;
+
+    const loadNextSemester = async () => {
+      setIsLoadingNextSemester(true);
+      setNextSemesterError(null);
+
+      try {
+        const { data, error } = await fetchClient.GET(
+          "/api/academic/semesters/next",
+        );
+
+        if (!isActive) {
+          return;
+        }
+
+        if (error) {
+          setNextSemester(null);
+          setNextSemesterError("Unable to check the next semester right now.");
+          return;
+        }
+
+        setNextSemester((data ?? null) as NextSemester);
+      } catch {
+        if (!isActive) {
+          return;
+        }
+
+        setNextSemester(null);
+        setNextSemesterError("Unable to check the next semester right now.");
+      } finally {
+        if (isActive) {
+          setIsLoadingNextSemester(false);
+        }
+      }
+    };
+
+    loadNextSemester();
+
+    return () => {
+      isActive = false;
+    };
+  }, [open]);
 
   const handleSubmit = async () => {
-    if (!extensionReason) return;
-    await onSubmit(Number(extensionDays), extensionReason);
-    setExtensionDays("7");
-    setExtensionReason("");
+    if (!extensionReason || !nextSemester || isLoadingNextSemester) return;
+    await onSubmit(extensionReason);
   };
+
+  const submitDisabled =
+    !extensionReason ||
+    isSubmitting ||
+    isLoadingNextSemester ||
+    !nextSemester ||
+    !!nextSemesterError;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -259,22 +325,31 @@ export function ExtensionRequestDialog({
           </DialogDescription>
         </DialogHeader>
         <FieldGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2">
-          <Field>
-            <FieldLabel htmlFor="extension-days">Extension Duration</FieldLabel>
+          <Field className="lg:col-span-2">
+            <FieldLabel>Next Semester</FieldLabel>
             <FieldDescription>
-              Number of additional days requested
+              Extension requests are only available when an upcoming semester
+              exists.
             </FieldDescription>
-            <div className="flex items-center gap-2">
-              <Input
-                id="extension-days"
-                type="number"
-                min="1"
-                max="90"
-                value={extensionDays}
-                onChange={(e) => setExtensionDays(e.target.value)}
-                className="w-24"
-              />
-              <span className="text-sm text-muted-foreground">days</span>
+            <div className="rounded-md border bg-muted/30 px-3 py-2 text-sm">
+              {isLoadingNextSemester ? (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <LoaderCircle className="size-4 animate-spin" />
+                  Checking next semester availability...
+                </div>
+              ) : nextSemester ? (
+                <div>
+                  <p className="font-medium">{nextSemester.name}</p>
+                  <p className="text-muted-foreground">
+                    This instance will be requested for the upcoming semester.
+                  </p>
+                </div>
+              ) : (
+                <p className="text-muted-foreground">
+                  {nextSemesterError ||
+                    "No upcoming semester is available for extension requests yet."}
+                </p>
+              )}
             </div>
           </Field>
           <Field className="lg:col-span-2">
@@ -292,7 +367,7 @@ export function ExtensionRequestDialog({
           </Field>
           <Button
             className="w-full lg:col-span-2"
-            disabled={!extensionReason || isSubmitting}
+            disabled={submitDisabled}
             onClick={handleSubmit}
           >
             {isSubmitting ? "Submitting..." : "Submit Extension Request"}
@@ -310,7 +385,7 @@ interface AddProxyDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: {
     port: number;
-    type: "HTTP" | "HTTPS" | "TCP";
+    type: "HTTP" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
@@ -323,7 +398,7 @@ export function AddProxyDialog({
   isSubmitting,
 }: AddProxyDialogProps) {
   const [proxyPort, setProxyPort] = useState("");
-  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS" | "TCP">("HTTP");
+  const [proxyType, setProxyType] = useState<"HTTP" | "TCP">("HTTP");
   const [proxyDescription, setProxyDescription] = useState("");
 
   const handleSubmit = async () => {
@@ -368,14 +443,13 @@ export function AddProxyDialog({
             <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
             <Select
               value={proxyType}
-              onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS" | "TCP")}
+              onValueChange={(v) => setProxyType(v as "HTTP" | "TCP")}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="HTTP">HTTP</SelectItem>
-                <SelectItem value="HTTPS">HTTPS</SelectItem>
                 <SelectItem value="TCP">TCP</SelectItem>
               </SelectContent>
             </Select>
@@ -453,7 +527,7 @@ interface ReverseProxyListProps {
   onAddDialogChange: (open: boolean) => void;
   onAddProxy: (data: {
     port: number;
-    type: "HTTP" | "HTTPS" | "TCP";
+    type: "HTTP" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
@@ -521,24 +595,31 @@ function ReverseProxyItem({
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="flex items-center gap-3">
-        <Globe className="size-4 text-muted-foreground" />
+        {proxy.type === "HTTP" ? (
+          <ExternalLink className="size-4 mt-0.5 text-muted-foreground" />
+        ) : (
+          <Globe className="size-4 mt-0.5 text-muted-foreground" />
+        )}
         <div>
           <p className="font-medium">Port {proxy.targetPort}</p>
-          <p className="text-sm text-muted-foreground">
-            {proxy.type} • {proxy.description || "No description"}
+          <p className="text-sm text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+            {proxy.type} {proxy.description ? `• ${proxy.description} ` : ""}-{" "}
+            {`p${proxy.targetPort}-${hostname}.fitm.cloud`}
           </p>
         </div>
       </div>
       <div className="flex gap-2">
-        <a
-          href={proxy.type === "TCP" ? `#` : `https://${hostname}:${proxy.targetPort}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button variant="ghost" size="icon">
-            <ExternalLink className="size-4" />
-          </Button>
-        </a>
+        {proxy.type === "HTTP" && (
+          <a
+            href={`https://p${proxy.targetPort}-${hostname}.fitm.cloud`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="ghost" size="icon">
+              <ExternalLink className="size-4" />
+            </Button>
+          </a>
+        )}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="ghost" size="icon" className="text-destructive">
