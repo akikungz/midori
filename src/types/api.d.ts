@@ -4,22 +4,6 @@
  */
 
 export interface paths {
-  "/metrics": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: operations["getMetrics"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/api/user/me": {
     parameters: {
       query?: never;
@@ -296,6 +280,26 @@ export interface paths {
      * @description Retrieve the current active semester
      */
     get: operations["getApiAcademicSemestersCurrent"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/academic/semesters/next": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get next semester
+     * @description Retrieve the next upcoming semester
+     */
+    get: operations["getApiAcademicSemestersNext"];
     put?: never;
     post?: never;
     delete?: never;
@@ -4222,6 +4226,23 @@ export interface components {
       /** @description Timestamp when the record was last updated */
       updatedAt?: Record<string, never> | string | number;
     } | null;
+    /** @description Response structure for fetching the next upcoming semester, returns null if no upcoming semester exists */
+    GetNextSemesterResponse: {
+      /** @description Unique identifier for the semester */
+      id: number;
+      /** @description Name of the semester */
+      name: string;
+      /** @description Start date of the semester */
+      startDate: Record<string, never> | string | number;
+      /** @description End date of the semester */
+      endDate: Record<string, never> | string | number;
+      /** @description Indicates if this semester is the current active semester */
+      isCurrent: boolean;
+      /** @description Timestamp when the record was created */
+      createdAt?: Record<string, never> | string | number;
+      /** @description Timestamp when the record was last updated */
+      updatedAt?: Record<string, never> | string | number;
+    } | null;
     /** @description Request body for adding a new semester */
     AddSemesterRequestBody: {
       /** @description Name of the semester */
@@ -4623,16 +4644,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  getMetrics: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: never;
-  };
   getApiUserMe: {
     parameters: {
       query?: never;
@@ -5172,6 +5183,26 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GetCurrentSemesterResponse"];
+        };
+      };
+    };
+  };
+  getApiAcademicSemestersNext: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response structure for fetching the next upcoming semester, returns null if no upcoming semester exists */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetNextSemesterResponse"];
         };
       };
     };

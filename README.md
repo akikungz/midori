@@ -29,14 +29,26 @@ Key variables:
 - `APP_ENV`: `development`, `production`, or `test`.
 - `LOG_LEVEL`: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
 - `OTEL_SERVICE_NAME`: Service identifier used in logs/traces.
+- `OTEL_EXPORTER_OTLP_AUTH_MODE` (optional): OTLP auth mode, either `none`, `bearer`, or `basic`.
+- `OTEL_EXPORTER_OTLP_AUTH_TOKEN` (optional): Bearer token used when auth mode is `bearer`.
+- `OTEL_EXPORTER_OTLP_AUTH_USERNAME` (optional): Username used when auth mode is `basic`.
+- `OTEL_EXPORTER_OTLP_AUTH_PASSWORD` (optional): Password used when auth mode is `basic`.
+- `OTEL_EXPORTER_OTLP_PROTOCOL` (optional): OTLP transport protocol, either `grpc` or `http/protobuf`.
 - `OTEL_EXPORTER_OTLP_ENDPOINT` (optional): OTLP collector base URL or full signal endpoint.
+- `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` (optional): Per-signal OTLP traces protocol override.
 - `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` (optional): Explicit OTLP HTTP traces endpoint.
+- `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` (optional): Per-signal OTLP metrics protocol override.
 - `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` (optional): Explicit OTLP HTTP metrics endpoint.
+- `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL` (optional): Per-signal OTLP logs protocol override.
 - `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` (optional): Explicit OTLP HTTP logs endpoint.
 - `OTEL_METRIC_EXPORT_INTERVAL` (optional): OTLP metrics export interval in milliseconds.
 - `SERVER_API_URL`: Base URL for server API routing.
 - `AUTH_API_URL`: Base URL for auth API routing.
 - `NEXT_PUBLIC_API_URL`: Public base URL used by the client auth library.
+
+For OTLP/gRPC, point the endpoint at the collector host and port such as `http://localhost:4317` and do not include `/v1/traces`, `/v1/metrics`, or `/v1/logs`.
+
+Authentication is optional. If `OTEL_EXPORTER_OTLP_AUTH_MODE` is unset or `none`, exports are sent without authentication headers or gRPC metadata.
 
 ## Learn More
 
