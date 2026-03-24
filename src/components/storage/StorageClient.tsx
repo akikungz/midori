@@ -528,7 +528,9 @@ export function StorageClient() {
                       ) : (
                         <Folder className="size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <span className="truncate min-w-0" title={file.name}>{file.name}</span>
+                      <span className="truncate min-w-0" title={file.name}>
+                        {file.name}
+                      </span>
                     </CardTitle>
                     <CardDescription className="flex flex-wrap gap-2">
                       <Badge variant="outline">{file.type}</Badge>
@@ -696,7 +698,5 @@ function StorageLoadingState() {
     </div>
   );
 }
-
-// ==================== File Preview Component ====================
 
 export default StorageClient;

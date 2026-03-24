@@ -29,11 +29,14 @@ Key variables:
 - `APP_ENV`: `development`, `production`, or `test`.
 - `LOG_LEVEL`: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
 - `OTEL_SERVICE_NAME`: Service identifier used in logs/traces.
+- `OTEL_EXPORTER_OTLP_ENDPOINT` (optional): OTLP collector base URL or full signal endpoint.
+- `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` (optional): Explicit OTLP HTTP traces endpoint.
+- `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` (optional): Explicit OTLP HTTP metrics endpoint.
+- `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` (optional): Explicit OTLP HTTP logs endpoint.
+- `OTEL_METRIC_EXPORT_INTERVAL` (optional): OTLP metrics export interval in milliseconds.
 - `SERVER_API_URL`: Base URL for server API routing.
 - `AUTH_API_URL`: Base URL for auth API routing.
 - `NEXT_PUBLIC_API_URL`: Public base URL used by the client auth library.
-- `OTEL_EXPORTER_OTLP_ENDPOINT` (optional): OTLP HTTP endpoint for tracing.
-- `LOKI_URL` (optional): Loki endpoint for log shipping.
 
 ## Learn More
 

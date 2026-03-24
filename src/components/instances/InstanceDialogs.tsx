@@ -310,7 +310,7 @@ interface AddProxyDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: {
     port: number;
-    type: "HTTP" | "HTTPS" | "TCP";
+    type: "HTTP" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
@@ -323,7 +323,7 @@ export function AddProxyDialog({
   isSubmitting,
 }: AddProxyDialogProps) {
   const [proxyPort, setProxyPort] = useState("");
-  const [proxyType, setProxyType] = useState<"HTTP" | "HTTPS" | "TCP">("HTTP");
+  const [proxyType, setProxyType] = useState<"HTTP" | "TCP">("HTTP");
   const [proxyDescription, setProxyDescription] = useState("");
 
   const handleSubmit = async () => {
@@ -368,14 +368,13 @@ export function AddProxyDialog({
             <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
             <Select
               value={proxyType}
-              onValueChange={(v) => setProxyType(v as "HTTP" | "HTTPS" | "TCP")}
+              onValueChange={(v) => setProxyType(v as "HTTP" | "TCP")}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="HTTP">HTTP</SelectItem>
-                <SelectItem value="HTTPS">HTTPS</SelectItem>
                 <SelectItem value="TCP">TCP</SelectItem>
               </SelectContent>
             </Select>
@@ -453,7 +452,7 @@ interface ReverseProxyListProps {
   onAddDialogChange: (open: boolean) => void;
   onAddProxy: (data: {
     port: number;
-    type: "HTTP" | "HTTPS" | "TCP";
+    type: "HTTP" | "TCP";
     description?: string;
   }) => Promise<void>;
   isSubmitting: boolean;
@@ -521,24 +520,30 @@ function ReverseProxyItem({
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="flex items-center gap-3">
-        <Globe className="size-4 text-muted-foreground" />
+        {proxy.type === "HTTP" ? (
+          <ExternalLink className="size-4 mt-0.5 text-muted-foreground" />
+        ) : (
+          <Globe className="size-4 mt-0.5 text-muted-foreground" />
+        )}
         <div>
           <p className="font-medium">Port {proxy.targetPort}</p>
-          <p className="text-sm text-muted-foreground">
-            {proxy.type} • {proxy.description || "No description"}
+          <p className="text-sm text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
+            {proxy.type} {proxy.description ? `• ${proxy.description} ` : ""}- {`p${proxy.targetPort}-${hostname}.fitm.cloud`}
           </p>
         </div>
       </div>
       <div className="flex gap-2">
-        <a
-          href={proxy.type === "TCP" ? `#` : `https://${hostname}:${proxy.targetPort}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button variant="ghost" size="icon">
-            <ExternalLink className="size-4" />
-          </Button>
-        </a>
+        {proxy.type === "HTTP" && (
+          <a
+            href={`https://p${proxy.targetPort}-${hostname}.fitm.cloud`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="ghost" size="icon">
+              <ExternalLink className="size-4" />
+            </Button>
+          </a>
+        )}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="ghost" size="icon" className="text-destructive">
@@ -610,10 +615,10 @@ interface AuditLogItemProps {
 function AuditLogItem({ log }: AuditLogItemProps) {
   const formattedTime = log.timestamp
     ? new Date(
-        typeof log.timestamp === "string" || typeof log.timestamp === "number"
-          ? log.timestamp
-          : "",
-      ).toLocaleString()
+      typeof log.timestamp === "string" || typeof log.timestamp === "number"
+        ? log.timestamp
+        : "",
+    ).toLocaleString()
     : "";
 
   return (

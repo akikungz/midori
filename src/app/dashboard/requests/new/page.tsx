@@ -1,31 +1,16 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { getServerSession } from "@midori/lib/server-api";
-import { hasPermission, type Role } from "@midori/lib/roles";
+import { AccessDeniedState } from "@midori/components/shared";
+import { requireServerPermission } from "@midori/lib/server-auth";
 import { Button } from "@midori/components/ui/button";
 import { NewRequestForm } from "@midori/components/requests/NewRequestForm";
 
 export default async function NewRequestPage() {
-  const user = await getServerSession();
+  const { isAllowed } = await requireServerPermission("CREATE_REQUEST");
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Check permission on server
-  const role = user.role as Role;
-  if (!hasPermission(role, "CREATE_REQUEST")) {
-    return (
-      <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
-        <div className="text-6xl">🚫</div>
-        <h2 className="text-xl font-semibold">Access Denied</h2>
-        <p className="text-muted-foreground">
-          You don't have permission to access this page.
-        </p>
-      </div>
-    );
+  if (!isAllowed) {
+    return <AccessDeniedState minHeightClassName="min-h-100" />;
   }
 
   return (

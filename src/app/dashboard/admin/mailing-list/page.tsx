@@ -1,28 +1,12 @@
-import { redirect } from "next/navigation";
-
-import { getServerSession } from "@midori/lib/server-api";
-import type { Role } from "@midori/lib/roles";
 import { MailingListClient } from "@midori/components/admin/MailingListClient";
+import { AccessDeniedState } from "@midori/components/shared";
+import { requireServerRole } from "@midori/lib/server-auth";
 
 export default async function MailingListPage() {
-  const user = await getServerSession();
+  const { isAllowed } = await requireServerRole("ADMIN");
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Check admin permission on server
-  const role = user.role as Role;
-  if (role !== "ADMIN") {
-    return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
-        <div className="text-6xl">🚫</div>
-        <h2 className="text-xl font-semibold">Access Denied</h2>
-        <p className="text-muted-foreground">
-          You don't have permission to access this page.
-        </p>
-      </div>
-    );
+  if (!isAllowed) {
+    return <AccessDeniedState />;
   }
 
   return (

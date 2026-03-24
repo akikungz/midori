@@ -1,17 +1,8 @@
-import { redirect } from "next/navigation";
-
-import { getServerSession } from "@midori/lib/server-api";
-import type { Role } from "@midori/lib/roles";
 import { InstancesClient } from "@midori/components/instances/InstancesClient";
+import { requireServerSession } from "@midori/lib/server-auth";
 
 export default async function InstancesPage() {
-  const user = await getServerSession();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const role = user.role as Role;
+  const { role } = await requireServerSession();
 
   return (
     <div className="space-y-6">

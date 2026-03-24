@@ -1,14 +1,8 @@
-import { redirect } from "next/navigation";
-
-import { getServerSession } from "@midori/lib/server-api";
 import { StorageClient } from "@midori/components/storage";
+import { requireServerSession } from "@midori/lib/server-auth";
 
 export default async function StoragePage() {
-  const user = await getServerSession();
-
-  if (!user) {
-    redirect("/login");
-  }
+  await requireServerSession();
 
   return (
     <div className="space-y-6">

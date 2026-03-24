@@ -1,14 +1,8 @@
-import { redirect } from "next/navigation";
-
-import { getServerSession } from "@midori/lib/server-api";
 import { SettingsClient } from "@midori/components/settings/SettingsClient";
+import { requireServerSession } from "@midori/lib/server-auth";
 
 export default async function SettingsPage() {
-  const user = await getServerSession();
-
-  if (!user) {
-    redirect("/login");
-  }
+  const { user } = await requireServerSession();
 
   return (
     <div className="space-y-6">

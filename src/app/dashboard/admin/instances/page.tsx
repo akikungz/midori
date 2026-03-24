@@ -1,27 +1,12 @@
-import { redirect } from "next/navigation";
-
 import { InstancesClient } from "@midori/components/instances/InstancesClient";
-import type { Role } from "@midori/lib/roles";
-import { getServerSession } from "@midori/lib/server-api";
+import { AccessDeniedState } from "@midori/components/shared";
+import { requireServerRole } from "@midori/lib/server-auth";
 
 export default async function AdminInstancesPage() {
-  const user = await getServerSession();
+  const { isAllowed, role } = await requireServerRole("ADMIN");
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  const role = user.role as Role;
-  if (role !== "ADMIN") {
-    return (
-      <div className="flex min-h-100 flex-col items-center justify-center space-y-4">
-        <div className="text-6xl">🚫</div>
-        <h2 className="text-xl font-semibold">Access Denied</h2>
-        <p className="text-muted-foreground">
-          You don&apos;t have permission to access this page.
-        </p>
-      </div>
-    );
+  if (!isAllowed) {
+    return <AccessDeniedState minHeightClassName="min-h-100" />;
   }
 
   return (
