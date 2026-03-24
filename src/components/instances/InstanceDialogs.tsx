@@ -11,6 +11,7 @@ import {
 
 import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
+import type { Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import {
   Dialog,
@@ -57,12 +58,16 @@ import {
 import type { components } from "@midori/types/api";
 
 type NextSemester = components["schemas"]["GetNextSemesterResponse"] | null;
+const INSTRUCTOR_INSTANCE_MAX_MEMORY_GB = 8;
+const INSTRUCTOR_INSTANCE_MAX_DISK_GB = 32;
+const INSTRUCTOR_INSTANCE_MAX_VCPU = 8;
 
 // ==================== Create Instance Dialog ====================
 
 interface CreateInstanceDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  userRole: Role;
   onSubmit: (data: {
     pveTemplateId: number;
     cpus: number;
@@ -76,6 +81,7 @@ interface CreateInstanceDialogProps {
 export function CreateInstanceDialog({
   open,
   onOpenChange,
+  userRole,
   onSubmit,
   isSubmitting,
 }: CreateInstanceDialogProps) {
@@ -86,8 +92,21 @@ export function CreateInstanceDialog({
     number | null
   >(null);
   const [cpus, setCpus] = useState("2");
-  const [memoryGB, setMemoryGB] = useState("4");
-  const [diskGB, setDiskGB] = useState("20");
+  const [memoryGB, setMemoryGB] = useState("8");
+  const [diskGB, setDiskGB] = useState("32");
+  const maxVcpu =
+    userRole === "ADMIN" || userRole === "INSTRUCTOR"
+      ? INSTRUCTOR_INSTANCE_MAX_VCPU
+      : 16;
+  const maxMemoryGB =
+    userRole === "ADMIN" || userRole === "INSTRUCTOR"
+      ? INSTRUCTOR_INSTANCE_MAX_MEMORY_GB
+      : 64;
+  const maxDiskGB =
+    userRole === "ADMIN" || userRole === "INSTRUCTOR"
+      ? INSTRUCTOR_INSTANCE_MAX_DISK_GB
+      : 500;
+  const minDiskGB = 8;
 
   // Use autocomplete hook for course offerings
   const courseOfferingsAutocomplete = useAutocomplete({
@@ -113,19 +132,19 @@ export function CreateInstanceDialog({
       setSelectedTemplateId(null);
       setSelectedCourseOfferingId(null);
       setCpus("2");
-      setMemoryGB("4");
-      setDiskGB("20");
+      setMemoryGB(String(maxMemoryGB));
+      setDiskGB(String(maxDiskGB));
       resetAutocompleteRef.current();
     }
-  }, [open]);
+  }, [maxDiskGB, maxMemoryGB, open]);
 
   const handleSubmit = async () => {
     if (!selectedTemplateId) return;
     await onSubmit({
       pveTemplateId: selectedTemplateId,
-      cpus: Number(cpus),
-      memoryGB: Number(memoryGB),
-      diskGB: Number(diskGB),
+      cpus: Math.min(Number(cpus), maxVcpu),
+      memoryGB: Math.min(Number(memoryGB), maxMemoryGB),
+      diskGB: Math.min(Math.max(Number(diskGB), minDiskGB), maxDiskGB),
       courseOfferingId: selectedCourseOfferingId || undefined,
     });
   };
@@ -181,9 +200,11 @@ export function CreateInstanceDialog({
               id="cpus"
               type="number"
               min="1"
-              max="16"
+              max={String(maxVcpu)}
               value={cpus}
-              onChange={(e) => setCpus(e.target.value)}
+              onChange={(e) =>
+                setCpus(String(Math.min(Number(e.target.value), maxVcpu)))
+              }
             />
           </Field>
           <Field>
@@ -193,9 +214,13 @@ export function CreateInstanceDialog({
               id="memory"
               type="number"
               min="1"
-              max="64"
+              max={String(maxMemoryGB)}
               value={memoryGB}
-              onChange={(e) => setMemoryGB(e.target.value)}
+              onChange={(e) =>
+                setMemoryGB(
+                  String(Math.min(Number(e.target.value), maxMemoryGB)),
+                )
+              }
             />
           </Field>
           <Field>
@@ -204,10 +229,19 @@ export function CreateInstanceDialog({
             <Input
               id="disk"
               type="number"
-              min="10"
-              max="500"
+              min={String(minDiskGB)}
+              max={String(maxDiskGB)}
               value={diskGB}
-              onChange={(e) => setDiskGB(e.target.value)}
+              onChange={(e) =>
+                setDiskGB(
+                  String(
+                    Math.min(
+                      Math.max(Number(e.target.value), minDiskGB),
+                      maxDiskGB,
+                    ),
+                  ),
+                )
+              }
             />
           </Field>
           <Button

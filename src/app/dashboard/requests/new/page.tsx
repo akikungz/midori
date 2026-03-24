@@ -7,7 +7,7 @@ import { Button } from "@midori/components/ui/button";
 import { NewRequestForm } from "@midori/components/requests/NewRequestForm";
 
 export default async function NewRequestPage() {
-  const { isAllowed } = await requireServerPermission("CREATE_REQUEST");
+  const { isAllowed, role } = await requireServerPermission("CREATE_REQUEST");
 
   if (!isAllowed) {
     return <AccessDeniedState minHeightClassName="min-h-100" />;
@@ -32,7 +32,7 @@ export default async function NewRequestPage() {
         </div>
       </div>
 
-      <NewRequestForm />
+      <NewRequestForm userRole={role} />
     </div>
   );
 }

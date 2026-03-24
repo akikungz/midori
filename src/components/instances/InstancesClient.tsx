@@ -352,6 +352,7 @@ export function InstancesClient({
         <CreateInstanceDialog
           open={isCreateDialogOpen}
           onOpenChange={setIsCreateDialogOpen}
+          userRole={userRole}
           onSubmit={handleCreateInstance}
           isSubmitting={submitState.isSubmitting}
         />

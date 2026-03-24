@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
+import type { Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Textarea } from "@midori/components/ui/textarea";
@@ -33,7 +34,15 @@ import {
 } from "@midori/components/ui/empty";
 import { Slider } from "@midori/components/ui/slider";
 
-export function NewRequestForm() {
+const STUDENT_REQUEST_MAX_MEMORY_GB = 2;
+const STUDENT_REQUEST_DISK_GB = 8;
+const STUDENT_REQUEST_MAX_VCPU = 4;
+
+interface NewRequestFormProps {
+  userRole: Role;
+}
+
+export function NewRequestForm({ userRole }: NewRequestFormProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -44,9 +53,15 @@ export function NewRequestForm() {
     null,
   );
   const [cpus, setCpus] = useState(2);
-  const [memoryGB, setMemoryGB] = useState(4);
-  const [diskGB, setDiskGB] = useState(16);
+  const [memoryGB, setMemoryGB] = useState(STUDENT_REQUEST_MAX_MEMORY_GB);
+  const [diskGB, setDiskGB] = useState(STUDENT_REQUEST_DISK_GB);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const maxMemoryGB =
+    userRole === "STUDENT" ? STUDENT_REQUEST_MAX_MEMORY_GB : 16;
+  const maxDiskGB = userRole === "STUDENT" ? STUDENT_REQUEST_DISK_GB : 64;
+  const minDiskGB = userRole === "STUDENT" ? STUDENT_REQUEST_DISK_GB : 16;
+  const maxVcpu = userRole === "STUDENT" ? STUDENT_REQUEST_MAX_VCPU : 8;
 
   // Use autocomplete hook for course offerings
   const courseOfferingsAutocomplete = useAutocomplete({
@@ -77,9 +92,9 @@ export function NewRequestForm() {
           title,
           description,
           courseOfferingId: selectedCourseOfferingId,
-          cpus,
-          memoryMB: memoryGB * 1024,
-          diskGB,
+          cpus: Math.min(cpus, maxVcpu),
+          memoryMB: Math.min(memoryGB, maxMemoryGB) * 1024,
+          diskGB: Math.min(Math.max(diskGB, minDiskGB), maxDiskGB),
           pveTemplateId: selectedTemplateId,
         },
       });
@@ -224,15 +239,17 @@ export function NewRequestForm() {
                   </div>
                   <Slider
                     value={[cpus]}
-                    onValueChange={(values: number[]) => setCpus(values[0])}
+                    onValueChange={(values: number[]) =>
+                      setCpus(Math.min(values[0], maxVcpu))
+                    }
                     min={1}
-                    max={8}
+                    max={maxVcpu}
                     step={1}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>1 vCPU</span>
-                    <span>8 vCPUs</span>
+                    <span>{maxVcpu} vCPUs</span>
                   </div>
                 </Field>
 
@@ -246,15 +263,17 @@ export function NewRequestForm() {
                   </div>
                   <Slider
                     value={[memoryGB]}
-                    onValueChange={(values: number[]) => setMemoryGB(values[0])}
+                    onValueChange={(values: number[]) =>
+                      setMemoryGB(Math.min(values[0], maxMemoryGB))
+                    }
                     min={1}
-                    max={16}
+                    max={maxMemoryGB}
                     step={1}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>1 GB</span>
-                    <span>16 GB</span>
+                    <span>{maxMemoryGB} GB</span>
                   </div>
                 </Field>
 
@@ -268,15 +287,19 @@ export function NewRequestForm() {
                   </div>
                   <Slider
                     value={[diskGB]}
-                    onValueChange={(values: number[]) => setDiskGB(values[0])}
-                    min={16}
-                    max={64}
+                    onValueChange={(values: number[]) =>
+                      setDiskGB(
+                        Math.min(Math.max(values[0], minDiskGB), maxDiskGB),
+                      )
+                    }
+                    min={minDiskGB}
+                    max={maxDiskGB}
                     step={4}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>16 GB</span>
-                    <span>64 GB</span>
+                    <span>{minDiskGB} GB</span>
+                    <span>{maxDiskGB} GB</span>
                   </div>
                 </Field>
               </FieldGroup>
