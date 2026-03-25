@@ -66,49 +66,56 @@ export function MailingListClient() {
     }
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.POST("/api/academic/mailing-list", {
+    const result = await fetchClient
+      .POST("/api/academic/mailing-list", {
         body: { email: newEmail },
+      })
+      .catch((error) => {
+        console.error("Failed to add email:", error);
+        toast.error("An error occurred while adding the email");
+        return null;
       });
 
-      if (error) {
-        toast.error("Failed to add email");
-        return;
-      }
+    setIsSubmitting(false);
 
-      toast.success("Email added successfully");
-      setNewEmail("");
-      setIsAddDialogOpen(false);
-      refetch();
-    } catch (error) {
-      console.error("Failed to add email:", error);
-      toast.error("An error occurred while adding the email");
-    } finally {
-      setIsSubmitting(false);
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to add email");
+      return;
+    }
+
+    toast.success("Email added successfully");
+    setNewEmail("");
+    setIsAddDialogOpen(false);
+    refetch();
   }, [newEmail, refetch]);
 
   const handleDeleteEmail = useCallback(
     async (mailingId: number) => {
-      try {
-        const { error } = await fetchClient.DELETE(
-          "/api/academic/mailing-list/{mailingId}",
-          {
-            params: { path: { mailingId } },
-          },
-        );
+      const result = await fetchClient
+        .DELETE("/api/academic/mailing-list/{mailingId}", {
+          params: { path: { mailingId } },
+        })
+        .catch((error) => {
+          console.error("Failed to delete email:", error);
+          toast.error("An error occurred while deleting the email");
+          return null;
+        });
 
-        if (error) {
-          toast.error("Failed to delete email");
-          return;
-        }
-
-        toast.success("Email removed successfully");
-        refetch();
-      } catch (error) {
-        console.error("Failed to delete email:", error);
-        toast.error("An error occurred while deleting the email");
+      if (!result) {
+        return;
       }
+
+      if (result.error) {
+        toast.error("Failed to delete email");
+        return;
+      }
+
+      toast.success("Email removed successfully");
+      refetch();
     },
     [refetch],
   );

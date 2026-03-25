@@ -403,37 +403,42 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
       specs?: InstanceRequestSpecs,
     ) => {
       withActionLoading(requestId, true);
-      try {
-        const body = {
-          status: action,
-          ...(specs
-            ? {
-                cpus: specs.cpus,
-                memoryMB: specs.memoryMB,
-                diskGB: specs.diskGB,
-              }
-            : {}),
-        };
+      const body = {
+        status: action,
+        ...(specs
+          ? {
+              cpus: specs.cpus,
+              memoryMB: specs.memoryMB,
+              diskGB: specs.diskGB,
+            }
+          : {}),
+      };
 
-        await fetchClient.PATCH("/api/requests/{requestId}/status", {
+      const result = await fetchClient
+        .PATCH("/api/requests/{requestId}/status", {
           params: { path: { requestId } },
           body: body as never,
+        })
+        .catch((error) => {
+          console.error("Failed to update request:", error);
+          toast.error("Failed to update request");
+          return null;
         });
 
-        setSelectedInstanceIds((previous) => {
-          const next = new Set(previous);
-          next.delete(requestId);
-          return next;
-        });
+      withActionLoading(requestId, false);
 
-        toast.success(`Request #${requestId} ${action.toLowerCase()}`);
-        queryClient.invalidateQueries({ queryKey: ["get", "/api/requests/"] });
-      } catch (error) {
-        console.error("Failed to update request:", error);
-        toast.error("Failed to update request");
-      } finally {
-        withActionLoading(requestId, false);
+      if (!result || result.error) {
+        return;
       }
+
+      setSelectedInstanceIds((previous) => {
+        const next = new Set(previous);
+        next.delete(requestId);
+        return next;
+      });
+
+      toast.success(`Request #${requestId} ${action.toLowerCase()}`);
+      queryClient.invalidateQueries({ queryKey: ["get", "/api/requests/"] });
     },
     [queryClient, withActionLoading],
   );
@@ -442,33 +447,35 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
   const handleExtendedRequestAction = useCallback(
     async (extendedRequestId: number, action: "APPROVED" | "REJECTED") => {
       withActionLoading(extendedRequestId, true);
-      try {
-        await fetchClient.PATCH(
-          "/api/extended-requests/{extendedRequestId}/status",
-          {
-            params: { path: { extendedRequestId } },
-            body: { status: action },
-          },
-        );
-
-        setSelectedExtendedIds((previous) => {
-          const next = new Set(previous);
-          next.delete(extendedRequestId);
-          return next;
+      const result = await fetchClient
+        .PATCH("/api/extended-requests/{extendedRequestId}/status", {
+          params: { path: { extendedRequestId } },
+          body: { status: action },
+        })
+        .catch((error) => {
+          console.error("Failed to update extended request:", error);
+          toast.error("Failed to update extended request");
+          return null;
         });
 
-        toast.success(
-          `Extended request #${extendedRequestId} ${action.toLowerCase()}`,
-        );
-        queryClient.invalidateQueries({
-          queryKey: ["get", "/api/extended-requests/"],
-        });
-      } catch (error) {
-        console.error("Failed to update extended request:", error);
-        toast.error("Failed to update extended request");
-      } finally {
-        withActionLoading(extendedRequestId, false);
+      withActionLoading(extendedRequestId, false);
+
+      if (!result || result.error) {
+        return;
       }
+
+      setSelectedExtendedIds((previous) => {
+        const next = new Set(previous);
+        next.delete(extendedRequestId);
+        return next;
+      });
+
+      toast.success(
+        `Extended request #${extendedRequestId} ${action.toLowerCase()}`,
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/extended-requests/"],
+      });
     },
     [queryClient, withActionLoading],
   );
@@ -481,59 +488,57 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
       }
 
       setIsBulkActing(true);
-      try {
-        const results = await Promise.allSettled(
-          requestIds.map((requestId) => {
-            if (requestType === "instance") {
-              const instanceBody = {
-                status: action,
-                ...(action === "APPROVED" && isBulkSpecModifyEnabled
-                  ? bulkSpecs
-                  : {}),
-              };
+      const results = await Promise.allSettled(
+        requestIds.map((requestId) => {
+          if (requestType === "instance") {
+            const instanceBody = {
+              status: action,
+              ...(action === "APPROVED" && isBulkSpecModifyEnabled
+                ? bulkSpecs
+                : {}),
+            };
 
-              return fetchClient.PATCH("/api/requests/{requestId}/status", {
-                params: { path: { requestId } },
-                body: instanceBody as never,
-              });
-            }
+            return fetchClient.PATCH("/api/requests/{requestId}/status", {
+              params: { path: { requestId } },
+              body: instanceBody as never,
+            });
+          }
 
-            return fetchClient.PATCH(
-              "/api/extended-requests/{extendedRequestId}/status",
-              {
-                params: { path: { extendedRequestId: requestId } },
-                body: { status: action },
-              },
-            );
-          }),
-        );
+          return fetchClient.PATCH(
+            "/api/extended-requests/{extendedRequestId}/status",
+            {
+              params: { path: { extendedRequestId: requestId } },
+              body: { status: action },
+            },
+          );
+        }),
+      );
 
-        const successCount = results.filter(
-          (result) => result.status === "fulfilled",
-        ).length;
-        const failedCount = results.length - successCount;
+      setIsBulkActing(false);
 
-        if (successCount > 0) {
-          toast.success(`${successCount} requests ${action.toLowerCase()}`);
-        }
+      const successCount = results.filter(
+        (result) => result.status === "fulfilled" && !result.value.error,
+      ).length;
+      const failedCount = results.length - successCount;
 
-        if (failedCount > 0) {
-          toast.error(`${failedCount} requests failed to update`);
-        }
+      if (successCount > 0) {
+        toast.success(`${successCount} requests ${action.toLowerCase()}`);
+      }
 
-        if (requestType === "instance") {
-          setSelectedInstanceIds(new Set());
-          queryClient.invalidateQueries({
-            queryKey: ["get", "/api/requests/"],
-          });
-        } else {
-          setSelectedExtendedIds(new Set());
-          queryClient.invalidateQueries({
-            queryKey: ["get", "/api/extended-requests/"],
-          });
-        }
-      } finally {
-        setIsBulkActing(false);
+      if (failedCount > 0) {
+        toast.error(`${failedCount} requests failed to update`);
+      }
+
+      if (requestType === "instance") {
+        setSelectedInstanceIds(new Set());
+        queryClient.invalidateQueries({
+          queryKey: ["get", "/api/requests/"],
+        });
+      } else {
+        setSelectedExtendedIds(new Set());
+        queryClient.invalidateQueries({
+          queryKey: ["get", "/api/extended-requests/"],
+        });
       }
     },
     [bulkSpecs, isBulkSpecModifyEnabled, queryClient, requestType, selectedIds],

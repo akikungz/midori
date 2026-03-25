@@ -106,28 +106,28 @@ export function CoursesClient() {
       setIsLoadingCourseDetails(true);
       setIsEditDialogOpen(true);
 
-      try {
-        const { data, error } = await fetchClient.GET(
-          "/api/academic/courses/{courseId}",
-          { params: { path: { courseId: course.id } } },
-        );
+      const result = await fetchClient
+        .GET("/api/academic/courses/{courseId}", {
+          params: { path: { courseId: course.id } },
+        })
+        .catch(() => {
+          toast.error("An error occurred while loading course details");
+          return null;
+        });
 
-        if (error || !data) {
-          toast.error("Failed to load course details");
-          return;
-        }
+      setIsLoadingCourseDetails(false);
 
-        instructorSelection.selectAll(
-          (data.instructors || []).map((i: Instructor) => i.id),
-        );
-        semesterSelection.selectAll(
-          (data.semesters || []).map((s: Semester) => s.id),
-        );
-      } catch {
-        toast.error("An error occurred while loading course details");
-      } finally {
-        setIsLoadingCourseDetails(false);
+      if (!result || result.error || !result.data) {
+        toast.error("Failed to load course details");
+        return;
       }
+
+      instructorSelection.selectAll(
+        (result.data.instructors || []).map((i: Instructor) => i.id),
+      );
+      semesterSelection.selectAll(
+        (result.data.semesters || []).map((s: Semester) => s.id),
+      );
     },
     [courseForm, instructorSelection, semesterSelection],
   );
@@ -139,29 +139,34 @@ export function CoursesClient() {
     }
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.POST("/api/academic/courses", {
+    const result = await fetchClient
+      .POST("/api/academic/courses", {
         body: {
           code: courseForm.formCode,
           title: courseForm.formTitle,
           description: courseForm.formDescription || undefined,
         },
+      })
+      .catch(() => {
+        toast.error("An error occurred while creating the course");
+        return null;
       });
 
-      if (error) {
-        toast.error("Failed to create course");
-        return;
-      }
+    setIsSubmitting(false);
 
-      toast.success("Course created successfully");
-      setIsAddDialogOpen(false);
-      courseForm.reset();
-      refetch();
-    } catch {
-      toast.error("An error occurred while creating the course");
-    } finally {
-      setIsSubmitting(false);
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to create course");
+      return;
+    }
+
+    toast.success("Course created successfully");
+    setIsAddDialogOpen(false);
+    courseForm.reset();
+    refetch();
   }, [courseForm, refetch]);
 
   const handleEditCourse = useCallback(async () => {
@@ -171,62 +176,71 @@ export function CoursesClient() {
     }
 
     setIsSubmitting(true);
-    try {
-      // Update course details
-      const { error: detailsError } = await fetchClient.PATCH(
-        "/api/academic/courses/{courseId}",
-        {
-          params: { path: { courseId: selectedCourse.id } },
-          body: {
-            code: courseForm.formCode,
-            title: courseForm.formTitle,
-            description: courseForm.formDescription || undefined,
-          },
+    const detailsResult = await fetchClient
+      .PATCH("/api/academic/courses/{courseId}", {
+        params: { path: { courseId: selectedCourse.id } },
+        body: {
+          code: courseForm.formCode,
+          title: courseForm.formTitle,
+          description: courseForm.formDescription || undefined,
         },
-      );
+      })
+      .catch(() => null);
 
-      if (detailsError) {
-        toast.error("Failed to update course details");
-        return;
-      }
-
-      // Update instructors
-      const { error: instructorsError } = await fetchClient.PATCH(
-        "/api/academic/courses/{courseId}/instructors",
-        {
-          params: { path: { courseId: selectedCourse.id } },
-          body: { instructorIds: instructorSelection.selected },
-        },
-      );
-
-      if (instructorsError) {
-        toast.error("Failed to update instructors");
-        return;
-      }
-
-      // Update semesters
-      const { error: semestersError } = await fetchClient.PATCH(
-        "/api/academic/courses/{courseId}/semesters",
-        {
-          params: { path: { courseId: selectedCourse.id } },
-          body: { semesterIds: semesterSelection.selected },
-        },
-      );
-
-      if (semestersError) {
-        toast.error("Failed to update semesters");
-        return;
-      }
-
-      toast.success("Course updated successfully");
-      setIsEditDialogOpen(false);
-      courseForm.reset();
-      refetch();
-    } catch {
-      toast.error("An error occurred while updating the course");
-    } finally {
+    if (!detailsResult) {
       setIsSubmitting(false);
+      toast.error("An error occurred while updating the course");
+      return;
     }
+
+    if (detailsResult.error) {
+      setIsSubmitting(false);
+      toast.error("Failed to update course details");
+      return;
+    }
+
+    const instructorsResult = await fetchClient
+      .PATCH("/api/academic/courses/{courseId}/instructors", {
+        params: { path: { courseId: selectedCourse.id } },
+        body: { instructorIds: instructorSelection.selected },
+      })
+      .catch(() => null);
+
+    if (!instructorsResult) {
+      setIsSubmitting(false);
+      toast.error("An error occurred while updating the course");
+      return;
+    }
+
+    if (instructorsResult.error) {
+      setIsSubmitting(false);
+      toast.error("Failed to update instructors");
+      return;
+    }
+
+    const semestersResult = await fetchClient
+      .PATCH("/api/academic/courses/{courseId}/semesters", {
+        params: { path: { courseId: selectedCourse.id } },
+        body: { semesterIds: semesterSelection.selected },
+      })
+      .catch(() => null);
+
+    setIsSubmitting(false);
+
+    if (!semestersResult) {
+      toast.error("An error occurred while updating the course");
+      return;
+    }
+
+    if (semestersResult.error) {
+      toast.error("Failed to update semesters");
+      return;
+    }
+
+    toast.success("Course updated successfully");
+    setIsEditDialogOpen(false);
+    courseForm.reset();
+    refetch();
   }, [
     selectedCourse,
     courseForm,
@@ -237,27 +251,29 @@ export function CoursesClient() {
 
   const handleToggleActive = useCallback(
     async (course: Course) => {
-      try {
-        const { error } = await fetchClient.PATCH(
-          "/api/academic/courses/{courseId}",
-          {
-            params: { path: { courseId: course.id } },
-            body: { isActive: !course.isActive },
-          },
-        );
+      const result = await fetchClient
+        .PATCH("/api/academic/courses/{courseId}", {
+          params: { path: { courseId: course.id } },
+          body: { isActive: !course.isActive },
+        })
+        .catch(() => {
+          toast.error("An error occurred while updating the course");
+          return null;
+        });
 
-        if (error) {
-          toast.error("Failed to update course status");
-          return;
-        }
-
-        toast.success(
-          `Course ${course.isActive ? "deactivated" : "activated"} successfully`,
-        );
-        refetch();
-      } catch {
-        toast.error("An error occurred while updating the course");
+      if (!result) {
+        return;
       }
+
+      if (result.error) {
+        toast.error("Failed to update course status");
+        return;
+      }
+
+      toast.success(
+        `Course ${course.isActive ? "deactivated" : "activated"} successfully`,
+      );
+      refetch();
     },
     [refetch],
   );

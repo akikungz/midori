@@ -168,8 +168,8 @@ export function InstancesClient({
       courseOfferingId?: number;
     }) => {
       submitState.startSubmit();
-      try {
-        const { error } = await fetchClient.POST("/api/instances/", {
+      const result = await fetchClient
+        .POST("/api/instances/", {
           body: {
             pveTemplateId: formData.pveTemplateId,
             courseOfferingId: formData.courseOfferingId,
@@ -177,24 +177,29 @@ export function InstancesClient({
             memoryMB: formData.memoryGB * 1024,
             diskGB: formData.diskGB,
           },
-        });
-
-        if (error) {
+        })
+        .catch((error) => {
+          console.error("Failed to create instance:", error);
           toast.error("Failed to create instance");
-          return;
-        }
-
-        queryClient.invalidateQueries({
-          queryKey: listQueryKey,
+          return null;
         });
-        setIsCreateDialogOpen(false);
-        toast.success("Instance created successfully");
-      } catch (error) {
-        console.error("Failed to create instance:", error);
-        toast.error("Failed to create instance");
-      } finally {
-        submitState.endSubmit();
+
+      submitState.endSubmit();
+
+      if (!result) {
+        return;
       }
+
+      if (result.error) {
+        toast.error("Failed to create instance");
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: listQueryKey,
+      });
+      setIsCreateDialogOpen(false);
+      toast.success("Instance created successfully");
     },
     [queryClient, submitState, listQueryKey],
   );

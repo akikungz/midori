@@ -106,7 +106,7 @@ export function InstructorsClient() {
       courseSelection.clear();
       setEditDialogOpen(true);
     },
-    [courseSelection.clear],
+    [courseSelection],
   );
 
   const handleCloseEditDialog = useCallback(
@@ -117,15 +117,15 @@ export function InstructorsClient() {
       }
       setEditDialogOpen(open);
     },
-    [courseSelection.clear],
+    [courseSelection],
   );
 
   const handleEditSubmit = useCallback(async () => {
     if (!selectedInstructor) return;
 
     setIsSubmitting(true);
-    try {
-      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
+    const result = await fetchClient
+      .PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: selectedInstructor.id },
         },
@@ -133,29 +133,28 @@ export function InstructorsClient() {
           role: editRole,
           courseIds: courseSelection.selected,
         },
+      })
+      .catch((error) => {
+        console.error("Failed to update instructor:", error);
+        toast.error("Failed to update instructor");
+        return null;
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["get", "/api/academic/instructors"],
-      });
+    setIsSubmitting(false);
 
-      toast.success("Instructor updated successfully");
-      setEditDialogOpen(false);
-      setSelectedInstructor(null);
-      courseSelection.clear();
-    } catch (error) {
-      console.error("Failed to update instructor:", error);
-      toast.error("Failed to update instructor");
-    } finally {
-      setIsSubmitting(false);
+    if (!result || result.error) {
+      return;
     }
-  }, [
-    selectedInstructor,
-    editRole,
-    courseSelection.selected,
-    courseSelection.clear,
-    queryClient,
-  ]);
+
+    queryClient.invalidateQueries({
+      queryKey: ["get", "/api/academic/instructors"],
+    });
+
+    toast.success("Instructor updated successfully");
+    setEditDialogOpen(false);
+    setSelectedInstructor(null);
+    courseSelection.clear();
+  }, [selectedInstructor, editRole, courseSelection, queryClient]);
 
   const handleOpenPromoteDialog = useCallback((instructor: Instructor) => {
     setInstructorToPromote(instructor);
@@ -166,29 +165,34 @@ export function InstructorsClient() {
     if (!instructorToPromote) return;
 
     setIsPromoting(true);
-    try {
-      await fetchClient.PATCH("/api/academic/instructors/{instructorId}", {
+    const result = await fetchClient
+      .PATCH("/api/academic/instructors/{instructorId}", {
         params: {
           path: { instructorId: instructorToPromote.id },
         },
         body: {
           role: "ADMIN",
         },
+      })
+      .catch((error) => {
+        console.error("Failed to promote instructor:", error);
+        toast.error("Failed to promote instructor");
+        return null;
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["get", "/api/academic/instructors"],
-      });
+    setIsPromoting(false);
 
-      toast.success(`${instructorToPromote.name} has been promoted to Admin`);
-      setPromoteDialogOpen(false);
-      setInstructorToPromote(null);
-    } catch (error) {
-      console.error("Failed to promote instructor:", error);
-      toast.error("Failed to promote instructor");
-    } finally {
-      setIsPromoting(false);
+    if (!result || result.error) {
+      return;
     }
+
+    queryClient.invalidateQueries({
+      queryKey: ["get", "/api/academic/instructors"],
+    });
+
+    toast.success(`${instructorToPromote.name} has been promoted to Admin`);
+    setPromoteDialogOpen(false);
+    setInstructorToPromote(null);
   }, [instructorToPromote, queryClient]);
 
   // ============================================================================

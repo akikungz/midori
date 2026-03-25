@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+import Link from "next/link";
 import { SidebarTrigger } from "@midori/components/ui/sidebar";
 import { Separator } from "@midori/components/ui/separator";
 import {
@@ -19,25 +20,28 @@ import {
 import { Badge } from "@midori/components/ui/badge";
 import { LogOut, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { useSession, useClearSession } from "@midori/hooks/useSession";
 import { authClient } from "@midori/lib/auth-client";
 import { api } from "@midori/lib/api";
 
+const emptySubscribe = () => () => {};
+
 export function DashboardHeader() {
   const { user } = useSession();
   const clearSession = useClearSession();
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
   const { data: currentSemester, isPending } = api.useQuery(
     "get",
     "/api/academic/semesters/current",
   );
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const getInitials = (name: string) => {
     return name
@@ -53,7 +57,7 @@ export function DashboardHeader() {
       fetchOptions: {
         onSuccess: () => {
           clearSession();
-          redirect("/login");
+          router.replace("/login");
         },
       },
     });
@@ -115,10 +119,10 @@ export function DashboardHeader() {
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <a href="/dashboard/settings">
+            <Link href="/dashboard/settings">
               <User className="mr-2 size-4" />
               Settings
-            </a>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

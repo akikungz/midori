@@ -86,8 +86,8 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
       return;
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.POST("/api/requests/", {
+    const result = await fetchClient
+      .POST("/api/requests/", {
         body: {
           title,
           description,
@@ -97,21 +97,26 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
           diskGB: Math.min(Math.max(diskGB, minDiskGB), maxDiskGB),
           pveTemplateId: selectedTemplateId,
         },
+      })
+      .catch((error) => {
+        console.error("Failed to create request:", error);
+        toast.error("Failed to create request");
+        return null;
       });
 
-      if (error) {
-        toast.error("Failed to create request");
-        return;
-      }
+    setIsSubmitting(false);
 
-      toast.success("Request created successfully");
-      router.push("/dashboard/requests");
-    } catch (error) {
-      console.error("Failed to create request:", error);
-      toast.error("Failed to create request");
-    } finally {
-      setIsSubmitting(false);
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to create request");
+      return;
+    }
+
+    toast.success("Request created successfully");
+    router.push("/dashboard/requests");
   };
 
   // Show empty state only when autocomplete returns empty results and not loading

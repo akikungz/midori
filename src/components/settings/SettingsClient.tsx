@@ -93,55 +93,65 @@ export function SettingsClient({ user }: SettingsClientProps) {
     }
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.POST("/api/user/ssh-keys", {
+    const result = await fetchClient
+      .POST("/api/user/ssh-keys", {
         body: {
           name: sshKeyName,
           publicKey: sshPublicKey,
         },
-      });
-
-      if (error) {
+      })
+      .catch((error) => {
+        console.error("Failed to add SSH key:", error);
         toast.error("Failed to add SSH key");
-        return;
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: ["get", "/api/user/ssh-keys"],
+        return null;
       });
-      setSshKeyName("");
-      setSshPublicKey("");
-      setIsAddDialogOpen(false);
-      toast.success("SSH key added successfully");
-    } catch (error) {
-      console.error("Failed to add SSH key:", error);
-      toast.error("Failed to add SSH key");
-    } finally {
-      setIsSubmitting(false);
+
+    setIsSubmitting(false);
+
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to add SSH key");
+      return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["get", "/api/user/ssh-keys"],
+    });
+    setSshKeyName("");
+    setSshPublicKey("");
+    setIsAddDialogOpen(false);
+    toast.success("SSH key added successfully");
   };
 
   const handleDeleteSshKey = async (keyId: number) => {
-    try {
-      const { error } = await fetchClient.DELETE("/api/user/ssh-keys", {
+    const result = await fetchClient
+      .DELETE("/api/user/ssh-keys", {
         body: {
           keyIds: [keyId],
         },
-      });
-
-      if (error) {
+      })
+      .catch((error) => {
+        console.error("Failed to delete SSH key:", error);
         toast.error("Failed to delete SSH key");
-        return;
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: ["get", "/api/user/ssh-keys"],
+        return null;
       });
-      toast.success("SSH key deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete SSH key:", error);
-      toast.error("Failed to delete SSH key");
+
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to delete SSH key");
+      return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["get", "/api/user/ssh-keys"],
+    });
+    toast.success("SSH key deleted successfully");
   };
 
   return (

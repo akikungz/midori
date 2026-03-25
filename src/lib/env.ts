@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const envSchema = z.object({
+const envSchema = z.object({
   APP_ENV: z.enum(["development", "production", "test"]),
   SERVER_API_URL: z.url().default("http://momoi-development:3000"),
   AUTH_API_URL: z.url().default("http://arisu:3001"),
@@ -23,9 +23,9 @@ export const envSchema = z.object({
     .default("info"),
 });
 
-export type Env = z.infer<typeof envSchema>;
+type Env = z.infer<typeof envSchema>;
 
-export const getEnv = (): Env => {
+const getEnv = (): Env => {
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     console.error(

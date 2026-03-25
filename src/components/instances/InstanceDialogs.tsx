@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import {
   Clock,
   Plus,
@@ -121,22 +121,20 @@ export function CreateInstanceDialog({
     limit: 20,
     enabled: open, // Only fetch when dialog is open
   });
+  const resetTemplateAutocomplete = templatesAutocomplete.reset;
 
-  // Store reset function in a ref to avoid dependency issues
-  const resetAutocompleteRef = useRef(templatesAutocomplete.reset);
-  resetAutocompleteRef.current = templatesAutocomplete.reset;
-
-  // Reset form when dialog closes
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
       setSelectedTemplateId(null);
       setSelectedCourseOfferingId(null);
       setCpus("2");
       setMemoryGB(String(maxMemoryGB));
       setDiskGB(String(maxDiskGB));
-      resetAutocompleteRef.current();
+      resetTemplateAutocomplete();
     }
-  }, [maxDiskGB, maxMemoryGB, open]);
+
+    onOpenChange(nextOpen);
+  };
 
   const handleSubmit = async () => {
     if (!selectedTemplateId) return;
@@ -150,7 +148,7 @@ export function CreateInstanceDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Instance</DialogTitle>
@@ -279,57 +277,34 @@ export function ExtensionRequestDialog({
     null,
   );
 
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = async (nextOpen: boolean) => {
+    if (!nextOpen) {
       setExtensionReason("");
       setNextSemester(null);
       setNextSemesterError(null);
       setIsLoadingNextSemester(false);
+      onOpenChange(nextOpen);
       return;
     }
 
-    let isActive = true;
+    onOpenChange(nextOpen);
+    setIsLoadingNextSemester(true);
+    setNextSemesterError(null);
 
-    const loadNextSemester = async () => {
-      setIsLoadingNextSemester(true);
-      setNextSemesterError(null);
+    const result = await fetchClient
+      .GET("/api/academic/semesters/next")
+      .catch(() => null);
 
-      try {
-        const { data, error } = await fetchClient.GET(
-          "/api/academic/semesters/next",
-        );
+    setIsLoadingNextSemester(false);
 
-        if (!isActive) {
-          return;
-        }
+    if (!result || result.error) {
+      setNextSemester(null);
+      setNextSemesterError("Unable to check the next semester right now.");
+      return;
+    }
 
-        if (error) {
-          setNextSemester(null);
-          setNextSemesterError("Unable to check the next semester right now.");
-          return;
-        }
-
-        setNextSemester((data ?? null) as NextSemester);
-      } catch {
-        if (!isActive) {
-          return;
-        }
-
-        setNextSemester(null);
-        setNextSemesterError("Unable to check the next semester right now.");
-      } finally {
-        if (isActive) {
-          setIsLoadingNextSemester(false);
-        }
-      }
-    };
-
-    loadNextSemester();
-
-    return () => {
-      isActive = false;
-    };
-  }, [open]);
+    setNextSemester((result.data ?? null) as NextSemester);
+  };
 
   const handleSubmit = async () => {
     if (!extensionReason || !nextSemester || isLoadingNextSemester) return;
@@ -344,7 +319,7 @@ export function ExtensionRequestDialog({
     !!nextSemesterError;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <Clock className="mr-2 size-4" />

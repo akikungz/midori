@@ -89,6 +89,7 @@ function SingleSelectAutocomplete({
 }: SingleAutocompleteProps) {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const listboxId = React.useId();
 
   const selectedOption = React.useMemo(
     () => options.find((opt) => opt.id === value),
@@ -108,6 +109,7 @@ function SingleSelectAutocomplete({
         <Button
           variant="outline"
           role="combobox"
+          aria-controls={listboxId}
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
           disabled={disabled}
@@ -133,7 +135,11 @@ function SingleSelectAutocomplete({
           />
           {isLoading && <Loader2 className="h-4 w-4 animate-spin opacity-50" />}
         </div>
-        <div className="max-h-60 overflow-y-auto p-1">
+        <div
+          id={listboxId}
+          role="listbox"
+          className="max-h-60 overflow-y-auto p-1"
+        >
           {!isLoading && options.length === 0 ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
               {emptyMessage}
@@ -188,6 +194,7 @@ function MultiSelectAutocomplete({
 }: MultiAutocompleteProps) {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const listboxId = React.useId();
 
   const selectedOptions = React.useMemo(
     () => options.filter((opt) => value.includes(opt.id)),
@@ -219,6 +226,7 @@ function MultiSelectAutocomplete({
         <Button
           variant="outline"
           role="combobox"
+          aria-controls={listboxId}
           aria-expanded={open}
           className={cn(
             "w-full justify-between min-h-10",
@@ -265,7 +273,11 @@ function MultiSelectAutocomplete({
           />
           {isLoading && <Loader2 className="h-4 w-4 animate-spin opacity-50" />}
         </div>
-        <div className="max-h-60 overflow-y-auto p-1">
+        <div
+          id={listboxId}
+          role="listbox"
+          className="max-h-60 overflow-y-auto p-1"
+        >
           {!isLoading && options.length === 0 ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
               {emptyMessage}

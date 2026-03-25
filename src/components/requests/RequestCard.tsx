@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   FileText,
@@ -98,23 +98,25 @@ export function InstanceRequestCard({
   const isPendingReview = canReview && request.status === "PENDING";
 
   const [isEditingSpecs, setIsEditingSpecs] = useState(false);
-  const [draftSpecs, setDraftSpecs] = useState<InstanceRequestSpecs>(
-    request.specs,
+  const [draftSpecs, setDraftSpecs] = useState<InstanceRequestSpecs | null>(
+    null,
   );
-
-  useEffect(() => {
-    setDraftSpecs(request.specs);
-    setIsEditingSpecs(false);
-  }, [request.specs]);
+  const activeSpecs = isEditingSpecs
+    ? (draftSpecs ?? request.specs)
+    : request.specs;
 
   const handleSpecChange = (
     field: keyof InstanceRequestSpecs,
     value: number,
   ) => {
-    setDraftSpecs((previous) => ({
-      ...previous,
-      [field]: Number.isFinite(value) ? Math.max(1, value) : previous[field],
-    }));
+    setDraftSpecs((previous) => {
+      const nextSpecs = previous ?? request.specs;
+
+      return {
+        ...nextSpecs,
+        [field]: Number.isFinite(value) ? Math.max(1, value) : nextSpecs[field],
+      };
+    });
   };
 
   return (
@@ -155,7 +157,16 @@ export function InstanceRequestCard({
                 variant="outline"
                 size="sm"
                 disabled={isActionLoading}
-                onClick={() => setIsEditingSpecs((value) => !value)}
+                onClick={() => {
+                  if (isEditingSpecs) {
+                    setIsEditingSpecs(false);
+                    setDraftSpecs(null);
+                    return;
+                  }
+
+                  setDraftSpecs(request.specs);
+                  setIsEditingSpecs(true);
+                }}
               >
                 <Pencil className="mr-1.5 size-3.5" />
                 {isEditingSpecs ? "Close edit" : "Edit specs"}
@@ -165,7 +176,7 @@ export function InstanceRequestCard({
                 variant="default"
                 size="sm"
                 disabled={isActionLoading}
-                onClick={() => onApprove(draftSpecs)}
+                onClick={() => onApprove(activeSpecs)}
               >
                 <CheckCircle className="mr-1.5 size-3.5" />
                 {isActionLoading ? "..." : "Approve"}
@@ -187,14 +198,14 @@ export function InstanceRequestCard({
       <CardContent>
         {isEditingSpecs && isPendingReview ? (
           <EditableRequestSpecs
-            specs={draftSpecs}
+            specs={activeSpecs}
             onChange={handleSpecChange}
           />
         ) : null}
         <RequestSpecs
-          cpus={draftSpecs.cpus}
-          memoryMB={draftSpecs.memoryMB}
-          diskGB={draftSpecs.diskGB}
+          cpus={activeSpecs.cpus}
+          memoryMB={activeSpecs.memoryMB}
+          diskGB={activeSpecs.diskGB}
           templateName={request.templateName}
         />
         {request.description && (

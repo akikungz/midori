@@ -111,25 +111,25 @@ export function SemestersClient() {
       setIsLoadingSemesterDetails(true);
       setIsEditDialogOpen(true);
 
-      try {
-        const { data, error } = await fetchClient.GET(
-          "/api/academic/semesters/{semesterId}",
-          { params: { path: { semesterId: semester.id } } },
-        );
+      const result = await fetchClient
+        .GET("/api/academic/semesters/{semesterId}", {
+          params: { path: { semesterId: semester.id } },
+        })
+        .catch(() => {
+          toast.error("An error occurred while loading semester details");
+          return null;
+        });
 
-        if (error || !data) {
-          toast.error("Failed to load semester details");
-          return;
-        }
+      setIsLoadingSemesterDetails(false);
 
-        courseSelection.selectAll(
-          (data.courses || []).map((c: Course) => c.id),
-        );
-      } catch {
-        toast.error("An error occurred while loading semester details");
-      } finally {
-        setIsLoadingSemesterDetails(false);
+      if (!result || result.error || !result.data) {
+        toast.error("Failed to load semester details");
+        return;
       }
+
+      courseSelection.selectAll(
+        (result.data.courses || []).map((c: Course) => c.id),
+      );
     },
     [semesterForm, courseSelection],
   );
@@ -146,29 +146,34 @@ export function SemestersClient() {
     }
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.POST("/api/academic/semesters", {
+    const result = await fetchClient
+      .POST("/api/academic/semesters", {
         body: {
           name: semesterForm.formName,
           startDate: semesterForm.formStartDate,
           endDate: semesterForm.formEndDate,
         },
+      })
+      .catch(() => {
+        toast.error("An error occurred while creating the semester");
+        return null;
       });
 
-      if (error) {
-        toast.error("Failed to create semester");
-        return;
-      }
+    setIsSubmitting(false);
 
-      toast.success("Semester created successfully");
-      setIsAddDialogOpen(false);
-      semesterForm.reset();
-      refetch();
-    } catch {
-      toast.error("An error occurred while creating the semester");
-    } finally {
-      setIsSubmitting(false);
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to create semester");
+      return;
+    }
+
+    toast.success("Semester created successfully");
+    setIsAddDialogOpen(false);
+    semesterForm.reset();
+    refetch();
   }, [semesterForm, refetch]);
 
   const handleEditSemester = useCallback(async () => {
@@ -178,99 +183,109 @@ export function SemestersClient() {
     }
 
     setIsSubmitting(true);
-    try {
-      // Update semester details
-      const { error: detailsError } = await fetchClient.PATCH(
-        "/api/academic/semesters/{semesterId}",
-        {
-          params: { path: { semesterId: selectedSemester.id } },
-          body: {
-            name: semesterForm.formName,
-            startDate: semesterForm.formStartDate,
-            endDate: semesterForm.formEndDate,
-          },
+    const detailsResult = await fetchClient
+      .PATCH("/api/academic/semesters/{semesterId}", {
+        params: { path: { semesterId: selectedSemester.id } },
+        body: {
+          name: semesterForm.formName,
+          startDate: semesterForm.formStartDate,
+          endDate: semesterForm.formEndDate,
         },
-      );
+      })
+      .catch(() => null);
 
-      if (detailsError) {
-        toast.error("Failed to update semester details");
-        return;
-      }
-
-      // Update courses
-      const { error: coursesError } = await fetchClient.PATCH(
-        "/api/academic/semesters/{semesterId}/courses",
-        {
-          params: { path: { semesterId: selectedSemester.id } },
-          body: { courseIds: courseSelection.selected },
-        },
-      );
-
-      if (coursesError) {
-        toast.error("Failed to update courses");
-        return;
-      }
-
-      toast.success("Semester updated successfully");
-      setIsEditDialogOpen(false);
-      semesterForm.reset();
-      refetch();
-    } catch {
-      toast.error("An error occurred while updating the semester");
-    } finally {
+    if (!detailsResult) {
       setIsSubmitting(false);
+      toast.error("An error occurred while updating the semester");
+      return;
     }
+
+    if (detailsResult.error) {
+      setIsSubmitting(false);
+      toast.error("Failed to update semester details");
+      return;
+    }
+
+    const coursesResult = await fetchClient
+      .PATCH("/api/academic/semesters/{semesterId}/courses", {
+        params: { path: { semesterId: selectedSemester.id } },
+        body: { courseIds: courseSelection.selected },
+      })
+      .catch(() => null);
+
+    setIsSubmitting(false);
+
+    if (!coursesResult) {
+      toast.error("An error occurred while updating the semester");
+      return;
+    }
+
+    if (coursesResult.error) {
+      toast.error("Failed to update courses");
+      return;
+    }
+
+    toast.success("Semester updated successfully");
+    setIsEditDialogOpen(false);
+    semesterForm.reset();
+    refetch();
   }, [selectedSemester, semesterForm, courseSelection, refetch]);
 
   const handleDeleteSemester = useCallback(async () => {
     if (!selectedSemester) return;
 
     setIsSubmitting(true);
-    try {
-      const { error } = await fetchClient.DELETE(
-        "/api/academic/semesters/{semesterId}",
-        { params: { path: { semesterId: selectedSemester.id } } },
-      );
+    const result = await fetchClient
+      .DELETE("/api/academic/semesters/{semesterId}", {
+        params: { path: { semesterId: selectedSemester.id } },
+      })
+      .catch(() => {
+        toast.error("An error occurred while deleting the semester");
+        return null;
+      });
 
-      if (error) {
-        toast.error("Failed to delete semester");
-        return;
-      }
+    setIsSubmitting(false);
 
-      toast.success("Semester deleted successfully");
-      setIsDeleteDialogOpen(false);
-      setSelectedSemester(null);
-      refetch();
-    } catch {
-      toast.error("An error occurred while deleting the semester");
-    } finally {
-      setIsSubmitting(false);
+    if (!result) {
+      return;
     }
+
+    if (result.error) {
+      toast.error("Failed to delete semester");
+      return;
+    }
+
+    toast.success("Semester deleted successfully");
+    setIsDeleteDialogOpen(false);
+    setSelectedSemester(null);
+    refetch();
   }, [selectedSemester, refetch]);
 
   const handleSetAsCurrent = useCallback(
     async (semester: Semester) => {
       if (semester.isCurrent) return;
 
-      try {
-        const { error } = await fetchClient.PATCH(
-          "/api/academic/semesters/{semesterId}",
-          {
-            params: { path: { semesterId: semester.id } },
-            body: { isCurrent: true },
-          },
-        );
+      const result = await fetchClient
+        .PATCH("/api/academic/semesters/{semesterId}", {
+          params: { path: { semesterId: semester.id } },
+          body: { isCurrent: true },
+        })
+        .catch(() => {
+          toast.error("An error occurred while updating the semester");
+          return null;
+        });
 
-        if (error) {
-          toast.error("Failed to set semester as current");
-          return;
-        }
-
-        toast.success(`${semester.name} is now the current semester`);
-        refetch();
-      } catch {
-        toast.error("An error occurred while updating the semester");
+      if (!result) {
+        return;
       }
+
+      if (result.error) {
+        toast.error("Failed to set semester as current");
+        return;
+      }
+
+      toast.success(`${semester.name} is now the current semester`);
+      refetch();
     },
     [refetch],
   );

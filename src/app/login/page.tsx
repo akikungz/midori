@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2Icon, Server } from "lucide-react";
 
@@ -56,22 +57,27 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
-
-    try {
-      const result = await authClient.signIn.social({
+    const result = await authClient.signIn
+      .social({
         provider: "google",
         callbackURL: "/dashboard",
+      })
+      .catch((err) => {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to sign in with Google. Please try again.",
+        );
+        setIsGoogleLoading(false);
+        return null;
       });
 
-      if (result.error) {
-        throw new Error(result.error.message || "Failed to authenticate");
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to sign in with Google. Please try again.",
-      );
+    if (!result) {
+      return;
+    }
+
+    if (result.error) {
+      setError(result.error.message || "Failed to authenticate");
       setIsGoogleLoading(false);
     }
   };
@@ -80,20 +86,24 @@ export default function LoginPage() {
     e.preventDefault();
     setIsEmailLoading(true);
     setError(null);
-    try {
-      const result = await authClient.signIn.email({
+    const result = await authClient.signIn
+      .email({
         email,
         password,
         callbackURL: "/dashboard",
-      });
-      if (result.error) {
-        setError(
-          result.error.message || "Failed to sign in. Please try again.",
-        );
+      })
+      .catch(() => {
+        setError("Failed to sign in. Please try again.");
         setIsEmailLoading(false);
-      }
-    } catch {
-      setError("Failed to sign in. Please try again.");
+        return null;
+      });
+
+    if (!result) {
+      return;
+    }
+
+    if (result.error) {
+      setError(result.error.message || "Failed to sign in. Please try again.");
       setIsEmailLoading(false);
     }
   };
@@ -221,19 +231,19 @@ export default function LoginPage() {
         {/* Footer */}
         <p className="text-center text-xs text-muted-foreground">
           By signing in, you agree to our{" "}
-          <a
+          <Link
             href="/terms"
-            className="underline underline-offset-4 hover:text-foreground transition-colors"
+            className="underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Terms of Service
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a
+          <Link
             href="/privacy"
-            className="underline underline-offset-4 hover:text-foreground transition-colors"
+            className="underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Privacy Policy
-          </a>
+          </Link>
         </p>
       </div>
     </main>
