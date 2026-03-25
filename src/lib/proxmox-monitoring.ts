@@ -1,4 +1,4 @@
-import values from "../../values.json";
+import values from "@midori/assets/prometheus_values.json";
 
 export interface ProxmoxMetricInventoryGroup {
   id: string;
