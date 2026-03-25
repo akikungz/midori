@@ -268,6 +268,66 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/monitoring/query": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Run an instant Prometheus query
+     * @description Executes a PromQL instant query against the configured Prometheus API.
+     */
+    get: operations["getApiMonitoringQuery"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/monitoring/query-range": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Run a range Prometheus query
+     * @description Executes a PromQL range query against the configured Prometheus API.
+     */
+    get: operations["getApiMonitoringQuery-range"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/monitoring/proxmox/overview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get a Proxmox monitoring overview
+     * @description Returns a curated Proxmox cluster summary built from the otelcol_proxmox_node_* and otelcol_proxmox_vm_* metrics available in Prometheus.
+     */
+    get: operations["getApiMonitoringProxmoxOverview"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/academic/semesters/current": {
     parameters: {
       query?: never;
@@ -3662,6 +3722,75 @@ export interface components {
       /** @description Number of items per page */
       pageSize: number;
     };
+    MonitoringInstantQueryRequestQuery: {
+      /** @description PromQL expression to execute as an instant query */
+      query: string;
+      /** @description Evaluation timestamp in RFC3339 or Unix timestamp format */
+      time?: string;
+      /** @description Prometheus query timeout duration such as 30s or 1m */
+      timeout?: string;
+    };
+    MonitoringRangeQueryRequestQuery: {
+      /** @description PromQL expression to execute as a range query */
+      query: string;
+      /** @description Range start in RFC3339 or Unix timestamp format */
+      start: string;
+      /** @description Range end in RFC3339 or Unix timestamp format */
+      end: string;
+      /** @description Query resolution step such as 30s, 1m, or 300 */
+      step?: string;
+      /** @description Prometheus query timeout duration such as 30s or 1m */
+      timeout?: string;
+    };
+    MonitoringProxmoxOverviewRequestQuery: {
+      /** @description Evaluation timestamp in RFC3339 or Unix timestamp format */
+      time?: string;
+      /** @description Prometheus query timeout duration such as 30s or 1m */
+      timeout?: string;
+    };
+    MonitoringQueryResponse: {
+      /** @constant */
+      status: "success";
+      data: {
+        /** @enum {string} */
+        resultType: "matrix" | "vector" | "scalar" | "string";
+        /** @description Raw Prometheus query result payload */
+        result: unknown;
+      };
+      /** @description Prometheus warnings for the executed query */
+      warnings?: string[];
+      /** @description Prometheus informational messages for the executed query */
+      infos?: string[];
+    };
+    MonitoringProxmoxOverviewResponse: {
+      /** @description Timestamp used for the Prometheus instant queries */
+      generatedAt: string;
+      summary: {
+        nodeCount: number | null;
+        guestCount: number | null;
+        vmCount: number | null;
+        lxcCount: number | null;
+        nodeMemoryUsedBytes: number | null;
+        nodeMemoryAvailableBytes: number | null;
+        nodeMemoryTotalBytes: number | null;
+        guestMemoryUsedBytes: number | null;
+        guestMemoryCapacityBytes: number | null;
+        nodeStorageUsedBytes: number | null;
+        nodeStorageAvailableBytes: number | null;
+        nodeStorageTotalBytes: number | null;
+        averageNodeCpuPercent: number | null;
+        averageGuestCpuPercent: number | null;
+      };
+      countsByType: {
+        [key: string]: number;
+      };
+      queries: {
+        [key: string]: string;
+      };
+      details: {
+        [key: string]: unknown;
+      };
+    };
     /** @description Represents an entry in the instructor mailing list */
     InstructorMailingListValue: {
       /** @description Unique identifier for the mailing list value */
@@ -5153,6 +5282,289 @@ export interface operations {
       };
       /** @description Response for status 403 */
       403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiMonitoringQuery: {
+    parameters: {
+      query: {
+        query: string;
+        time?: string;
+        timeout?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MonitoringQueryResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 502 */
+      502: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 503 */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 504 */
+      504: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  "getApiMonitoringQuery-range": {
+    parameters: {
+      query: {
+        query: string;
+        start: string;
+        end: string;
+        step?: string;
+        timeout?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MonitoringQueryResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 502 */
+      502: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 503 */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 504 */
+      504: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiMonitoringProxmoxOverview: {
+    parameters: {
+      query?: {
+        time?: string;
+        timeout?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MonitoringProxmoxOverviewResponse"];
+        };
+      };
+      /** @description Response for status 400 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 502 */
+      502: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 503 */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 504 */
+      504: {
         headers: {
           [name: string]: unknown;
         };

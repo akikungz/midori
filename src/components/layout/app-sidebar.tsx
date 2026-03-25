@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Activity,
   FolderOpen,
   GraduationCap,
   Home,
@@ -64,6 +65,11 @@ const mainNavItems = [
  * Admin-only navigation items
  */
 const adminNavItems = [
+  {
+    title: "Monitoring",
+    url: "/dashboard/admin/monitoring",
+    icon: Activity,
+  },
   {
     title: "Courses",
     url: "/dashboard/admin/courses",
