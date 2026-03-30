@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Activity,
   Cpu,
+  RefreshCw,
   Server,
   FileText,
   FolderOpen,
@@ -13,8 +15,10 @@ import {
   Plus,
   Clock,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 import type { components } from "@midori/types/api";
+import { fetchClient } from "@midori/lib/api";
 import { formatDateTime, formatFileSize } from "@midori/lib/format";
 import type { Role } from "@midori/lib/roles";
 import {
@@ -31,6 +35,13 @@ import {
 } from "@midori/components/ui/card";
 import { Button } from "@midori/components/ui/button";
 import { Badge } from "@midori/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@midori/components/ui/select";
 
 interface DashboardCardsProps {
   user: {
@@ -52,6 +63,76 @@ interface DashboardCardsProps {
     extendedRequestCount: number;
   };
 }
+
+interface DashboardLiveSnapshot {
+  overview?: components["schemas"]["MonitoringProxmoxOverviewResponse"];
+  dashboardSummary?: DashboardCardsProps["dashboardSummary"];
+  series: MetricSeriesConfig[];
+}
+
+interface PrometheusMatrixSample {
+  metric?: Record<string, string>;
+  values?: [number | string, string][];
+}
+
+interface MetricSeriesPoint {
+  timestamp: number;
+  value: number;
+}
+
+interface MetricSeriesConfig {
+  id: string;
+  title: string;
+  description: string;
+  unit: "percent";
+  points: MetricSeriesPoint[];
+}
+
+const AUTO_REFRESH_OPTIONS = [
+  { value: "0", label: "Manual" },
+  { value: "5000", label: "5s" },
+  { value: "10000", label: "10s" },
+  { value: "15000", label: "15s" },
+  { value: "30000", label: "30s" },
+  { value: "60000", label: "1m" },
+] as const;
+
+const RANGE_WINDOW_MS = 60 * 60 * 1000;
+const RANGE_STEP = "60s";
+
+const METRIC_SERIES_DEFINITIONS = [
+  {
+    id: "node-cpu",
+    title: "Host CPU Trend",
+    description: "Average CPU load across Proxmox nodes over the last hour.",
+    unit: "percent" as const,
+    query: "avg(otelcol_proxmox_node_cpustat_cpu_percent)",
+  },
+  {
+    id: "guest-cpu",
+    title: "Guest CPU Trend",
+    description:
+      "Average CPU load across VM and LXC guests over the last hour.",
+    unit: "percent" as const,
+    query: "avg(otelcol_proxmox_vm_cpu_percent)",
+  },
+  {
+    id: "node-memory",
+    title: "Host Memory Trend",
+    description: "Percent of node memory currently in use.",
+    unit: "percent" as const,
+    query:
+      "100 * sum(otelcol_proxmox_node_memory_memused_bytes) / clamp_min(sum(otelcol_proxmox_node_memory_memtotal_bytes), 1)",
+  },
+  {
+    id: "storage",
+    title: "Storage Trend",
+    description: "Percent of Proxmox storage capacity currently consumed.",
+    unit: "percent" as const,
+    query:
+      "100 * sum(otelcol_proxmox_storage_used_bytes) / clamp_min(sum(otelcol_proxmox_storage_total_bytes), 1)",
+  },
+] as const;
 
 function formatMetricNumber(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) {
@@ -77,6 +158,269 @@ function formatMetricBytes(value: number | null | undefined) {
   return formatFileSize(value);
 }
 
+function formatMetricLabel(value: number, unit: MetricSeriesConfig["unit"]) {
+  if (unit === "percent") {
+    return `${value.toFixed(1)}%`;
+  }
+
+  return formatMetricNumber(value);
+}
+
+function parseRangePoints(result: unknown): MetricSeriesPoint[] {
+  if (!Array.isArray(result) || result.length === 0) {
+    return [];
+  }
+
+  const firstSeries = result[0] as PrometheusMatrixSample;
+  if (!Array.isArray(firstSeries.values)) {
+    return [];
+  }
+
+  return firstSeries.values
+    .map((entry) => {
+      const timestamp = Number(entry[0]) * 1000;
+      const value = Number(entry[1]);
+
+      if (Number.isNaN(timestamp) || Number.isNaN(value)) {
+        return null;
+      }
+
+      return { timestamp, value };
+    })
+    .filter((point): point is MetricSeriesPoint => point !== null);
+}
+
+function buildDashboardSummary(
+  role: Role | undefined,
+  counts:
+    | {
+      instanceCount: number;
+      requestCount: number;
+      extendedRequestCount: number;
+    }
+    | undefined,
+): DashboardCardsProps["dashboardSummary"] {
+  if (!role || !counts) {
+    return undefined;
+  }
+
+  if (role === "STUDENT") {
+    return {
+      title: "My Activity",
+      description: "A quick summary of your current instances and requests",
+      instanceLabel: "Instances",
+      instanceDescription: "Total instances linked to your account",
+      requestLabel: "Requests",
+      requestDescription: "Instance requests you have submitted",
+      extendedRequestLabel: "Extended Requests",
+      extendedRequestDescription:
+        "Extension requests for your existing instances",
+      ...counts,
+    };
+  }
+
+  if (role === "ADMIN" || role === "INSTRUCTOR") {
+    return {
+      title: "Work Queue",
+      description:
+        role === "ADMIN"
+          ? "System-wide instance volume and pending review items"
+          : "Your instance volume and pending review items",
+      instanceLabel: "Instances",
+      instanceDescription:
+        role === "ADMIN"
+          ? "Total instances across the platform"
+          : "Instances currently in your scope",
+      requestLabel: "Pending Requests",
+      requestDescription: "Instance requests waiting for review",
+      extendedRequestLabel: "Pending Extended Requests",
+      extendedRequestDescription: "Extension requests waiting for review",
+      ...counts,
+    };
+  }
+
+  return undefined;
+}
+
+async function fetchDashboardSnapshot(role: Role | undefined) {
+  const end = new Date();
+  const start = new Date(end.getTime() - RANGE_WINDOW_MS);
+
+  const countPromises =
+    role === "STUDENT"
+      ? [
+        fetchClient.GET("/api/instances/", {
+          params: { query: { page: 1, pageSize: 1 } },
+        }),
+        fetchClient.GET("/api/requests/", {
+          params: { query: { page: 1, pageSize: 1 } },
+        }),
+        fetchClient.GET("/api/extended-requests/", {
+          params: { query: { page: 1, pageSize: 1 } },
+        }),
+      ]
+      : role === "ADMIN" || role === "INSTRUCTOR"
+        ? [
+          fetchClient.GET(
+            role === "ADMIN" ? "/api/instances/admin" : "/api/instances/",
+            {
+              params: { query: { page: 1, pageSize: 1 } },
+            },
+          ),
+          fetchClient.GET("/api/requests/", {
+            params: {
+              query: { page: 1, pageSize: 1, status: "PENDING" },
+            },
+          }),
+          fetchClient.GET("/api/extended-requests/", {
+            params: {
+              query: { page: 1, pageSize: 1, status: "PENDING" },
+            },
+          }),
+        ]
+        : [];
+
+  const [overviewResponse, ...restResponses] = await Promise.all([
+    fetchClient.GET("/api/monitoring/proxmox/overview"),
+    ...countPromises,
+    ...METRIC_SERIES_DEFINITIONS.map((series) =>
+      fetchClient.GET("/api/monitoring/query-range", {
+        params: {
+          query: {
+            query: series.query,
+            start: start.toISOString(),
+            end: end.toISOString(),
+            step: RANGE_STEP,
+          },
+        },
+      }),
+    ),
+  ]);
+
+  if (overviewResponse.error) {
+    throw new Error(
+      "message" in overviewResponse.error
+        ? String(overviewResponse.error.message)
+        : "Failed to load monitoring overview.",
+    );
+  }
+
+  const countResponses = restResponses.slice(0, countPromises.length);
+  const seriesResponses = restResponses.slice(countPromises.length) as Array<{
+    data?: components["schemas"]["MonitoringQueryResponse"];
+  }>;
+
+  const getTotalItems = (index: number) => {
+    const response = countResponses[index] as {
+      data?: { totalItems?: number };
+    };
+    return response.data?.totalItems ?? 0;
+  };
+
+  const counts =
+    countResponses.length === 3
+      ? {
+        instanceCount: getTotalItems(0),
+        requestCount: getTotalItems(1),
+        extendedRequestCount: getTotalItems(2),
+      }
+      : undefined;
+
+  return {
+    overview: overviewResponse.data,
+    dashboardSummary: buildDashboardSummary(role, counts),
+    series: METRIC_SERIES_DEFINITIONS.map((series, index) => ({
+      id: series.id,
+      title: series.title,
+      description: series.description,
+      unit: series.unit,
+      points: parseRangePoints(seriesResponses[index]?.data?.data?.result),
+    })),
+  } satisfies DashboardLiveSnapshot;
+}
+
+function MetricTrendCard({ series }: { series: MetricSeriesConfig }) {
+  const points = series.points;
+  const values = points.map((point) => point.value);
+  const latest = values.at(-1);
+  const min = values.length > 0 ? Math.min(...values) : 0;
+  const max = values.length > 0 ? Math.max(...values) : 0;
+  const range = max - min || 1;
+
+  const polylinePoints = points
+    .map((point, index) => {
+      const x = (index / Math.max(points.length - 1, 1)) * 100;
+      const y = 100 - ((point.value - min) / range) * 100;
+      return `${x},${y}`;
+    })
+    .join(" ");
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <CardTitle className="text-base">{series.title}</CardTitle>
+            <CardDescription className="mt-1">
+              {series.description}
+            </CardDescription>
+          </div>
+          <Badge variant="outline" className="shrink-0">
+            {latest != null
+              ? formatMetricLabel(latest, series.unit)
+              : "No data"}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="h-36 rounded-xl border bg-muted/20 p-3">
+          {points.length > 1 ? (
+            <svg
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              className="h-full w-full overflow-visible"
+              aria-label={series.title}
+            >
+              <title>{series.title}</title>
+              <polyline
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-primary"
+                points={polylinePoints}
+              />
+            </svg>
+          ) : (
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+              Waiting for time-series samples
+            </div>
+          )}
+        </div>
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Latest</p>
+            <p className="mt-1 font-medium">
+              {latest != null ? formatMetricLabel(latest, series.unit) : "N/A"}
+            </p>
+          </div>
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Min</p>
+            <p className="mt-1 font-medium">
+              {formatMetricLabel(min, series.unit)}
+            </p>
+          </div>
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Max</p>
+            <p className="mt-1 font-medium">
+              {formatMetricLabel(max, series.unit)}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function DashboardCards({
   user,
   proxmoxOverview,
@@ -85,7 +429,36 @@ export function DashboardCards({
   const router = useRouter();
   const role = user?.role as Role | undefined;
   const isStudent = role === "STUDENT";
-  const summary = proxmoxOverview?.summary;
+  const [autoRefreshMs, setAutoRefreshMs] = useState<number>(15000);
+
+  const initialLiveSnapshot: DashboardLiveSnapshot = {
+    overview: proxmoxOverview,
+    dashboardSummary,
+    series: METRIC_SERIES_DEFINITIONS.map((series) => ({
+      id: series.id,
+      title: series.title,
+      description: series.description,
+      unit: series.unit,
+      points: [],
+    })),
+  };
+
+  const {
+    data: liveSnapshot,
+    refetch,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ["dashboard-live-snapshot", role],
+    queryFn: () => fetchDashboardSnapshot(role),
+    initialData: initialLiveSnapshot,
+    refetchInterval: autoRefreshMs > 0 ? autoRefreshMs : false,
+    refetchOnWindowFocus: false,
+  });
+
+  const summary = liveSnapshot.overview?.summary;
+  const readableDashboardSummary =
+    liveSnapshot.dashboardSummary ?? dashboardSummary;
 
   const can = (permission: string) => {
     if (!role) return false;
@@ -119,24 +492,55 @@ export function DashboardCards({
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-lg font-semibold tracking-tight">
-              Proxmox Cluster Summary
+              Proxmox Cluster Health
             </h2>
             <p className="text-sm text-muted-foreground">
-              Shared infrastructure snapshot from the monitoring service
+              Live infrastructure summary with one-hour trends and refresh
+              controls
             </p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {proxmoxOverview
-              ? `Updated ${formatDateTime(proxmoxOverview.generatedAt)}`
-              : "Monitoring snapshot unavailable"}
-          </p>
+          <div className="flex flex-col items-start gap-2 sm:items-end">
+            <div className="flex items-center gap-2">
+              <Select
+                value={String(autoRefreshMs)}
+                onValueChange={(value) => setAutoRefreshMs(Number(value))}
+              >
+                <SelectTrigger className="h-9 w-30">
+                  <SelectValue placeholder="Auto refresh" />
+                </SelectTrigger>
+                <SelectContent>
+                  {AUTO_REFRESH_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => refetch()}
+                disabled={isFetching}
+              >
+                <RefreshCw
+                  className={`mr-2 size-4 ${isFetching ? "animate-spin" : ""}`}
+                />
+                Refresh
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {liveSnapshot.overview
+                ? `Updated ${formatDateTime(liveSnapshot.overview.generatedAt)}`
+                : "Monitoring snapshot unavailable"}
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">
-                Nodes & Guests
+                Cluster Footprint
               </CardTitle>
               <Server className="size-4 text-muted-foreground" />
             </CardHeader>
@@ -146,14 +550,16 @@ export function DashboardCards({
                 {formatMetricNumber(summary?.guestCount)}
               </div>
               <CardDescription className="mt-1">
-                Nodes and total guests in the current Proxmox snapshot
+                Nodes and guests currently represented in the cluster snapshot
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Average CPU</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Average Host CPU
+              </CardTitle>
               <Cpu className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -161,7 +567,7 @@ export function DashboardCards({
                 {formatMetricPercent(summary?.averageNodeCpuPercent)}
               </div>
               <CardDescription className="mt-1">
-                Host average CPU, guest average{" "}
+                Host average CPU, with guest average at{" "}
                 {formatMetricPercent(summary?.averageGuestCpuPercent)}
               </CardDescription>
             </CardContent>
@@ -169,7 +575,9 @@ export function DashboardCards({
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Node Memory</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Host Memory in Use
+              </CardTitle>
               <Activity className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -177,8 +585,9 @@ export function DashboardCards({
                 {formatMetricBytes(summary?.nodeMemoryUsedBytes)}
               </div>
               <CardDescription className="mt-1">
-                Used of {formatMetricBytes(summary?.nodeMemoryTotalBytes)} total
-                host memory
+                Using {formatMetricBytes(summary?.nodeMemoryUsedBytes)} out of{" "}
+                {formatMetricBytes(summary?.nodeMemoryTotalBytes)} total host
+                memory
               </CardDescription>
             </CardContent>
           </Card>
@@ -195,23 +604,36 @@ export function DashboardCards({
                 {formatMetricBytes(summary?.nodeStorageUsedBytes)}
               </div>
               <CardDescription className="mt-1">
-                Used of {formatMetricBytes(summary?.nodeStorageTotalBytes)}{" "}
-                cluster storage
+                Using {formatMetricBytes(summary?.nodeStorageUsedBytes)} out of{" "}
+                {formatMetricBytes(summary?.nodeStorageTotalBytes)} cluster
+                storage
               </CardDescription>
             </CardContent>
           </Card>
         </div>
+
+        <div className="grid gap-4 xl:grid-cols-2">
+          {liveSnapshot.series.map((series) => (
+            <MetricTrendCard key={series.id} series={series} />
+          ))}
+        </div>
+
+        {error ? (
+          <p className="text-sm text-destructive">
+            Live monitoring refresh failed. Showing the latest successful data.
+          </p>
+        ) : null}
       </div>
 
       {/* Role Summary */}
-      {dashboardSummary && (
+      {readableDashboardSummary && (
         <div className="space-y-3">
           <div>
             <h2 className="text-lg font-semibold tracking-tight">
-              {dashboardSummary.title}
+              {readableDashboardSummary.title}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {dashboardSummary.description}
+              {readableDashboardSummary.description}
             </p>
           </div>
 
@@ -219,16 +641,16 @@ export function DashboardCards({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
-                  {dashboardSummary.instanceLabel}
+                  {readableDashboardSummary.instanceLabel}
                 </CardTitle>
                 <Server className="size-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-semibold tracking-tight">
-                  {formatMetricNumber(dashboardSummary.instanceCount)}
+                  {formatMetricNumber(readableDashboardSummary.instanceCount)}
                 </div>
                 <CardDescription className="mt-1">
-                  {dashboardSummary.instanceDescription}
+                  {readableDashboardSummary.instanceDescription}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -236,16 +658,16 @@ export function DashboardCards({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
-                  {dashboardSummary.requestLabel}
+                  {readableDashboardSummary.requestLabel}
                 </CardTitle>
                 <FileText className="size-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-semibold tracking-tight">
-                  {formatMetricNumber(dashboardSummary.requestCount)}
+                  {formatMetricNumber(readableDashboardSummary.requestCount)}
                 </div>
                 <CardDescription className="mt-1">
-                  {dashboardSummary.requestDescription}
+                  {readableDashboardSummary.requestDescription}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -253,16 +675,18 @@ export function DashboardCards({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
-                  {dashboardSummary.extendedRequestLabel}
+                  {readableDashboardSummary.extendedRequestLabel}
                 </CardTitle>
                 <Clock className="size-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-semibold tracking-tight">
-                  {formatMetricNumber(dashboardSummary.extendedRequestCount)}
+                  {formatMetricNumber(
+                    readableDashboardSummary.extendedRequestCount,
+                  )}
                 </div>
                 <CardDescription className="mt-1">
-                  {dashboardSummary.extendedRequestDescription}
+                  {readableDashboardSummary.extendedRequestDescription}
                 </CardDescription>
               </CardContent>
             </Card>

@@ -10,7 +10,7 @@ on:
       - "src/**"
       - "public/**"
       - "package.json"
-      - "bun.lock"
+      - "pnpm-lock.yaml"
       - ".github/workflows/build.yaml"
   workflow_dispatch:
 
@@ -33,13 +33,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}:${{ github.ref_name }} .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   # deploy:
   #   needs: build-and-push

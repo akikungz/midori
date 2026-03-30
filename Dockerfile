@@ -1,22 +1,28 @@
-FROM oven/bun:1-alpine AS package
+FROM node:lts-alpine AS based
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack enable
+
+FROM based AS deps
 
 WORKDIR /app
 
-COPY package.json bun.lock ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN bun install
+RUN pnpm install --frozen-lockfile
 
-FROM node:lts-alpine AS build
+FROM based AS build
 
 WORKDIR /app
 
 COPY . .
-
-COPY --from=package /app/node_modules /app/node_modules
+COPY --from=deps /app/node_modules /app/node_modules
 
 ENV APP_ENV=development
 
-RUN npm run build
+RUN pnpm build
 
 FROM node:lts-alpine AS runtime
 
@@ -39,4 +45,4 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD [ "node", "--use-system-ca", "server.js" ]
+CMD ["node", "--use-system-ca", "server.js"]
