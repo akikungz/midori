@@ -1,13 +1,28 @@
+"use client";
+
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Activity,
   Cpu,
   Database,
   HardDrive,
   Network,
+  RefreshCw,
   Server,
 } from "lucide-react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import type { components } from "@midori/types/api";
+import { fetchClient } from "@midori/lib/api";
 import { formatDateTime, formatFileSize } from "@midori/lib/format";
 import type { ProxmoxMetricInventoryGroup } from "@midori/lib/proxmox-monitoring";
 import {
@@ -20,6 +35,7 @@ import {
   AlertTitle,
 } from "@midori/components/ui/alert";
 import { Badge } from "@midori/components/ui/badge";
+import { Button } from "@midori/components/ui/button";
 import {
   Card,
   CardContent,
@@ -27,6 +43,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@midori/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@midori/components/ui/select";
 
 type ProxmoxOverview =
   components["schemas"]["MonitoringProxmoxOverviewResponse"];
@@ -36,6 +59,75 @@ interface ProxmoxMonitoringDashboardProps {
   inventory: ProxmoxMetricInventoryGroup[];
   errorMessage?: string;
 }
+
+interface PrometheusMatrixSample {
+  metric?: Record<string, string>;
+  values?: [number | string, string][];
+}
+
+interface MetricSeriesPoint {
+  timestamp: number;
+  value: number;
+}
+
+interface MetricSeriesConfig {
+  id: string;
+  title: string;
+  description: string;
+  unit: "percent";
+  points: MetricSeriesPoint[];
+}
+
+interface AdminMonitoringSnapshot {
+  overview?: ProxmoxOverview;
+  series: MetricSeriesConfig[];
+}
+
+const AUTO_REFRESH_OPTIONS = [
+  { value: "0", label: "Manual" },
+  { value: "5000", label: "5s" },
+  { value: "10000", label: "10s" },
+  { value: "15000", label: "15s" },
+  { value: "30000", label: "30s" },
+  { value: "60000", label: "1m" },
+] as const;
+
+const RANGE_WINDOW_MS = 60 * 60 * 1000;
+const RANGE_STEP = "60s";
+
+const METRIC_SERIES_DEFINITIONS = [
+  {
+    id: "node-cpu",
+    title: "Host CPU Trend",
+    description: "Average CPU load across Proxmox nodes over the last hour.",
+    unit: "percent" as const,
+    query: "avg(otelcol_proxmox_node_cpustat_cpu_percent)",
+  },
+  {
+    id: "guest-cpu",
+    title: "Guest CPU Trend",
+    description:
+      "Average CPU load across VM and LXC guests over the last hour.",
+    unit: "percent" as const,
+    query: "avg(otelcol_proxmox_vm_cpu_percent)",
+  },
+  {
+    id: "node-memory",
+    title: "Host Memory Trend",
+    description: "Percent of node memory currently in use.",
+    unit: "percent" as const,
+    query:
+      "100 * sum(otelcol_proxmox_node_memory_memused_bytes) / clamp_min(sum(otelcol_proxmox_node_memory_memtotal_bytes), 1)",
+  },
+  {
+    id: "storage",
+    title: "Storage Trend",
+    description: "Percent of Proxmox storage capacity currently consumed.",
+    unit: "percent" as const,
+    query:
+      "100 * sum(otelcol_proxmox_storage_used_bytes) / clamp_min(sum(otelcol_proxmox_storage_total_bytes), 1)",
+  },
+] as const;
 
 function formatPercent(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) {
@@ -61,6 +153,14 @@ function formatBytes(value: number | null | undefined) {
   return formatFileSize(value);
 }
 
+function formatMetricLabel(value: number, unit: MetricSeriesConfig["unit"]) {
+  if (unit === "percent") {
+    return `${value.toFixed(1)}%`;
+  }
+
+  return formatNumber(value);
+}
+
 function percentFromParts(
   used: number | null | undefined,
   total: number | null | undefined,
@@ -70,6 +170,74 @@ function percentFromParts(
   }
 
   return (used / total) * 100;
+}
+
+function parseRangePoints(result: unknown): MetricSeriesPoint[] {
+  if (!Array.isArray(result) || result.length === 0) {
+    return [];
+  }
+
+  const firstSeries = result[0] as PrometheusMatrixSample;
+  if (!Array.isArray(firstSeries.values)) {
+    return [];
+  }
+
+  return firstSeries.values
+    .map((entry) => {
+      const timestamp = Number(entry[0]) * 1000;
+      const value = Number(entry[1]);
+
+      if (Number.isNaN(timestamp) || Number.isNaN(value)) {
+        return null;
+      }
+
+      return { timestamp, value };
+    })
+    .filter((point): point is MetricSeriesPoint => point !== null);
+}
+
+async function fetchAdminMonitoringSnapshot(): Promise<AdminMonitoringSnapshot> {
+  const end = new Date();
+  const start = new Date(end.getTime() - RANGE_WINDOW_MS);
+
+  const [overviewResponse, ...seriesResponses] = await Promise.all([
+    fetchClient.GET("/api/monitoring/proxmox/overview"),
+    ...METRIC_SERIES_DEFINITIONS.map((series) =>
+      fetchClient.GET("/api/monitoring/query-range", {
+        params: {
+          query: {
+            query: series.query,
+            start: start.toISOString(),
+            end: end.toISOString(),
+            step: RANGE_STEP,
+          },
+        },
+      }),
+    ),
+  ]);
+
+  if (overviewResponse.error) {
+    throw new Error(
+      "message" in overviewResponse.error
+        ? String(overviewResponse.error.message)
+        : "Failed to load Proxmox monitoring data.",
+    );
+  }
+
+  const typedSeriesResponses = seriesResponses as Array<{
+    data?: components["schemas"]["MonitoringQueryResponse"];
+  }>;
+
+  return {
+    overview: overviewResponse.data,
+    series: METRIC_SERIES_DEFINITIONS.map((series, index) => ({
+      id: series.id,
+      title: series.title,
+      description: series.description,
+      unit: series.unit,
+      points: parseRangePoints(typedSeriesResponses[index]?.data?.data?.result),
+    })),
+  };
 }
 
 function UsageBar({
@@ -129,6 +297,113 @@ function MetricStatCard({
   );
 }
 
+function MetricTrendCard({ series }: { series: MetricSeriesConfig }) {
+  const points = series.points;
+  const values = points.map((point) => point.value);
+  const latest = values.at(-1);
+  const min = values.length > 0 ? Math.min(...values) : 0;
+  const max = values.length > 0 ? Math.max(...values) : 0;
+  const chartData = points.map((point) => ({
+    time: new Date(point.timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    value: Number(point.value.toFixed(2)),
+  }));
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <CardTitle className="text-base">{series.title}</CardTitle>
+            <CardDescription className="mt-1">
+              {series.description}
+            </CardDescription>
+          </div>
+          <Badge variant="outline" className="shrink-0">
+            {latest != null
+              ? formatMetricLabel(latest, series.unit)
+              : "No data"}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="h-44 rounded-xl border bg-muted/20 p-3">
+          {points.length > 1 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis
+                  dataKey="time"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 12 }}
+                  minTickGap={24}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 12 }}
+                  width={44}
+                  tickFormatter={(value: number) =>
+                    formatMetricLabel(value, series.unit)
+                  }
+                />
+                <Tooltip
+                  formatter={(value) =>
+                    typeof value === "number"
+                      ? formatMetricLabel(value, series.unit)
+                      : "N/A"
+                  }
+                  labelClassName="text-foreground"
+                  contentStyle={{
+                    borderRadius: "0.75rem",
+                    borderColor: "var(--border)",
+                    backgroundColor: "var(--card)",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="var(--primary)"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+              Waiting for time-series samples
+            </div>
+          )}
+        </div>
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Latest</p>
+            <p className="mt-1 font-medium">
+              {latest != null ? formatMetricLabel(latest, series.unit) : "N/A"}
+            </p>
+          </div>
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Min</p>
+            <p className="mt-1 font-medium">
+              {formatMetricLabel(min, series.unit)}
+            </p>
+          </div>
+          <div className="rounded-lg border p-3">
+            <p className="text-muted-foreground">Max</p>
+            <p className="mt-1 font-medium">
+              {formatMetricLabel(max, series.unit)}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function renderDetailValue(value: unknown) {
   if (value == null) {
     return "N/A";
@@ -158,12 +433,34 @@ export function ProxmoxMonitoringDashboard({
   inventory,
   errorMessage,
 }: ProxmoxMonitoringDashboardProps) {
-  const summary = overview?.summary;
-  const queryEntries = Object.entries(overview?.queries ?? {});
-  const detailEntries = Object.entries(overview?.details ?? {});
-  const countEntries = Object.entries(overview?.countsByType ?? {}).sort(
-    (a, b) => b[1] - a[1],
-  );
+  const [autoRefreshMs, setAutoRefreshMs] = useState<number>(15000);
+
+  const {
+    data: liveSnapshot,
+    refetch,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ["admin-proxmox-monitoring"],
+    queryFn: fetchAdminMonitoringSnapshot,
+    initialData: {
+      overview,
+      series: METRIC_SERIES_DEFINITIONS.map((series) => ({
+        id: series.id,
+        title: series.title,
+        description: series.description,
+        unit: series.unit,
+        points: [],
+      })),
+    } satisfies AdminMonitoringSnapshot,
+    refetchInterval: autoRefreshMs > 0 ? autoRefreshMs : false,
+    refetchOnWindowFocus: false,
+  });
+
+  const summary = liveSnapshot.overview?.summary;
+  const countEntries = Object.entries(
+    liveSnapshot.overview?.countsByType ?? {},
+  ).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="space-y-6">
@@ -173,26 +470,71 @@ export function ProxmoxMonitoringDashboard({
             Proxmox Monitoring
           </h1>
           <p className="max-w-3xl text-muted-foreground">
-            Cluster health dashboard powered by
-            `/api/monitoring/proxmox/overview` and the `otelcol_proxmox_*`
-            Prometheus metrics cataloged in `values.json`.
+            Human-readable cluster monitoring with live refresh controls,
+            Recharts time-series panels, and metric inventory context from
+            `values.json`.
           </p>
         </div>
-        <Badge variant="outline" className="w-fit">
-          Snapshot{" "}
-          {overview ? formatDateTime(overview.generatedAt) : "Unavailable"}
-        </Badge>
+        <div className="flex flex-col items-start gap-2 lg:items-end">
+          <div className="flex items-center gap-2">
+            <Select
+              value={String(autoRefreshMs)}
+              onValueChange={(value) => setAutoRefreshMs(Number(value))}
+            >
+              <SelectTrigger className="h-9 w-30">
+                <SelectValue placeholder="Auto refresh" />
+              </SelectTrigger>
+              <SelectContent>
+                {AUTO_REFRESH_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isFetching}
+            >
+              <RefreshCw
+                className={`mr-2 size-4 ${isFetching ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </Button>
+          </div>
+          <Badge variant="outline" className="w-fit">
+            Snapshot{" "}
+            {liveSnapshot.overview
+              ? formatDateTime(liveSnapshot.overview.generatedAt)
+              : "Unavailable"}
+          </Badge>
+        </div>
       </div>
 
       {errorMessage ? (
         <Alert variant="destructive">
           <Activity />
-          <AlertTitle>Unable to load live Proxmox overview</AlertTitle>
+          <AlertTitle>Initial monitoring snapshot was unavailable</AlertTitle>
           <AlertDescription>
             <p>{errorMessage}</p>
             <p>
-              The metric inventory below still reflects the available Proxmox
-              series from `values.json`.
+              The dashboard will keep trying to refresh live data while the
+              metric inventory remains available below.
+            </p>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {error ? (
+        <Alert variant="destructive">
+          <Activity />
+          <AlertTitle>Live refresh failed</AlertTitle>
+          <AlertDescription>
+            <p>
+              The latest successful monitoring snapshot is still shown, but the
+              most recent refresh attempt did not complete.
             </p>
           </AlertDescription>
         </Alert>
@@ -200,29 +542,35 @@ export function ProxmoxMonitoringDashboard({
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricStatCard
-          title="Cluster Nodes"
-          value={formatNumber(summary?.nodeCount)}
-          description="Nodes currently represented in the overview snapshot."
+          title="Cluster Footprint"
+          value={`${formatNumber(summary?.nodeCount)} / ${formatNumber(summary?.guestCount)}`}
+          description="Nodes and total guests currently represented in the snapshot."
           icon={Server}
         />
         <MetricStatCard
-          title="Guests"
-          value={formatNumber(summary?.guestCount)}
-          description={`${formatNumber(summary?.vmCount)} VMs and ${formatNumber(summary?.lxcCount)} LXCs`}
+          title="Guest Mix"
+          value={`${formatNumber(summary?.vmCount)} VMs`}
+          description={`${formatNumber(summary?.lxcCount)} LXCs are active in the same snapshot.`}
           icon={Cpu}
         />
         <MetricStatCard
-          title="Avg Node CPU"
+          title="Average Host CPU"
           value={formatPercent(summary?.averageNodeCpuPercent)}
-          description="Average host CPU utilization across Proxmox nodes."
+          description={`Guest average is ${formatPercent(summary?.averageGuestCpuPercent)} across VM and LXC workloads.`}
           icon={Activity}
         />
         <MetricStatCard
-          title="Avg Guest CPU"
-          value={formatPercent(summary?.averageGuestCpuPercent)}
-          description="Average CPU utilization across VM and LXC guests."
+          title="Guest Memory Reserved"
+          value={formatBytes(summary?.guestMemoryCapacityBytes)}
+          description={`Guests are using ${formatBytes(summary?.guestMemoryUsedBytes)} of reserved memory capacity.`}
           icon={Database}
         />
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-2">
+        {liveSnapshot.series.map((series) => (
+          <MetricTrendCard key={series.id} series={series} />
+        ))}
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
@@ -230,12 +578,13 @@ export function ProxmoxMonitoringDashboard({
           <CardHeader>
             <CardTitle>Capacity Summary</CardTitle>
             <CardDescription>
-              Memory and storage utilization derived from the overview response.
+              Current resource usage converted into plain language and progress
+              bars.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <UsageBar
-              label="Node memory"
+              label="Host memory"
               used={summary?.nodeMemoryUsedBytes}
               total={summary?.nodeMemoryTotalBytes}
             />
@@ -245,7 +594,7 @@ export function ProxmoxMonitoringDashboard({
               total={summary?.guestMemoryCapacityBytes}
             />
             <UsageBar
-              label="Node storage"
+              label="Cluster storage"
               used={summary?.nodeStorageUsedBytes}
               total={summary?.nodeStorageTotalBytes}
             />
@@ -256,8 +605,8 @@ export function ProxmoxMonitoringDashboard({
           <CardHeader>
             <CardTitle>Metric Coverage</CardTitle>
             <CardDescription>
-              Proxmox series discovered from `values.json`, organized by
-              exporter family.
+              Proxmox series discovered from `values.json`, grouped by exporter
+              family.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
@@ -296,8 +645,7 @@ export function ProxmoxMonitoringDashboard({
           <CardHeader>
             <CardTitle>Types in Snapshot</CardTitle>
             <CardDescription>
-              Counts returned by the Proxmox overview API, useful for checking
-              guest mix.
+              Current VM and LXC mix returned by the overview endpoint.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -319,172 +667,6 @@ export function ProxmoxMonitoringDashboard({
             ) : (
               <p className="text-sm text-muted-foreground">
                 No type breakdown returned in the current snapshot.
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Prometheus Naming Guide</CardTitle>
-            <CardDescription>
-              Quick suffix reference distilled from `prometheus_values.md`.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {proxmoxMetricLegend.map((item) => (
-              <div key={item.suffix} className="rounded-lg border px-4 py-3">
-                <p className="font-mono text-sm font-medium">{item.suffix}</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {item.meaning}
-                </p>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Metric Families</CardTitle>
-          <CardDescription>
-            Dashboard-oriented grouping of the `otelcol_proxmox_*` metrics found
-            in `values.json`.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4 lg:grid-cols-2">
-          {inventory.map((group) => (
-            <div key={group.id} className="rounded-xl border p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="font-semibold">{group.title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {group.description}
-                  </p>
-                </div>
-                <Badge variant="outline">{group.metrics.length}</Badge>
-              </div>
-
-              <div className="mt-4 space-y-3">
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Example metrics
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {group.examples.map((metric) => (
-                      <Badge
-                        key={metric}
-                        variant="secondary"
-                        className="font-mono text-[11px]"
-                      >
-                        {metric}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Prefixes
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {group.prefixes.map((prefix) => (
-                      <Badge
-                        key={prefix}
-                        variant="outline"
-                        className="font-mono text-[11px]"
-                      >
-                        {prefix}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Sample series
-                  </p>
-                  <div className="mt-2 space-y-1">
-                    {group.metrics.slice(0, 6).map((metric) => (
-                      <p
-                        key={metric}
-                        className="font-mono text-xs text-muted-foreground"
-                      >
-                        {metric}
-                      </p>
-                    ))}
-                    {group.metrics.length > 6 ? (
-                      <p className="text-xs text-muted-foreground">
-                        +{group.metrics.length - 6} additional series
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 xl:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Overview Queries</CardTitle>
-            <CardDescription>
-              PromQL statements embedded in the overview payload.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {queryEntries.length > 0 ? (
-              queryEntries.map(([name, query]) => (
-                <div key={name} className="rounded-lg border p-4">
-                  <div className="flex items-center gap-2">
-                    <Network className="size-4 text-muted-foreground" />
-                    <p className="font-medium">{name}</p>
-                  </div>
-                  <pre className="mt-3 overflow-x-auto rounded-md bg-muted p-3 text-xs text-muted-foreground">
-                    <code>{query}</code>
-                  </pre>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                The current response did not include query definitions.
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Additional Detail Keys</CardTitle>
-            <CardDescription>
-              Extra sections returned by the API for future expansion of this
-              dashboard.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {detailEntries.length > 0 ? (
-              detailEntries.map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex items-center justify-between rounded-lg border px-4 py-3"
-                >
-                  <div className="flex items-center gap-2">
-                    <HardDrive className="size-4 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">{key}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Returned by the overview endpoint
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="secondary">{renderDetailValue(value)}</Badge>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                No additional detail sections were included in this snapshot.
               </p>
             )}
           </CardContent>

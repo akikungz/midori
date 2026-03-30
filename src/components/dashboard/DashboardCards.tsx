@@ -16,6 +16,15 @@ import {
   Clock,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import type { components } from "@midori/types/api";
 import { fetchClient } from "@midori/lib/api";
@@ -339,88 +348,6 @@ async function fetchDashboardSnapshot(role: Role | undefined) {
   } satisfies DashboardLiveSnapshot;
 }
 
-function MetricTrendCard({ series }: { series: MetricSeriesConfig }) {
-  const points = series.points;
-  const values = points.map((point) => point.value);
-  const latest = values.at(-1);
-  const min = values.length > 0 ? Math.min(...values) : 0;
-  const max = values.length > 0 ? Math.max(...values) : 0;
-  const range = max - min || 1;
-
-  const polylinePoints = points
-    .map((point, index) => {
-      const x = (index / Math.max(points.length - 1, 1)) * 100;
-      const y = 100 - ((point.value - min) / range) * 100;
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <CardTitle className="text-base">{series.title}</CardTitle>
-            <CardDescription className="mt-1">
-              {series.description}
-            </CardDescription>
-          </div>
-          <Badge variant="outline" className="shrink-0">
-            {latest != null
-              ? formatMetricLabel(latest, series.unit)
-              : "No data"}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="h-36 rounded-xl border bg-muted/20 p-3">
-          {points.length > 1 ? (
-            <svg
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              className="h-full w-full overflow-visible"
-              aria-label={series.title}
-            >
-              <title>{series.title}</title>
-              <polyline
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="text-primary"
-                points={polylinePoints}
-              />
-            </svg>
-          ) : (
-            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-              Waiting for time-series samples
-            </div>
-          )}
-        </div>
-        <div className="grid grid-cols-3 gap-3 text-sm">
-          <div className="rounded-lg border p-3">
-            <p className="text-muted-foreground">Latest</p>
-            <p className="mt-1 font-medium">
-              {latest != null ? formatMetricLabel(latest, series.unit) : "N/A"}
-            </p>
-          </div>
-          <div className="rounded-lg border p-3">
-            <p className="text-muted-foreground">Min</p>
-            <p className="mt-1 font-medium">
-              {formatMetricLabel(min, series.unit)}
-            </p>
-          </div>
-          <div className="rounded-lg border p-3">
-            <p className="text-muted-foreground">Max</p>
-            <p className="mt-1 font-medium">
-              {formatMetricLabel(max, series.unit)}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 export function DashboardCards({
   user,
   proxmoxOverview,
@@ -546,8 +473,8 @@ export function DashboardCards({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold tracking-tight">
-                {formatMetricNumber(summary?.nodeCount)} /{" "}
-                {formatMetricNumber(summary?.guestCount)}
+                {formatMetricNumber(summary?.nodeCount)} Nodes /{" "}
+                {formatMetricNumber(summary?.guestCount)} Vms
               </div>
               <CardDescription className="mt-1">
                 Nodes and guests currently represented in the cluster snapshot
@@ -610,12 +537,6 @@ export function DashboardCards({
               </CardDescription>
             </CardContent>
           </Card>
-        </div>
-
-        <div className="grid gap-4 xl:grid-cols-2">
-          {liveSnapshot.series.map((series) => (
-            <MetricTrendCard key={series.id} series={series} />
-          ))}
         </div>
 
         {error ? (
