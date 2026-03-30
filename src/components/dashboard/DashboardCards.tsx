@@ -16,15 +16,6 @@ import {
   Clock,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 import type { components } from "@midori/types/api";
 import { fetchClient } from "@midori/lib/api";
@@ -167,7 +158,7 @@ function formatMetricBytes(value: number | null | undefined) {
   return formatFileSize(value);
 }
 
-function formatMetricLabel(value: number, unit: MetricSeriesConfig["unit"]) {
+function _formatMetricLabel(value: number, unit: MetricSeriesConfig["unit"]) {
   if (unit === "percent") {
     return `${value.toFixed(1)}%`;
   }
@@ -203,10 +194,10 @@ function buildDashboardSummary(
   role: Role | undefined,
   counts:
     | {
-      instanceCount: number;
-      requestCount: number;
-      extendedRequestCount: number;
-    }
+        instanceCount: number;
+        requestCount: number;
+        extendedRequestCount: number;
+      }
     | undefined,
 ): DashboardCardsProps["dashboardSummary"] {
   if (!role || !counts) {
@@ -258,35 +249,35 @@ async function fetchDashboardSnapshot(role: Role | undefined) {
   const countPromises =
     role === "STUDENT"
       ? [
-        fetchClient.GET("/api/instances/", {
-          params: { query: { page: 1, pageSize: 1 } },
-        }),
-        fetchClient.GET("/api/requests/", {
-          params: { query: { page: 1, pageSize: 1 } },
-        }),
-        fetchClient.GET("/api/extended-requests/", {
-          params: { query: { page: 1, pageSize: 1 } },
-        }),
-      ]
-      : role === "ADMIN" || role === "INSTRUCTOR"
-        ? [
-          fetchClient.GET(
-            role === "ADMIN" ? "/api/instances/admin" : "/api/instances/",
-            {
-              params: { query: { page: 1, pageSize: 1 } },
-            },
-          ),
+          fetchClient.GET("/api/instances/", {
+            params: { query: { page: 1, pageSize: 1 } },
+          }),
           fetchClient.GET("/api/requests/", {
-            params: {
-              query: { page: 1, pageSize: 1, status: "PENDING" },
-            },
+            params: { query: { page: 1, pageSize: 1 } },
           }),
           fetchClient.GET("/api/extended-requests/", {
-            params: {
-              query: { page: 1, pageSize: 1, status: "PENDING" },
-            },
+            params: { query: { page: 1, pageSize: 1 } },
           }),
         ]
+      : role === "ADMIN" || role === "INSTRUCTOR"
+        ? [
+            fetchClient.GET(
+              role === "ADMIN" ? "/api/instances/admin" : "/api/instances/",
+              {
+                params: { query: { page: 1, pageSize: 1 } },
+              },
+            ),
+            fetchClient.GET("/api/requests/", {
+              params: {
+                query: { page: 1, pageSize: 1, status: "PENDING" },
+              },
+            }),
+            fetchClient.GET("/api/extended-requests/", {
+              params: {
+                query: { page: 1, pageSize: 1, status: "PENDING" },
+              },
+            }),
+          ]
         : [];
 
   const [overviewResponse, ...restResponses] = await Promise.all([
@@ -329,10 +320,10 @@ async function fetchDashboardSnapshot(role: Role | undefined) {
   const counts =
     countResponses.length === 3
       ? {
-        instanceCount: getTotalItems(0),
-        requestCount: getTotalItems(1),
-        extendedRequestCount: getTotalItems(2),
-      }
+          instanceCount: getTotalItems(0),
+          requestCount: getTotalItems(1),
+          extendedRequestCount: getTotalItems(2),
+        }
       : undefined;
 
   return {

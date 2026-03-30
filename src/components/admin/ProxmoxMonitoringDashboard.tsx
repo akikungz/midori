@@ -2,15 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Activity,
-  Cpu,
-  Database,
-  HardDrive,
-  Network,
-  RefreshCw,
-  Server,
-} from "lucide-react";
+import { Activity, Cpu, Database, RefreshCw, Server } from "lucide-react";
 import {
   CartesianGrid,
   Line,
@@ -25,10 +17,6 @@ import type { components } from "@midori/types/api";
 import { fetchClient } from "@midori/lib/api";
 import { formatDateTime, formatFileSize } from "@midori/lib/format";
 import type { ProxmoxMetricInventoryGroup } from "@midori/lib/proxmox-monitoring";
-import {
-  proxmoxMetricCounts,
-  proxmoxMetricLegend,
-} from "@midori/lib/proxmox-monitoring";
 import {
   Alert,
   AlertDescription,
@@ -404,7 +392,7 @@ function MetricTrendCard({ series }: { series: MetricSeriesConfig }) {
   );
 }
 
-function renderDetailValue(value: unknown) {
+function _renderDetailValue(value: unknown) {
   if (value == null) {
     return "N/A";
   }
@@ -430,7 +418,6 @@ function renderDetailValue(value: unknown) {
 
 export function ProxmoxMonitoringDashboard({
   overview,
-  inventory,
   errorMessage,
 }: ProxmoxMonitoringDashboardProps) {
   const [autoRefreshMs, setAutoRefreshMs] = useState<number>(15000);
@@ -601,46 +588,6 @@ export function ProxmoxMonitoringDashboard({
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Metric Coverage</CardTitle>
-            <CardDescription>
-              Proxmox series discovered from `values.json`, grouped by exporter
-              family.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-lg border p-4">
-              <p className="text-sm text-muted-foreground">
-                Total Proxmox metrics
-              </p>
-              <p className="mt-1 text-2xl font-semibold">
-                {formatNumber(proxmoxMetricCounts.total)}
-              </p>
-            </div>
-            <div className="rounded-lg border p-4">
-              <p className="text-sm text-muted-foreground">Node metrics</p>
-              <p className="mt-1 text-2xl font-semibold">
-                {formatNumber(proxmoxMetricCounts.node)}
-              </p>
-            </div>
-            <div className="rounded-lg border p-4">
-              <p className="text-sm text-muted-foreground">Guest metrics</p>
-              <p className="mt-1 text-2xl font-semibold">
-                {formatNumber(proxmoxMetricCounts.vm)}
-              </p>
-            </div>
-            <div className="rounded-lg border p-4">
-              <p className="text-sm text-muted-foreground">Storage metrics</p>
-              <p className="mt-1 text-2xl font-semibold">
-                {formatNumber(proxmoxMetricCounts.storage)}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <Card>
           <CardHeader>
             <CardTitle>Types in Snapshot</CardTitle>
