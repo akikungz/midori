@@ -5,7 +5,7 @@ import { Plus, Search, Filter, RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
@@ -180,7 +180,7 @@ export function InstancesClient({
         })
         .catch((error) => {
           console.error("Failed to create instance:", error);
-          toast.error("Failed to create instance");
+          toast.error(getApiErrorMessage(error) ?? "Failed to create instance");
           return null;
         });
 
@@ -190,8 +190,11 @@ export function InstancesClient({
         return;
       }
 
-      if (result.error) {
-        toast.error("Failed to create instance");
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to create instance",
+        );
         return;
       }
 
@@ -218,7 +221,9 @@ export function InstancesClient({
         );
 
         if (error) {
-          toast.error("Failed to re-provision instance");
+          toast.error(
+            getApiErrorMessage(error) ?? "Failed to re-provision instance",
+          );
           return;
         }
 
@@ -228,7 +233,9 @@ export function InstancesClient({
         });
       } catch (error) {
         console.error("Failed to re-provision instance:", error);
-        toast.error("Failed to re-provision instance");
+        toast.error(
+          getApiErrorMessage(error) ?? "Failed to re-provision instance",
+        );
       }
     },
     [queryClient, listQueryKey],
@@ -247,7 +254,7 @@ export function InstancesClient({
         );
 
         if (error) {
-          toast.error("Failed to promote instance");
+          toast.error(getApiErrorMessage(error) ?? "Failed to promote instance");
           return;
         }
 
@@ -257,7 +264,7 @@ export function InstancesClient({
         });
       } catch (error) {
         console.error("Failed to promote instance:", error);
-        toast.error("Failed to promote instance");
+        toast.error(getApiErrorMessage(error) ?? "Failed to promote instance");
       }
     },
     [queryClient, listQueryKey],
@@ -276,7 +283,7 @@ export function InstancesClient({
         );
 
         if (error) {
-          toast.error("Failed to delete instance");
+          toast.error(getApiErrorMessage(error) ?? "Failed to delete instance");
           return;
         }
 
@@ -286,7 +293,7 @@ export function InstancesClient({
         });
       } catch (error) {
         console.error("Failed to delete instance:", error);
-        toast.error("Failed to delete instance");
+        toast.error(getApiErrorMessage(error) ?? "Failed to delete instance");
       }
     },
     [queryClient, listQueryKey],

@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { LoadingState } from "@midori/components/shared/LoadingState";
 import { SearchInput } from "@midori/components/shared/SearchInput";
@@ -72,7 +72,9 @@ export function MailingListClient() {
       })
       .catch((error) => {
         console.error("Failed to add email:", error);
-        toast.error("An error occurred while adding the email");
+        toast.error(
+          getApiErrorMessage(error) ?? "An error occurred while adding the email",
+        );
         return null;
       });
 
@@ -82,8 +84,9 @@ export function MailingListClient() {
       return;
     }
 
-    if (result.error) {
-      toast.error("Failed to add email");
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(getApiErrorMessage(resultError) ?? "Failed to add email");
       return;
     }
 
@@ -101,7 +104,10 @@ export function MailingListClient() {
         })
         .catch((error) => {
           console.error("Failed to delete email:", error);
-          toast.error("An error occurred while deleting the email");
+          toast.error(
+            getApiErrorMessage(error) ??
+              "An error occurred while deleting the email",
+          );
           return null;
         });
 
@@ -109,8 +115,9 @@ export function MailingListClient() {
         return;
       }
 
-      if (result.error) {
-        toast.error("Failed to delete email");
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(getApiErrorMessage(resultError) ?? "Failed to delete email");
         return;
       }
 

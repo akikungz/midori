@@ -7,7 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Server, ArrowUpCircle } from "lucide-react";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { hasPermission, isAdmin, type Role } from "@midori/lib/roles";
 import { useSession } from "@midori/hooks/useSession";
 import { Button } from "@midori/components/ui/button";
@@ -221,7 +221,7 @@ export function InstanceDetailClient({
       })
       .catch((error) => {
         console.error("Failed to promote instance:", error);
-        toast.error("Failed to promote instance");
+        toast.error(getApiErrorMessage(error) ?? "Failed to promote instance");
         return null;
       });
 
@@ -231,8 +231,11 @@ export function InstanceDetailClient({
       return;
     }
 
-    if (result.error) {
-      toast.error("Failed to promote instance");
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(
+        getApiErrorMessage(resultError) ?? "Failed to promote instance",
+      );
       return;
     }
 
@@ -252,7 +255,7 @@ export function InstanceDetailClient({
       );
 
       if (error) {
-        toast.error("Failed to delete instance");
+        toast.error(getApiErrorMessage(error) ?? "Failed to delete instance");
         return;
       }
 
@@ -260,7 +263,7 @@ export function InstanceDetailClient({
       router.push("/dashboard/instances");
     } catch (error) {
       console.error("Failed to delete instance:", error);
-      toast.error("Failed to delete instance");
+      toast.error(getApiErrorMessage(error) ?? "Failed to delete instance");
     }
   }, [instanceId, router]);
 
@@ -277,7 +280,9 @@ export function InstanceDetailClient({
         })
         .catch((error) => {
           console.error("Failed to submit extension request:", error);
-          toast.error("Failed to submit extension request");
+          toast.error(
+            getApiErrorMessage(error) ?? "Failed to submit extension request",
+          );
           return null;
         });
 
@@ -287,8 +292,11 @@ export function InstanceDetailClient({
         return;
       }
 
-      if (result.error) {
-        toast.error("Failed to submit extension request");
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to submit extension request",
+        );
         return;
       }
 
@@ -319,7 +327,9 @@ export function InstanceDetailClient({
         })
         .catch((error) => {
           console.error("Failed to add proxy:", error);
-          toast.error("Failed to add reverse proxy");
+          toast.error(
+            getApiErrorMessage(error) ?? "Failed to add reverse proxy",
+          );
           return null;
         });
 
@@ -329,8 +339,11 @@ export function InstanceDetailClient({
         return;
       }
 
-      if (result.error) {
-        toast.error("Failed to add reverse proxy");
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to add reverse proxy",
+        );
         return;
       }
 
@@ -354,7 +367,9 @@ export function InstanceDetailClient({
         );
 
         if (error) {
-          toast.error("Failed to delete reverse proxy");
+          toast.error(
+            getApiErrorMessage(error) ?? "Failed to delete reverse proxy",
+          );
           return;
         }
 
@@ -364,7 +379,9 @@ export function InstanceDetailClient({
         });
       } catch (error) {
         console.error("Failed to delete proxy:", error);
-        toast.error("Failed to delete reverse proxy");
+        toast.error(
+          getApiErrorMessage(error) ?? "Failed to delete reverse proxy",
+        );
       }
     },
     [instanceId, queryClient],

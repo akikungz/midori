@@ -5,7 +5,7 @@ import { Key, Plus, Trash2, User, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import {
   getRoleDisplayName,
   getRoleBadgeVariant,
@@ -102,7 +102,7 @@ export function SettingsClient({ user }: SettingsClientProps) {
       })
       .catch((error) => {
         console.error("Failed to add SSH key:", error);
-        toast.error("Failed to add SSH key");
+        toast.error(getApiErrorMessage(error) ?? "Failed to add SSH key");
         return null;
       });
 
@@ -112,8 +112,9 @@ export function SettingsClient({ user }: SettingsClientProps) {
       return;
     }
 
-    if (result.error) {
-      toast.error("Failed to add SSH key");
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(getApiErrorMessage(resultError) ?? "Failed to add SSH key");
       return;
     }
 
@@ -135,7 +136,7 @@ export function SettingsClient({ user }: SettingsClientProps) {
       })
       .catch((error) => {
         console.error("Failed to delete SSH key:", error);
-        toast.error("Failed to delete SSH key");
+        toast.error(getApiErrorMessage(error) ?? "Failed to delete SSH key");
         return null;
       });
 
@@ -143,8 +144,11 @@ export function SettingsClient({ user }: SettingsClientProps) {
       return;
     }
 
-    if (result.error) {
-      toast.error("Failed to delete SSH key");
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(
+        getApiErrorMessage(resultError) ?? "Failed to delete SSH key",
+      );
       return;
     }
 

@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import {
   usePagination,
   useDebounce,
@@ -136,13 +136,21 @@ export function InstructorsClient() {
       })
       .catch((error) => {
         console.error("Failed to update instructor:", error);
-        toast.error("Failed to update instructor");
+        toast.error(getApiErrorMessage(error) ?? "Failed to update instructor");
         return null;
       });
 
     setIsSubmitting(false);
 
-    if (!result || result.error) {
+    if (!result) {
+      return;
+    }
+
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(
+        getApiErrorMessage(resultError) ?? "Failed to update instructor",
+      );
       return;
     }
 
@@ -176,13 +184,21 @@ export function InstructorsClient() {
       })
       .catch((error) => {
         console.error("Failed to promote instructor:", error);
-        toast.error("Failed to promote instructor");
+        toast.error(getApiErrorMessage(error) ?? "Failed to promote instructor");
         return null;
       });
 
     setIsPromoting(false);
 
-    if (!result || result.error) {
+    if (!result) {
+      return;
+    }
+
+    const resultError = (result as { error?: unknown }).error;
+    if (resultError) {
+      toast.error(
+        getApiErrorMessage(resultError) ?? "Failed to promote instructor",
+      );
       return;
     }
 
