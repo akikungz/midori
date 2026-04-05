@@ -71,6 +71,12 @@ interface InstanceData {
   ownerEmail?: string;
   ownerId?: number;
   requesterId?: number;
+  semester?: string;
+}
+
+interface InstanceExtendedRequest {
+  id: number;
+  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
 }
 
 function getOwnerInfo(instance: InstanceData) {
@@ -166,6 +172,23 @@ export function InstanceDetailClient({
     },
   ) as { data: ReverseProxy[] | undefined };
 
+  const { data: extensionRequests } = api.useQuery(
+    "get",
+    "/api/instances/{instanceId}/extended-request",
+    {
+      params: {
+        path: { instanceId },
+        query: { page: 1, pageSize: 20 },
+      },
+    },
+  ) as {
+    data:
+    | {
+      values: InstanceExtendedRequest[];
+    }
+    | undefined;
+  };
+
   const { data: auditLogs } = api.useQuery(
     "get",
     "/api/instances/{instanceId}/audit-logs",
@@ -178,6 +201,16 @@ export function InstanceDetailClient({
   ) as { data: { values: AuditLog[] } | undefined };
 
   const logs = auditLogs?.values || [];
+  const activeExtensionRequest =
+    extensionRequests?.values.find(
+      (request) =>
+        request.status === "PENDING" || request.status === "APPROVED",
+    ) ?? null;
+  const activeExtensionRequestStatus =
+    activeExtensionRequest?.status === "PENDING" ||
+      activeExtensionRequest?.status === "APPROVED"
+      ? activeExtensionRequest.status
+      : null;
 
   // Handlers
   const handlePromote = useCallback(async () => {
@@ -261,8 +294,11 @@ export function InstanceDetailClient({
 
       setIsExtensionDialogOpen(false);
       toast.success("Extension request submitted");
+      queryClient.invalidateQueries({
+        queryKey: ["get", "/api/instances/{instanceId}/extended-request"],
+      });
     },
-    [instanceId, submitState],
+    [instanceId, queryClient, submitState],
   );
 
   const handleAddProxy = useCallback(
@@ -370,6 +406,7 @@ export function InstanceDetailClient({
         isSubmitting={submitState.isSubmitting}
         ownerDisplay={ownerDisplay}
         shouldShowOwner={shouldShowOwner}
+        activeExtensionRequestStatus={activeExtensionRequestStatus}
       />
 
       {/* Tabs */}
@@ -390,7 +427,7 @@ export function InstanceDetailClient({
             />
           )}
           {instance.courseOffering && (
-            <CourseInfoCard courseOffering={instance.courseOffering} />
+            <CourseInfoCard courseOffering={instance.courseOffering} workSemester={instance.semester} />
           )}
         </TabsContent>
 
@@ -430,6 +467,7 @@ interface InstanceDetailHeaderProps {
   isSubmitting: boolean;
   ownerDisplay: string | null;
   shouldShowOwner: boolean;
+  activeExtensionRequestStatus: "PENDING" | "APPROVED" | null;
 }
 
 function InstanceDetailHeader({
@@ -445,11 +483,19 @@ function InstanceDetailHeader({
   isSubmitting,
   ownerDisplay,
   shouldShowOwner,
+  activeExtensionRequestStatus,
 }: InstanceDetailHeaderProps) {
   const showPromote = canPromote && instance.status !== "PROMOTED";
+  const extensionBlocked = activeExtensionRequestStatus !== null;
+  const extensionTriggerLabel =
+    activeExtensionRequestStatus === "APPROVED"
+      ? "Already Extended"
+      : activeExtensionRequestStatus === "PENDING"
+        ? "Extension Requested"
+        : "Request Extension";
 
   return (
-    <div className="flex items-start justify-between">
+    <div className="flex items-start justify-between gap-4">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
           <Link href="/dashboard/instances">
@@ -477,22 +523,38 @@ function InstanceDetailHeader({
           )}
         </div>
       </div>
-      <div className="flex gap-2">
-        {canCreateExtension && (
-          <ExtensionRequestDialog
-            open={isExtensionDialogOpen}
-            onOpenChange={onExtensionDialogChange}
-            onSubmit={onSubmitExtension}
-            isSubmitting={isSubmitting}
-          />
-        )}
-        {showPromote && (
-          <Button variant="outline" onClick={onPromote} disabled={isSubmitting}>
-            <ArrowUpCircle className="mr-2 size-4" />
-            {isSubmitting ? "..." : "Promote"}
-          </Button>
-        )}
-        {canDelete && <DeleteInstanceDialog onConfirm={onDelete} />}
+      <div className="flex flex-col items-end gap-2">
+        <div className="flex gap-2">
+          {canCreateExtension && (
+            <ExtensionRequestDialog
+              open={isExtensionDialogOpen}
+              onOpenChange={onExtensionDialogChange}
+              onSubmit={onSubmitExtension}
+              isSubmitting={isSubmitting}
+              disabled={extensionBlocked}
+              triggerLabel={extensionTriggerLabel}
+            />
+          )}
+          {showPromote && (
+            <Button
+              variant="outline"
+              onClick={onPromote}
+              disabled={isSubmitting}
+            >
+              <ArrowUpCircle className="mr-2 size-4" />
+              {isSubmitting ? "..." : "Promote"}
+            </Button>
+          )}
+          {canDelete && <DeleteInstanceDialog onConfirm={onDelete} />}
+        </div>
+
+        {canCreateExtension && extensionBlocked ? (
+          <p className="text-right text-sm text-muted-foreground">
+            {activeExtensionRequestStatus === "APPROVED"
+              ? "This instance has already been extended."
+              : "An extension request is already pending for this instance."}
+          </p>
+        ) : null}
       </div>
     </div>
   );

@@ -83,19 +83,24 @@ export function VmDetailsCard({
 
 interface CourseInfoCardProps {
   courseOffering: CourseOffering;
+  workSemester?: string;
 }
 
-export function CourseInfoCard({ courseOffering }: CourseInfoCardProps) {
+export function CourseInfoCard({ courseOffering, workSemester }: CourseInfoCardProps) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base">Course Information</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <DetailItem label="Course Code" value={courseOffering.courseCode} />
-          <DetailItem label="Course Title" value={courseOffering.courseTitle} />
-          <DetailItem label="Semester" value={courseOffering.semester} />
+        <div className="grid gap-4 sm:grid-cols-4">
+          <DetailItem label="Course Code" value={courseOffering.courseCode} mono />
+          <DetailItem label="Course Title" value={courseOffering.courseTitle} className="sm:col-span-2" />
+          <DetailItem
+            label="Instance Semester"
+            value={workSemester ? `${courseOffering.semester} - ${workSemester}` : courseOffering.semester}
+            mono
+          />
         </div>
       </CardContent>
     </Card>
@@ -108,11 +113,12 @@ interface DetailItemProps {
   label: string;
   value: string;
   mono?: boolean;
+  className?: string;
 }
 
-function DetailItem({ label, value, mono }: DetailItemProps) {
+function DetailItem({ label, value, mono, className }: DetailItemProps) {
   return (
-    <div>
+    <div className={className}>
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className={`font-medium ${mono ? "font-mono" : ""}`}>{value}</p>
     </div>

@@ -775,14 +775,28 @@ ssh -i ~/.ssh/<private_key> <username>@<ip-address>
 
 ### F. Reverse Proxies
 
-Reverse proxies expose a service running **inside** your VM to the outside via an HTTP/HTTPS endpoint.
+Reverse proxies expose a service running **inside** your VM to the outside via an HTTP or TCP endpoint.
 
 **Create a reverse proxy**
 - Navigate to **Dashboard → Instances → (select an instance) → Reverse Proxies**.
 - Add a proxy with:
   - **Target port**: the port your app listens on inside the VM (e.g., 3000)
-  - **Type**: HTTP or HTTPS
+  - **Type**: HTTP for web apps, TCP for raw socket services
   - **Description** (optional)
+
+**Using TCP services behind a TLS tunnel**
+- Some services are plain TCP only and do not speak HTTP. For those services, choose **TCP** instead of **HTTP**.
+- If the service itself does not handle TLS, run a local TLS tunnel inside the VM and point the reverse proxy at the tunnel port rather than the original service port.
+- Common tunnel tools include `ncat --ssl`, `stunnel`, or `socat` with OpenSSL support.
+- Example pattern:
+
+```bash
+# Example: expose local service 127.0.0.1:25565 through a TLS-wrapped listener on 127.0.0.1:8443
+ncat --ssl -lk 127.0.0.1 8443 --sh-exec "ncat 127.0.0.1 25565"
+```
+
+- After starting the tunnel, create the reverse proxy with **Type = TCP** and **Target port = 8443**.
+- This is useful when the public entrypoint expects TLS on the forwarded TCP stream but the original daemon only speaks plain TCP.
 
 **Delete a reverse proxy**
 - In the same tab, remove a proxy you no longer need to reduce exposure.

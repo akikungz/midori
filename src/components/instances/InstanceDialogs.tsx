@@ -262,6 +262,8 @@ interface ExtensionRequestDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (reason: string) => Promise<void>;
   isSubmitting: boolean;
+  disabled?: boolean;
+  triggerLabel?: string;
 }
 
 export function ExtensionRequestDialog({
@@ -269,6 +271,8 @@ export function ExtensionRequestDialog({
   onOpenChange,
   onSubmit,
   isSubmitting,
+  disabled = false,
+  triggerLabel = "Request Extension",
 }: ExtensionRequestDialogProps) {
   const [extensionReason, setExtensionReason] = useState("");
   const [nextSemester, setNextSemester] = useState<NextSemester>(null);
@@ -321,9 +325,9 @@ export function ExtensionRequestDialog({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" disabled={disabled}>
           <Clock className="mr-2 size-4" />
-          Request Extension
+          {triggerLabel}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -434,12 +438,19 @@ export function AddProxyDialog({
         <DialogHeader>
           <DialogTitle>Add Reverse Proxy</DialogTitle>
           <DialogDescription>
-            Configure a new reverse proxy for this instance
+            Configure a new reverse proxy for this instance. Use HTTP for web
+            apps and TCP for raw services such as SSH, databases, or custom
+            sockets.
           </DialogDescription>
         </DialogHeader>
         <FieldGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="proxy-port">Target Port</FieldLabel>
+            <FieldDescription>
+              Enter the port listening inside the VM. If you wrap a plain TCP
+              service with a local TLS tunnel, use the tunnel port here instead
+              of the original service port.
+            </FieldDescription>
             <Input
               id="proxy-port"
               type="number"
@@ -450,6 +461,11 @@ export function AddProxyDialog({
           </Field>
           <Field>
             <FieldLabel htmlFor="proxy-type">Type</FieldLabel>
+            <FieldDescription>
+              Plain TCP services do not speak HTTP and may also need a local TLS
+              wrapper. In that case, choose TCP and forward to a tunnel created
+              with tools like `ncat --ssl` or `stunnel`.
+            </FieldDescription>
             <Select
               value={proxyType}
               onValueChange={(v) => setProxyType(v as "HTTP" | "TCP")}
@@ -558,7 +574,9 @@ export function ReverseProxyList({
         <div>
           <CardTitle className="text-base">Reverse Proxies</CardTitle>
           <CardDescription>
-            Configure reverse proxies to expose services
+            Configure reverse proxies to expose HTTP apps or raw TCP services.
+            For TCP services that must sit behind TLS, point the proxy at a
+            local tunnel port rather than the original daemon port.
           </CardDescription>
         </div>
         <AddProxyDialog

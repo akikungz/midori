@@ -12,8 +12,12 @@ import {
   Pencil,
   CheckSquare,
   Square,
+  History,
+  LoaderCircle,
+  User,
 } from "lucide-react";
 
+import { fetchClient } from "@midori/lib/api";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import {
@@ -32,12 +36,24 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@midori/components/ui/empty";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@midori/components/ui/dialog";
 import type { components } from "@midori/types/api";
 
 type InstanceRequestItem =
   components["schemas"]["GetRequestsResponse"]["values"][number];
 type ExtendedRequestItem =
   components["schemas"]["GetExtendedRequestsResponse"]["values"][number];
+type RequestAuditLog =
+  components["schemas"]["GetRequestAuditLogsResponse"]["values"][number];
+type ExtendedRequestAuditLog =
+  components["schemas"]["GetExtendedRequestAuditLogsResponse"]["values"][number];
 
 // ==================== Status Config ====================
 
@@ -137,62 +153,70 @@ export function InstanceRequestCard({
                 : "No course assigned"}
             </CardDescription>
           </div>
-          {isPendingReview && (
-            <div className="flex flex-wrap justify-end gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onToggleSelect}
-                disabled={isActionLoading}
-              >
-                {isSelected ? (
-                  <CheckSquare className="mr-1.5 size-3.5" />
-                ) : (
-                  <Square className="mr-1.5 size-3.5" />
-                )}
-                {isSelected ? "Selected" : "Select"}
-              </Button>
+          <div className="flex flex-col items-end gap-2">
+            {isPendingReview && (
+              <div className="flex flex-wrap justify-end gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onToggleSelect}
+                  disabled={isActionLoading}
+                >
+                  {isSelected ? (
+                    <CheckSquare className="mr-1.5 size-3.5" />
+                  ) : (
+                    <Square className="mr-1.5 size-3.5" />
+                  )}
+                  {isSelected ? "Selected" : "Select"}
+                </Button>
 
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={isActionLoading}
-                onClick={() => {
-                  if (isEditingSpecs) {
-                    setIsEditingSpecs(false);
-                    setDraftSpecs(null);
-                    return;
-                  }
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isActionLoading}
+                  onClick={() => {
+                    if (isEditingSpecs) {
+                      setIsEditingSpecs(false);
+                      setDraftSpecs(null);
+                      return;
+                    }
 
-                  setDraftSpecs(request.specs);
-                  setIsEditingSpecs(true);
-                }}
-              >
-                <Pencil className="mr-1.5 size-3.5" />
-                {isEditingSpecs ? "Close edit" : "Edit specs"}
-              </Button>
+                    setDraftSpecs(request.specs);
+                    setIsEditingSpecs(true);
+                  }}
+                >
+                  <Pencil className="mr-1.5 size-3.5" />
+                  {isEditingSpecs ? "Close edit" : "Edit specs"}
+                </Button>
 
-              <Button
-                variant="default"
-                size="sm"
-                disabled={isActionLoading}
-                onClick={() => onApprove(activeSpecs)}
-              >
-                <CheckCircle className="mr-1.5 size-3.5" />
-                {isActionLoading ? "..." : "Approve"}
-              </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  disabled={isActionLoading}
+                  onClick={() => onApprove(activeSpecs)}
+                >
+                  <CheckCircle className="mr-1.5 size-3.5" />
+                  {isActionLoading ? "..." : "Approve"}
+                </Button>
 
-              <Button
-                variant="destructive"
-                size="sm"
-                disabled={isActionLoading}
-                onClick={onReject}
-              >
-                <XCircle className="mr-1.5 size-3.5" />
-                Reject
-              </Button>
-            </div>
-          )}
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  disabled={isActionLoading}
+                  onClick={onReject}
+                >
+                  <XCircle className="mr-1.5 size-3.5" />
+                  Reject
+                </Button>
+              </div>
+            )}
+
+            <RequestAuditLogDialog
+              requestId={request.id}
+              requestTitle={request.title}
+              type="instance"
+            />
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -243,23 +267,41 @@ export function ExtendedRequestCard({
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base">{request.title}</CardTitle>
+              <CardTitle className="text-base">{request.targetInstance.hostname}</CardTitle>
               <Badge variant={statusConfig[request.status].variant}>
                 <StatusIcon className="mr-1 size-3" />
                 {statusConfig[request.status].label}
               </Badge>
             </div>
             <CardDescription>
-              Instance: #{request.targetInstanceId}
+              {request.requester.name} ({request.requester.email})
+              {
+                request.courseOffering ? (
+                  <>
+                    <br />
+                    <span className="mt-2">
+                      {request.courseOffering.courseCode} - {request.courseOffering.courseTitle} ({request.courseOffering.semester})
+                    </span>
+                  </>
+                ) : null
+              }
             </CardDescription>
           </div>
-          {canReview && request.status === "PENDING" && (
-            <RequestActionButtons
-              isLoading={isActionLoading}
-              onApprove={onApprove}
-              onReject={onReject}
+          <div className="flex flex-col items-end gap-2">
+            {canReview && request.status === "PENDING" && (
+              <RequestActionButtons
+                isLoading={isActionLoading}
+                onApprove={onApprove}
+                onReject={onReject}
+              />
+            )}
+
+            <RequestAuditLogDialog
+              requestId={request.id}
+              requestTitle={request.title}
+              type="extended"
             />
-          )}
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -269,7 +311,7 @@ export function ExtendedRequestCard({
           </p>
         )}
         {request.reason && (
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             <span className="font-medium text-foreground">Reason:</span>{" "}
             {request.reason}
           </p>
@@ -358,6 +400,169 @@ function EditableRequestSpecs({ specs, onChange }: EditableRequestSpecsProps) {
           onChange={(event) => onChange("diskGB", Number(event.target.value))}
         />
       </label>
+    </div>
+  );
+}
+
+interface DetailMetaItemProps {
+  label: string;
+  value?: string;
+}
+
+function DetailMetaItem({ label, value }: DetailMetaItemProps) {
+  if (!value) {
+    return null;
+  }
+
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground/80">
+        {label}
+      </p>
+      <p className="font-medium text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function formatDateValue(value?: string | number | Record<string, never>) {
+  if (typeof value !== "string" && typeof value !== "number") {
+    return undefined;
+  }
+
+  return new Date(value).toLocaleString();
+}
+
+type AuditLogEntry = RequestAuditLog | ExtendedRequestAuditLog;
+
+interface RequestAuditLogDialogProps {
+  requestId: number;
+  requestTitle: string;
+  type: "instance" | "extended";
+}
+
+function RequestAuditLogDialog({
+  requestId,
+  requestTitle,
+  type,
+}: RequestAuditLogDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [logs, setLogs] = useState<AuditLogEntry[]>([]);
+
+  const handleOpenChange = async (nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    const result =
+      type === "instance"
+        ? await fetchClient
+          .GET("/api/requests/{requestId}/audit-logs", {
+            params: {
+              path: { requestId },
+              query: { page: 1, pageSize: 20 },
+            },
+          })
+          .catch(() => null)
+        : await fetchClient
+          .GET("/api/extended-requests/{extendedRequestId}/audit-logs", {
+            params: {
+              path: { extendedRequestId: requestId },
+              query: { page: 1, pageSize: 20 },
+            },
+          })
+          .catch(() => null);
+
+    setIsLoading(false);
+
+    if (!result || result.error) {
+      setLogs([]);
+      setError("Unable to load audit logs right now.");
+      return;
+    }
+
+    setLogs(result.data?.values ?? []);
+  };
+
+  const requestLabel =
+    type === "instance" ? `Request #${requestId}` : `Extension #${requestId}`;
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <History className="mr-1.5 size-3.5" />
+          Audit Logs
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>{requestLabel} Audit Logs</DialogTitle>
+          <DialogDescription>{requestTitle}</DialogDescription>
+        </DialogHeader>
+
+        <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
+          {isLoading ? (
+            <div className="flex items-center gap-2 rounded-md border px-3 py-6 text-sm text-muted-foreground">
+              <LoaderCircle className="size-4 animate-spin" />
+              Loading audit logs...
+            </div>
+          ) : error ? (
+            <div className="rounded-md border border-dashed px-3 py-6 text-sm text-muted-foreground">
+              {error}
+            </div>
+          ) : logs.length > 0 ? (
+            logs.map((log) => <RequestAuditLogItem key={log.id} log={log} />)
+          ) : (
+            <div className="rounded-md border border-dashed px-3 py-6 text-sm text-muted-foreground">
+              No audit logs available for this request.
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function RequestAuditLogItem({ log }: { log: AuditLogEntry }) {
+  const timestampValue =
+    typeof log.timestamp === "string" || typeof log.timestamp === "number"
+      ? log.timestamp
+      : null;
+  const formattedTime = log.timestamp
+    ? timestampValue
+      ? new Date(timestampValue).toLocaleString()
+      : ""
+    : "";
+  const performedBy = log.performedBy
+    ? `${log.performedBy.name} (${log.performedBy.email})`
+    : null;
+
+  return (
+    <div className="rounded-lg border p-3">
+      <div className="flex items-center justify-between gap-3">
+        <Badge variant={statusConfig[log.action].variant}>{log.action}</Badge>
+        {formattedTime ? (
+          <p className="text-xs text-muted-foreground">{formattedTime}</p>
+        ) : null}
+      </div>
+
+      {performedBy ? (
+        <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+          <User className="size-4" />
+          <span>{performedBy}</span>
+        </div>
+      ) : null}
+
+      <p className="mt-2 text-sm text-muted-foreground">
+        {log.notes || "No additional notes"}
+      </p>
     </div>
   );
 }

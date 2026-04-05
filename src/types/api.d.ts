@@ -693,11 +693,7 @@ export interface paths {
      */
     get: operations["getApiExtended-requests"];
     put?: never;
-    /**
-     * Create an extended request
-     * @description Students request changes related to an existing instance
-     */
-    post: operations["postApiExtended-requests"];
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -2973,6 +2969,8 @@ export interface components {
           | "PROVISIONING"
           | "COMPLETED"
           | "FAILED";
+        /** @description Semester of the instance */
+        semester?: string;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -3038,6 +3036,8 @@ export interface components {
         | "PROVISIONING"
         | "COMPLETED"
         | "FAILED";
+      /** @description Semester of the instance */
+      semester?: string;
       /** @description Timestamp when the record was created */
       createdAt?: Record<string, never> | string | number;
       /** @description Timestamp when the record was last updated */
@@ -3286,8 +3286,12 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
+      targetInstance: {
+        /** @description Target instance ID */
+        id: number;
+        /** @description Target instance hostname */
+        hostname: string;
+      };
       /** @description Summary of a course offering */
       courseOffering?: {
         /** @description Course code */
@@ -3308,8 +3312,14 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
-      /** @description Requester platform user ID */
-      requesterId: number;
+      requester: {
+        /** @description Requester platform user ID */
+        id: number;
+        /** @description Requester name */
+        name: string;
+        /** @description Requester email */
+        email: string;
+      };
       /** @description Reviewer platform user ID */
       reviewerId?: number;
       /** @description Timestamp when the record was created */
@@ -3512,8 +3522,12 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
+      targetInstance: {
+        /** @description Target instance ID */
+        id: number;
+        /** @description Target instance hostname */
+        hostname: string;
+      };
       /** @description Summary of a course offering */
       courseOffering?: {
         /** @description Course code */
@@ -3534,8 +3548,14 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
-      /** @description Requester platform user ID */
-      requesterId: number;
+      requester: {
+        /** @description Requester platform user ID */
+        id: number;
+        /** @description Requester name */
+        name: string;
+        /** @description Requester email */
+        email: string;
+      };
       /** @description Reviewer platform user ID */
       reviewerId?: number;
       /** @description Timestamp when the record was created */
@@ -3575,8 +3595,12 @@ export interface components {
         status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
         /** @description Reviewer or requester note */
         reason?: string;
-        /** @description Target instance ID */
-        targetInstanceId: number;
+        targetInstance: {
+          /** @description Target instance ID */
+          id: number;
+          /** @description Target instance hostname */
+          hostname: string;
+        };
         /** @description Summary of a course offering */
         courseOffering?: {
           /** @description Course code */
@@ -3597,8 +3621,14 @@ export interface components {
           /** @description Semester end date */
           endDate: Record<string, never> | string | number;
         };
-        /** @description Requester platform user ID */
-        requesterId: number;
+        requester: {
+          /** @description Requester platform user ID */
+          id: number;
+          /** @description Requester name */
+          name: string;
+          /** @description Requester email */
+          email: string;
+        };
         /** @description Reviewer platform user ID */
         reviewerId?: number;
         /** @description Timestamp when the record was created */
@@ -3633,8 +3663,12 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
-      /** @description Target instance ID */
-      targetInstanceId: number;
+      targetInstance: {
+        /** @description Target instance ID */
+        id: number;
+        /** @description Target instance hostname */
+        hostname: string;
+      };
       /** @description Summary of a course offering */
       courseOffering?: {
         /** @description Course code */
@@ -3655,8 +3689,14 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
-      /** @description Requester platform user ID */
-      requesterId: number;
+      requester: {
+        /** @description Requester platform user ID */
+        id: number;
+        /** @description Requester name */
+        name: string;
+        /** @description Requester email */
+        email: string;
+      };
       /** @description Reviewer platform user ID */
       reviewerId?: number;
       /** @description Timestamp when the record was created */
@@ -6226,46 +6266,6 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GetExtendedRequestsResponse"];
-        };
-      };
-    };
-  };
-  "postApiExtended-requests": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateExtendedRequestRequestBody"];
-        "application/x-www-form-urlencoded": components["schemas"]["CreateExtendedRequestRequestBody"];
-        "multipart/form-data": components["schemas"]["CreateExtendedRequestRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Extended request data */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["CreateExtendedRequestResponse"];
-        };
-      };
-      /** @description Response for status 403 */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Error message */
-            message: string;
-          };
         };
       };
     };
