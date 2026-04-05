@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 import { toast } from "sonner";
 
-import { fetchClient } from "@midori/lib/api";
+import { fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import type { Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
@@ -100,7 +100,7 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
       })
       .catch((error) => {
         console.error("Failed to create request:", error);
-        toast.error("Failed to create request");
+        toast.error(getApiErrorMessage(error) ?? "Failed to create request");
         return null;
       });
 
@@ -111,7 +111,7 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
     }
 
     if (result.error) {
-      toast.error("Failed to create request");
+      toast.error(getApiErrorMessage(result.error) ?? "Failed to create request");
       return;
     }
 

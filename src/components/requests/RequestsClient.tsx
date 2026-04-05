@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { api, fetchClient } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { hasPermission, type Role } from "@midori/lib/roles";
 import { Skeleton } from "@midori/components/ui/skeleton";
 import { Tabs, TabsContent } from "@midori/components/ui/tabs";
@@ -421,13 +421,21 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
         })
         .catch((error) => {
           console.error("Failed to update request:", error);
-          toast.error("Failed to update request");
+          toast.error(getApiErrorMessage(error) ?? "Failed to update request");
           return null;
         });
 
       withActionLoading(requestId, false);
 
-      if (!result || result.error) {
+      if (!result) {
+        return;
+      }
+
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to update request",
+        );
         return;
       }
 
@@ -454,13 +462,23 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
         })
         .catch((error) => {
           console.error("Failed to update extended request:", error);
-          toast.error("Failed to update extended request");
+          toast.error(
+            getApiErrorMessage(error) ?? "Failed to update extended request",
+          );
           return null;
         });
 
       withActionLoading(extendedRequestId, false);
 
-      if (!result || result.error) {
+      if (!result) {
+        return;
+      }
+
+      const resultError = (result as { error?: unknown }).error;
+      if (resultError) {
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to update extended request",
+        );
         return;
       }
 
@@ -516,17 +534,42 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
 
       setIsBulkActing(false);
 
-      const successCount = results.filter(
-        (result) => result.status === "fulfilled" && !result.value.error,
-      ).length;
+      const successCount = results.filter((result) => {
+        if (result.status !== "fulfilled") {
+          return false;
+        }
+
+        const resultError = (result.value as { error?: unknown }).error;
+        return !resultError;
+      }).length;
       const failedCount = results.length - successCount;
+
+      const failedMessages = results.flatMap((result) => {
+        if (result.status === "rejected") {
+          const message = getApiErrorMessage(result.reason);
+          return message ? [message] : [];
+        }
+
+        const resultError = (result.value as { error?: unknown }).error;
+        if (resultError) {
+          const message = getApiErrorMessage(resultError);
+          return message ? [message] : [];
+        }
+
+        return [];
+      });
 
       if (successCount > 0) {
         toast.success(`${successCount} requests ${action.toLowerCase()}`);
       }
 
       if (failedCount > 0) {
-        toast.error(`${failedCount} requests failed to update`);
+        const firstFailedMessage = failedMessages[0];
+        toast.error(
+          firstFailedMessage
+            ? `${failedCount} requests failed to update: ${firstFailedMessage}`
+            : `${failedCount} requests failed to update`,
+        );
       }
 
       if (requestType === "instance") {
