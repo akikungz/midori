@@ -239,7 +239,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
         request.title,
         request.description,
         request.reason,
-        `#${request.targetInstanceId}`,
+        `#${request.targetInstance.id}`,
         request.courseOffering?.courseCode,
       ]
         .filter(Boolean)
