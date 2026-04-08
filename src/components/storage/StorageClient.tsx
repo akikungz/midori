@@ -22,6 +22,7 @@ import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Skeleton } from "@midori/components/ui/skeleton";
 import { Badge } from "@midori/components/ui/badge";
+import { Progress } from "@midori/components/ui/progress";
 import {
   Card,
   CardContent,
@@ -77,6 +78,8 @@ export function StorageClient() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | StorageType>("all");
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingFileName, setUploadingFileName] = useState("");
   const [actionLoadingIds, setActionLoadingIds] = useState<Set<string>>(
     new Set(),
   );
@@ -182,6 +185,61 @@ export function StorageClient() {
     uploadInputRef.current?.click();
   }, []);
 
+  const uploadToPresignedUrl = useCallback(
+    (
+      uploadUrl: string,
+      file: File,
+      contentType: string,
+      onProgress: (progress: number) => void,
+    ) =>
+      new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("PUT", uploadUrl);
+        xhr.setRequestHeader("Content-Type", contentType);
+
+        xhr.upload.onprogress = (event) => {
+          if (!event.lengthComputable) {
+            return;
+          }
+
+          const nextProgress = Math.round((event.loaded / event.total) * 100);
+          onProgress(Math.max(0, Math.min(100, nextProgress)));
+        };
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            onProgress(100);
+            resolve();
+            return;
+          }
+
+          let message = `Upload failed with status ${xhr.status}`;
+
+          if (xhr.status === 413) {
+            message =
+              "File is too large for the storage backend. Please try a smaller file.";
+          } else if (xhr.status === 400) {
+            message =
+              "Invalid file format or upload request rejected by storage backend.";
+          }
+
+          reject(new Error(message));
+        };
+
+        xhr.onerror = () => {
+          reject(new Error("Network error while uploading file"));
+        };
+
+        xhr.onabort = () => {
+          reject(new Error("Upload was cancelled"));
+        };
+
+        xhr.send(file);
+      }),
+    [],
+  );
+
   const handleUploadFileChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const selectedFile = event.target.files?.[0];
@@ -201,6 +259,8 @@ export function StorageClient() {
       }
 
       setIsUploading(true);
+      setUploadingFileName(selectedFile.name);
+      setUploadProgress(0);
 
       try {
         const contentType = selectedFile.type || "application/octet-stream";
@@ -219,27 +279,12 @@ export function StorageClient() {
         }
 
         // Step 2: Upload file directly to S3 using presigned URL
-        const uploadResponse = await fetch(uploadData.uploadUrl, {
-          method: "PUT",
-          headers: {
-            "Content-Type": contentType,
-          },
-          body: selectedFile,
-        });
-
-        if (!uploadResponse.ok) {
-          let message = `Upload failed with status ${uploadResponse.status}`;
-
-          if (uploadResponse.status === 413) {
-            message =
-              "File is too large for the storage backend. Please try a smaller file.";
-          } else if (uploadResponse.status === 400) {
-            message =
-              "Invalid file format or upload request rejected by storage backend.";
-          }
-
-          throw new Error(message);
-        }
+        await uploadToPresignedUrl(
+          uploadData.uploadUrl,
+          selectedFile,
+          contentType,
+          setUploadProgress,
+        );
 
         // Step 3: Create file metadata in the API
         const extension = selectedFile.name.includes(".")
@@ -275,9 +320,11 @@ export function StorageClient() {
           uploadInputRef.current.value = "";
         }
         setIsUploading(false);
+        setUploadingFileName("");
+        setUploadProgress(0);
       }
     },
-    [invalidateStorageQueries],
+    [invalidateStorageQueries, uploadToPresignedUrl],
   );
 
   const handleDelete = useCallback(
@@ -418,6 +465,8 @@ export function StorageClient() {
         isRefreshing={isFetching}
         onUploadClick={handleUploadClick}
         isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        uploadingFileName={uploadingFileName}
         isDisabled={false}
       />
 
@@ -593,6 +642,8 @@ interface StorageToolbarProps {
   isRefreshing: boolean;
   onUploadClick: () => void;
   isUploading: boolean;
+  uploadProgress: number;
+  uploadingFileName: string;
   isDisabled: boolean;
 }
 
@@ -605,58 +656,76 @@ function StorageToolbar({
   isRefreshing,
   onUploadClick,
   isUploading,
+  uploadProgress,
+  uploadingFileName,
   isDisabled,
 }: StorageToolbarProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={searchTerm}
-          onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search files and folders..."
-          className="pl-9"
+    <div className="space-y-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={searchTerm}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder="Search files and folders..."
+            className="pl-9"
+            disabled={isDisabled}
+          />
+        </div>
+
+        <Select
+          value={typeFilter}
+          onValueChange={(value) =>
+            onTypeFilterChange(value as "all" | StorageType)
+          }
           disabled={isDisabled}
-        />
+        >
+          <SelectTrigger className="w-full sm:w-40">
+            <SelectValue placeholder="Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All types</SelectItem>
+            <SelectItem value="FILE">Files</SelectItem>
+            <SelectItem value="FOLDER">Folders</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={onRefresh}
+          disabled={isRefreshing || isDisabled}
+        >
+          <RefreshCw
+            className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
+          <span className="sr-only">Refresh</span>
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onUploadClick}
+          disabled={isUploading || isDisabled}
+        >
+          <Upload className="mr-1.5 size-4" />
+          {isUploading ? "Uploading..." : "Upload"}
+        </Button>
       </div>
 
-      <Select
-        value={typeFilter}
-        onValueChange={(value) =>
-          onTypeFilterChange(value as "all" | StorageType)
-        }
-        disabled={isDisabled}
-      >
-        <SelectTrigger className="w-full sm:w-40">
-          <SelectValue placeholder="Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All types</SelectItem>
-          <SelectItem value="FILE">Files</SelectItem>
-          <SelectItem value="FOLDER">Folders</SelectItem>
-        </SelectContent>
-      </Select>
-
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        onClick={onRefresh}
-        disabled={isRefreshing || isDisabled}
-      >
-        <RefreshCw className={`size-4 ${isRefreshing ? "animate-spin" : ""}`} />
-        <span className="sr-only">Refresh</span>
-      </Button>
-
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onUploadClick}
-        disabled={isUploading || isDisabled}
-      >
-        <Upload className="mr-1.5 size-4" />
-        {isUploading ? "Uploading..." : "Upload"}
-      </Button>
+      {isUploading ? (
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span className="truncate" title={uploadingFileName}>
+              Uploading {uploadingFileName || "file"}
+            </span>
+            <span>{uploadProgress}%</span>
+          </div>
+          <Progress value={uploadProgress} aria-label="File upload progress" />
+        </div>
+      ) : null}
     </div>
   );
 }
