@@ -92,7 +92,6 @@ export type FileType = "FILE" | "FOLDER";
 export type FileVisibility = Schema<"StorageFilePermissionItem">["permission"];
 export type FileData = PaginatedValue<"StorageFileListResponse">;
 export type FilePermission = Schema<"StorageFilePermissionItem">;
-export type FileVersion = Schema<"StorageFileVersionItem">;
 export type FileDetails = Schema<"StorageFileDetailResponse">;
 
 export interface BreadcrumbItem {
