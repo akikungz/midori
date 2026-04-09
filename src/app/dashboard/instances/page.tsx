@@ -1,8 +1,37 @@
 import { InstancesClient } from "@midori/components/instances/InstancesClient";
 import { requireServerSession } from "@midori/lib/server-auth";
+import { createServerApiClient } from "@midori/lib/server-api";
+import { buildSemesterInstanceNotice } from "@midori/lib/semester-notice";
+import { SemesterInstanceNotice } from "@midori/components/shared/SemesterInstanceNotice";
 
 export default async function InstancesPage() {
-  const { role } = await requireServerSession();
+  const [{ role }, api] = await Promise.all([
+    requireServerSession(),
+    createServerApiClient(),
+  ]);
+  const isStudent = role === "STUDENT";
+
+  const semesterNoticeData = isStudent
+    ? await Promise.all([
+        api.GET("/api/academic/semesters/current"),
+        api.GET("/api/academic/semesters", {
+          params: {
+            query: {
+              page: 1,
+              pageSize: 100,
+            },
+          },
+        }),
+      ])
+    : null;
+
+  const semesterInstanceNotice =
+    isStudent && semesterNoticeData
+      ? buildSemesterInstanceNotice({
+          currentSemester: semesterNoticeData[0].data,
+          semesters: semesterNoticeData[1].data?.values,
+        })
+      : null;
 
   return (
     <div className="space-y-6">
@@ -15,6 +44,10 @@ export default async function InstancesPage() {
           </p>
         </div>
       </div>
+
+      {semesterInstanceNotice ? (
+        <SemesterInstanceNotice notice={semesterInstanceNotice} />
+      ) : null}
 
       <InstancesClient userRole={role} />
     </div>

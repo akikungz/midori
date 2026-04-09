@@ -21,11 +21,13 @@ import type { components } from "@midori/types/api";
 import { fetchClient } from "@midori/lib/api";
 import { formatDateTime, formatFileSize } from "@midori/lib/format";
 import type { Role } from "@midori/lib/roles";
+import type { SemesterInstanceNotice as SemesterInstanceNoticeData } from "@midori/lib/semester-notice";
 import {
   getRoleDisplayName,
   getRoleBadgeVariant,
   hasPermission,
 } from "@midori/lib/roles";
+import { SemesterInstanceNotice } from "@midori/components/shared/SemesterInstanceNotice";
 import {
   Card,
   CardContent,
@@ -62,6 +64,7 @@ interface DashboardCardsProps {
     requestCount: number;
     extendedRequestCount: number;
   };
+  semesterInstanceNotice?: SemesterInstanceNoticeData | null;
 }
 
 interface DashboardLiveSnapshot {
@@ -343,6 +346,7 @@ export function DashboardCards({
   user,
   proxmoxOverview,
   dashboardSummary,
+  semesterInstanceNotice,
 }: DashboardCardsProps) {
   const router = useRouter();
   const role = user?.role as Role | undefined;
@@ -404,6 +408,10 @@ export function DashboardCards({
           Here's an overview of your FITM Cloud resources.
         </p>
       </div>
+
+      {isStudent && semesterInstanceNotice ? (
+        <SemesterInstanceNotice notice={semesterInstanceNotice} />
+      ) : null}
 
       {/* Proxmox Summary */}
       <div className="space-y-3">

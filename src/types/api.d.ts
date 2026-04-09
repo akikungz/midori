@@ -140,6 +140,66 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/instances/{instanceId}/start": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Start instance
+     * @description Start a specific instance by ID
+     */
+    post: operations["postApiInstancesByInstanceIdStart"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/stop": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Stop instance
+     * @description Stop a specific instance by ID
+     */
+    post: operations["postApiInstancesByInstanceIdStop"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/instances/{instanceId}/restart": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Restart instance
+     * @description Restart a specific instance by ID
+     */
+    post: operations["postApiInstancesByInstanceIdRestart"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/instances/{instanceId}/reverse-proxies": {
     parameters: {
       query?: never;
@@ -268,6 +328,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/instances/{instanceId}/monitoring": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get monitoring data for an instance
+     * @description Retrieve Prometheus-backed runtime monitoring metrics for a specific instance.
+     */
+    get: operations["getApiInstancesByInstanceIdMonitoring"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/monitoring/query": {
     parameters: {
       query?: never;
@@ -337,7 +417,7 @@ export interface paths {
     };
     /**
      * Get current semester
-     * @description Retrieve the current active semester
+     * @description Retrieve the current semester auto-detected by current date within semester date range
      */
     get: operations["getApiAcademicSemestersCurrent"];
     put?: never;
@@ -693,7 +773,11 @@ export interface paths {
      */
     get: operations["getApiExtended-requests"];
     put?: never;
-    post?: never;
+    /**
+     * Create a new extended request
+     * @description Students submit an extension request for an existing instance
+     */
+    post: operations["postApiExtended-requests"];
     delete?: never;
     options?: never;
     head?: never;
@@ -840,8 +924,8 @@ export interface paths {
       cookie?: never;
     };
     /**
-     * Create latest version download URL
-     * @description Generate a signed download URL for the latest file version
+     * Create download URL
+     * @description Generate a signed download URL for a file
      */
     get: operations["getApiStorageFilesByFileIdDownload-url"];
     put?: never;
@@ -887,90 +971,6 @@ export interface paths {
      */
     post: operations["postApiStorageFilesByFileIdCopy"];
     delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storage/files/{fileId}/versions": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * List file versions
-     * @description List version history for a file
-     */
-    get: operations["getApiStorageFilesByFileIdVersions"];
-    put?: never;
-    /**
-     * Create file version
-     * @description Create a new version for a file
-     */
-    post: operations["postApiStorageFilesByFileIdVersions"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storage/files/{fileId}/upload-url": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /**
-     * Create file version upload URL
-     * @description Generate a presigned upload URL for a new file version
-     */
-    post: operations["postApiStorageFilesByFileIdUpload-url"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storage/files/{fileId}/versions/{versionId}/download-url": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * Create file version download URL
-     * @description Generate a signed download URL for a specific file version
-     */
-    get: operations["getApiStorageFilesByFileIdVersionsByVersionIdDownload-url"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storage/files/{fileId}/versions/{versionId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * Delete file version
-     * @description Delete a specific file version
-     */
-    delete: operations["deleteApiStorageFilesByFileIdVersionsByVersionId"];
     options?: never;
     head?: never;
     patch?: never;
@@ -3177,6 +3177,18 @@ export interface components {
       /** @description Success message */
       message: string;
     };
+    InstanceStatusActionRequestParams: {
+      /** @description Unique identifier for the instance to update */
+      instanceId: number;
+    };
+    InstanceStatusActionResponse: {
+      /** @description Unique identifier for the instance */
+      id: number;
+      /** @enum {string} */
+      status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+      /** @description Success message */
+      message: string;
+    };
     GetInstanceAuditLogsResponse: {
       /** @description List of audit log entries */
       values: {
@@ -3217,6 +3229,28 @@ export interface components {
       provisionStatus: string;
       /** @description Success message */
       message: string;
+    };
+    GetInstanceMonitoringResponse: {
+      /** @description Timestamp used for the Prometheus instant queries */
+      generatedAt: string;
+      /** @description Unique identifier for the instance */
+      instanceId: number;
+      /** @description Proxmox VM identifier for the instance */
+      vmId: number;
+      /** @description Hostname of the provisioned virtual machine */
+      hostname: string;
+      summary: {
+        uptimeSeconds: number | null;
+        cpuPercent: number | null;
+        memoryUsedBytes: number | null;
+        memoryCapacityBytes: number | null;
+      };
+      queries: {
+        [key: string]: string;
+      };
+      details: {
+        [key: string]: unknown;
+      };
     };
     InstanceIdParams: {
       /** @description Unique identifier for the instance */
@@ -3286,6 +3320,8 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
       targetInstance: {
         /** @description Target instance ID */
         id: number;
@@ -3312,6 +3348,8 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
+      /** @description Requester platform user ID */
+      requesterId: number;
       requester: {
         /** @description Requester platform user ID */
         id: number;
@@ -3522,6 +3560,8 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
       targetInstance: {
         /** @description Target instance ID */
         id: number;
@@ -3548,6 +3588,8 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
+      /** @description Requester platform user ID */
+      requesterId: number;
       requester: {
         /** @description Requester platform user ID */
         id: number;
@@ -3595,6 +3637,8 @@ export interface components {
         status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
         /** @description Reviewer or requester note */
         reason?: string;
+        /** @description Target instance ID */
+        targetInstanceId: number;
         targetInstance: {
           /** @description Target instance ID */
           id: number;
@@ -3621,6 +3665,8 @@ export interface components {
           /** @description Semester end date */
           endDate: Record<string, never> | string | number;
         };
+        /** @description Requester platform user ID */
+        requesterId: number;
         requester: {
           /** @description Requester platform user ID */
           id: number;
@@ -3663,6 +3709,8 @@ export interface components {
       status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
       /** @description Reviewer or requester note */
       reason?: string;
+      /** @description Target instance ID */
+      targetInstanceId: number;
       targetInstance: {
         /** @description Target instance ID */
         id: number;
@@ -3689,6 +3737,8 @@ export interface components {
         /** @description Semester end date */
         endDate: Record<string, never> | string | number;
       };
+      /** @description Requester platform user ID */
+      requesterId: number;
       requester: {
         /** @description Requester platform user ID */
         id: number;
@@ -3875,6 +3925,8 @@ export interface components {
       description?: string;
       /** @description Indicates if the course is currently active */
       isActive: boolean;
+      /** @description Indicates if the course is project based */
+      isProjectBased: boolean;
       /** @description Timestamp when the record was created */
       createdAt?: Record<string, never> | string | number;
       /** @description Timestamp when the record was last updated */
@@ -4049,6 +4101,8 @@ export interface components {
         description?: string;
         /** @description Indicates if the course is currently active */
         isActive: boolean;
+        /** @description Indicates if the course is project based */
+        isProjectBased: boolean;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -4091,6 +4145,8 @@ export interface components {
         description?: string;
         /** @description Indicates if the course is currently active */
         isActive: boolean;
+        /** @description Indicates if the course is project based */
+        isProjectBased: boolean;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -4133,6 +4189,8 @@ export interface components {
         description?: string;
         /** @description Indicates if the course is currently active */
         isActive: boolean;
+        /** @description Indicates if the course is project based */
+        isProjectBased: boolean;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -4164,6 +4222,8 @@ export interface components {
       description?: string;
       /** @description Indicates if the course is currently active */
       isActive: boolean;
+      /** @description Indicates if the course is project based */
+      isProjectBased: boolean;
       /** @description List of instructors teaching the course */
       instructors: {
         /** @description Unique identifier for the instructor listing */
@@ -4212,6 +4272,8 @@ export interface components {
       title: string;
       /** @description Description of the course */
       description?: string;
+      /** @description Indicates if the course is project based */
+      isProjectBased?: boolean;
     };
     /** @description Response structure after adding a new course */
     AddCourseResponse: {
@@ -4225,6 +4287,8 @@ export interface components {
       description?: string;
       /** @description Indicates if the course is currently active */
       isActive: boolean;
+      /** @description Indicates if the course is project based */
+      isProjectBased: boolean;
       /** @description Timestamp when the record was created */
       createdAt?: Record<string, never> | string | number;
       /** @description Timestamp when the record was last updated */
@@ -4240,6 +4304,8 @@ export interface components {
       description?: string;
       /** @description Indicates if the course is currently active */
       isActive?: boolean;
+      /** @description Indicates if the course is project based */
+      isProjectBased?: boolean;
     };
     /** @description Request body for associating an instructor with a course */
     EditCourseInstructorRequestBody: {
@@ -4372,6 +4438,8 @@ export interface components {
         description?: string;
         /** @description Indicates if the course is currently active */
         isActive: boolean;
+        /** @description Indicates if the course is project based */
+        isProjectBased: boolean;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -4485,6 +4553,8 @@ export interface components {
         description?: string;
         /** @description Indicates if the course is currently active */
         isActive: boolean;
+        /** @description Indicates if the course is project based */
+        isProjectBased: boolean;
         /** @description Timestamp when the record was created */
         createdAt?: Record<string, never> | string | number;
         /** @description Timestamp when the record was last updated */
@@ -4614,42 +4684,6 @@ export interface components {
       parentId?: string;
       name?: string;
     };
-    StorageFileVersionItem: {
-      id: number;
-      platformFileId: string;
-      versionNumber: number;
-      sizeBytes: number;
-      mimeType?: string;
-      storagePath: string;
-      checksumSha256?: string;
-      createdById?: number;
-      /** @description Timestamp when the record was created */
-      createdAt?: Record<string, never> | string | number;
-      /** @description Timestamp when the record was last updated */
-      updatedAt?: Record<string, never> | string | number;
-    };
-    GetStorageFileVersionsResponse: {
-      values: {
-        id: number;
-        platformFileId: string;
-        versionNumber: number;
-        sizeBytes: number;
-        mimeType?: string;
-        storagePath: string;
-        checksumSha256?: string;
-        createdById?: number;
-        /** @description Timestamp when the record was created */
-        createdAt?: Record<string, never> | string | number;
-        /** @description Timestamp when the record was last updated */
-        updatedAt?: Record<string, never> | string | number;
-      }[];
-    };
-    CreateStorageFileVersionRequestBody: {
-      storagePath: string;
-      sizeBytes: number;
-      mimeType?: string;
-      checksumSha256?: string;
-    };
     CreateStorageUploadUrlRequestBody: {
       filename?: string;
       contentType?: string;
@@ -4723,6 +4757,8 @@ export interface components {
       id: number;
       /** @description Display label for the option */
       label: string;
+      /** @description Whether the course offering is project-based */
+      isProjectBased?: boolean;
     };
     /** @description List of autocomplete options */
     AutocompleteResponse: {
@@ -4730,6 +4766,8 @@ export interface components {
       id: number;
       /** @description Display label for the option */
       label: string;
+      /** @description Whether the course offering is project-based */
+      isProjectBased?: boolean;
     }[];
     User: {
       id?: string;
@@ -5081,6 +5119,72 @@ export interface operations {
       };
     };
   };
+  postApiInstancesByInstanceIdStart: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InstanceStatusActionResponse"];
+        };
+      };
+    };
+  };
+  postApiInstancesByInstanceIdStop: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InstanceStatusActionResponse"];
+        };
+      };
+    };
+  };
+  postApiInstancesByInstanceIdRestart: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InstanceStatusActionResponse"];
+        };
+      };
+    };
+  };
   "getApiInstancesByInstanceIdReverse-proxies": {
     parameters: {
       query?: never;
@@ -5322,6 +5426,98 @@ export interface operations {
       };
       /** @description Response for status 403 */
       403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  getApiInstancesByInstanceIdMonitoring: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        instanceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Response for status 200 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GetInstanceMonitoringResponse"];
+        };
+      };
+      /** @description Response for status 404 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 409 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 502 */
+      502: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 503 */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+      /** @description Response for status 504 */
+      504: {
         headers: {
           [name: string]: unknown;
         };
@@ -6270,6 +6466,46 @@ export interface operations {
       };
     };
   };
+  "postApiExtended-requests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateExtendedRequestRequestBody"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateExtendedRequestRequestBody"];
+        "multipart/form-data": components["schemas"]["CreateExtendedRequestRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Extended request data */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CreateExtendedRequestResponse"];
+        };
+      };
+      /** @description Response for status 403 */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description HTTP status code */
+            status: number;
+            /** @description Error message */
+            message: string;
+          };
+        };
+      };
+    };
+  };
   "patchApiExtended-requestsByExtendedRequestIdStatus": {
     parameters: {
       query?: never;
@@ -6614,160 +6850,6 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["StorageFileItem"];
-        };
-      };
-    };
-  };
-  getApiStorageFilesByFileIdVersions: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        fileId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Response for status 200 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["GetStorageFileVersionsResponse"];
-        };
-      };
-    };
-  };
-  postApiStorageFilesByFileIdVersions: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        fileId: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateStorageFileVersionRequestBody"];
-        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageFileVersionRequestBody"];
-        "multipart/form-data": components["schemas"]["CreateStorageFileVersionRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Response for status 200 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["StorageFileVersionItem"];
-        };
-      };
-    };
-  };
-  "postApiStorageFilesByFileIdUpload-url": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        fileId: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateStorageUploadUrlRequestBody"];
-        "application/x-www-form-urlencoded": components["schemas"]["CreateStorageUploadUrlRequestBody"];
-        "multipart/form-data": components["schemas"]["CreateStorageUploadUrlRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Response for status 200 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["StorageUploadUrlResponse"];
-        };
-      };
-      /** @description Response for status 400 */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Error message */
-            message: string;
-          };
-        };
-      };
-      /** @description Response for status 403 */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            /** @description HTTP status code */
-            status: number;
-            /** @description Error message */
-            message: string;
-          };
-        };
-      };
-    };
-  };
-  "getApiStorageFilesByFileIdVersionsByVersionIdDownload-url": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        fileId: string;
-        versionId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Response for status 200 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["StorageDownloadUrlResponse"];
-        };
-      };
-    };
-  };
-  deleteApiStorageFilesByFileIdVersionsByVersionId: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        fileId: string;
-        versionId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Response for status 200 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            success: boolean;
-          };
         };
       };
     };

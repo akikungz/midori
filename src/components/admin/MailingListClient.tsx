@@ -11,6 +11,32 @@ import { SearchInput } from "@midori/components/shared/SearchInput";
 import { MailingList, type MailingEntry } from "./mailing-list/MailingCard";
 import { AddEmailDialog } from "./mailing-list/MailingDialogs";
 
+const DEFAULT_MAILING_EMAIL_DOMAIN = "@itm.kmutnb.ac.th";
+
+function normalizeMailingEmail(input: string): string {
+  const trimmed = input.trim().toLowerCase();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  if (!trimmed.includes("@")) {
+    return `${trimmed}${DEFAULT_MAILING_EMAIL_DOMAIN}`;
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+
+  if (!localPart) {
+    return "";
+  }
+
+  if (!domainPart) {
+    return `${localPart}${DEFAULT_MAILING_EMAIL_DOMAIN}`;
+  }
+
+  return trimmed;
+}
+
 // ============================================================================
 // Main Component
 // ============================================================================
@@ -60,20 +86,25 @@ export function MailingListClient() {
   }, []);
 
   const handleAddEmail = useCallback(async () => {
-    if (!newEmail || !newEmail.includes("@")) {
+    const normalizedEmail = normalizeMailingEmail(newEmail);
+
+    if (!normalizedEmail || !normalizedEmail.includes("@")) {
       toast.error("Please enter a valid email address");
       return;
     }
 
+    setNewEmail(normalizedEmail);
+
     setIsSubmitting(true);
     const result = await fetchClient
       .POST("/api/academic/mailing-list", {
-        body: { email: newEmail },
+        body: { email: normalizedEmail },
       })
       .catch((error) => {
         console.error("Failed to add email:", error);
         toast.error(
-          getApiErrorMessage(error) ?? "An error occurred while adding the email",
+          getApiErrorMessage(error) ??
+            "An error occurred while adding the email",
         );
         return null;
       });
@@ -117,7 +148,9 @@ export function MailingListClient() {
 
       const resultError = (result as { error?: unknown }).error;
       if (resultError) {
-        toast.error(getApiErrorMessage(resultError) ?? "Failed to delete email");
+        toast.error(
+          getApiErrorMessage(resultError) ?? "Failed to delete email",
+        );
         return;
       }
 

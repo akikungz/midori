@@ -22,17 +22,20 @@ function useCourseForm() {
   const [formCode, setFormCode] = useState("");
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
+  const [formIsProjectBased, setFormIsProjectBased] = useState(false);
 
   const reset = useCallback(() => {
     setFormCode("");
     setFormTitle("");
     setFormDescription("");
+    setFormIsProjectBased(false);
   }, []);
 
   const setFromCourse = useCallback((course: Course) => {
     setFormCode(course.code);
     setFormTitle(course.title);
     setFormDescription(course.description || "");
+    setFormIsProjectBased(course.isProjectBased);
   }, []);
 
   const isValid = formCode.trim() !== "" && formTitle.trim() !== "";
@@ -41,9 +44,11 @@ function useCourseForm() {
     formCode,
     formTitle,
     formDescription,
+    formIsProjectBased,
     setFormCode,
     setFormTitle,
     setFormDescription,
+    setFormIsProjectBased,
     reset,
     setFromCourse,
     isValid,
@@ -145,6 +150,7 @@ export function CoursesClient() {
           code: courseForm.formCode,
           title: courseForm.formTitle,
           description: courseForm.formDescription || undefined,
+          isProjectBased: courseForm.formIsProjectBased,
         },
       })
       .catch(() => {
@@ -183,6 +189,7 @@ export function CoursesClient() {
           code: courseForm.formCode,
           title: courseForm.formTitle,
           description: courseForm.formDescription || undefined,
+          isProjectBased: courseForm.formIsProjectBased,
         },
       })
       .catch(() => null);
@@ -337,9 +344,11 @@ export function CoursesClient() {
         formCode={courseForm.formCode}
         formTitle={courseForm.formTitle}
         formDescription={courseForm.formDescription}
+        formIsProjectBased={courseForm.formIsProjectBased}
         onFormCodeChange={courseForm.setFormCode}
         onFormTitleChange={courseForm.setFormTitle}
         onFormDescriptionChange={courseForm.setFormDescription}
+        onFormIsProjectBasedChange={courseForm.setFormIsProjectBased}
         onSubmit={handleAddCourse}
         isSubmitting={isSubmitting}
       />
@@ -351,9 +360,11 @@ export function CoursesClient() {
         formCode={courseForm.formCode}
         formTitle={courseForm.formTitle}
         formDescription={courseForm.formDescription}
+        formIsProjectBased={courseForm.formIsProjectBased}
         onFormCodeChange={courseForm.setFormCode}
         onFormTitleChange={courseForm.setFormTitle}
         onFormDescriptionChange={courseForm.setFormDescription}
+        onFormIsProjectBasedChange={courseForm.setFormIsProjectBased}
         onSubmit={handleEditCourse}
         isSubmitting={isSubmitting}
         isLoadingDetails={isLoadingCourseDetails}

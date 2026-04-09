@@ -261,34 +261,34 @@ export function SemestersClient() {
     refetch();
   }, [selectedSemester, refetch]);
 
-  const handleSetAsCurrent = useCallback(
-    async (semester: Semester) => {
-      if (semester.isCurrent) return;
+  // const handleSetAsCurrent = useCallback(
+  //   async (semester: Semester) => {
+  //     if (semester.isCurrent) return;
 
-      const result = await fetchClient
-        .PATCH("/api/academic/semesters/{semesterId}", {
-          params: { path: { semesterId: semester.id } },
-          body: { isCurrent: true },
-        })
-        .catch(() => {
-          toast.error("An error occurred while updating the semester");
-          return null;
-        });
+  //     const result = await fetchClient
+  //       .PATCH("/api/academic/semesters/{semesterId}", {
+  //         params: { path: { semesterId: semester.id } },
+  //         body: { isCurrent: true },
+  //       })
+  //       .catch(() => {
+  //         toast.error("An error occurred while updating the semester");
+  //         return null;
+  //       });
 
-      if (!result) {
-        return;
-      }
+  //     if (!result) {
+  //       return;
+  //     }
 
-      if (result.error) {
-        toast.error("Failed to set semester as current");
-        return;
-      }
+  //     if (result.error) {
+  //       toast.error("Failed to set semester as current");
+  //       return;
+  //     }
 
-      toast.success(`${semester.name} is now the current semester`);
-      refetch();
-    },
-    [refetch],
-  );
+  //     toast.success(`${semester.name} is now the current semester`);
+  //     refetch();
+  //   },
+  //   [refetch],
+  // );
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -329,7 +329,7 @@ export function SemestersClient() {
           searchQuery={searchQuery}
           onEdit={handleOpenEditDialog}
           onDelete={handleOpenDeleteDialog}
-          onSetAsCurrent={handleSetAsCurrent}
+          // onSetAsCurrent={handleSetAsCurrent}
           onAdd={handleOpenAddDialog}
         />
       )}

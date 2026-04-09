@@ -51,6 +51,7 @@ interface EditInstructorDialogProps {
   instructor: Instructor | null;
   editRole: "ADMIN" | "INSTRUCTOR";
   onRoleChange: (role: "ADMIN" | "INSTRUCTOR") => void;
+  isRoleLocked: boolean;
   selectedCourseIds: number[];
   onToggleCourse: (courseId: number) => void;
   onSubmit: () => void;
@@ -64,6 +65,7 @@ export function EditInstructorDialog({
   instructor,
   editRole,
   onRoleChange,
+  isRoleLocked,
   selectedCourseIds,
   onToggleCourse,
   onSubmit,
@@ -117,6 +119,7 @@ export function EditInstructorDialog({
                   onValueChange={(v) =>
                     onRoleChange(v as "ADMIN" | "INSTRUCTOR")
                   }
+                  disabled={isRoleLocked}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -126,6 +129,11 @@ export function EditInstructorDialog({
                     <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectContent>
                 </Select>
+                {isRoleLocked ? (
+                  <p className="text-xs text-muted-foreground">
+                    You cannot change your own role.
+                  </p>
+                ) : null}
               </Field>
             </FieldGroup>
           </TabsContent>

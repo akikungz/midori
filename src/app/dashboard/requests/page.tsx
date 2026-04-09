@@ -3,13 +3,23 @@ import { Plus } from "lucide-react";
 
 import { hasPermission } from "@midori/lib/roles";
 import { requireServerSession } from "@midori/lib/server-auth";
+import { createServerApiClient } from "@midori/lib/server-api";
 import { Button } from "@midori/components/ui/button";
 import { RequestsClient } from "@midori/components/requests";
 
 export default async function RequestsPage() {
-  const { role } = await requireServerSession();
+  const [{ role }, api] = await Promise.all([
+    requireServerSession(),
+    createServerApiClient(),
+  ]);
+
   const isStudent = role === "STUDENT";
-  const canCreateRequest = hasPermission(role, "CREATE_REQUEST");
+  const { data: currentSemester } = await api.GET(
+    "/api/academic/semesters/current",
+  );
+  const isSemesterBreak = isStudent && !currentSemester;
+  const canCreateRequest =
+    hasPermission(role, "CREATE_REQUEST") && !isSemesterBreak;
 
   return (
     <div className="space-y-6">
@@ -19,7 +29,9 @@ export default async function RequestsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Requests</h1>
           <p className="text-muted-foreground">
             {isStudent
-              ? "View and manage your instance requests"
+              ? isSemesterBreak
+                ? "Semester Break: creating new requests is unavailable"
+                : "View and manage your instance requests"
               : "Review and process instance requests"}
           </p>
         </div>
@@ -33,7 +45,11 @@ export default async function RequestsPage() {
         )}
       </div>
 
-      <RequestsClient userRole={role} isStudent={isStudent} />
+      <RequestsClient
+        userRole={role}
+        isStudent={isStudent}
+        canCreateRequest={canCreateRequest}
+      />
     </div>
   );
 }

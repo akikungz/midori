@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Server, Cpu, HardDrive, MemoryStick } from "lucide-react";
 import { toast } from "sonner";
 
-import { fetchClient, getApiErrorMessage } from "@midori/lib/api";
+import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import type { Role } from "@midori/lib/roles";
 import { Button } from "@midori/components/ui/button";
@@ -34,9 +34,15 @@ import {
 } from "@midori/components/ui/empty";
 import { Slider } from "@midori/components/ui/slider";
 
-const STUDENT_REQUEST_MAX_MEMORY_GB = 2;
+const STUDENT_REQUEST_MAX_MEMORY_MB = 2048;
 const STUDENT_REQUEST_DISK_GB = 8;
 const STUDENT_REQUEST_MAX_VCPU = 4;
+const MIN_MEMORY_MB = 512;
+const MEMORY_STEP_MB = 128;
+
+const PROJECT_REQUEST_MAX_MEMORY_MB = 8192;
+const PROJECT_REQUEST_DISK_GB = 32;
+const PROJECT_REQUEST_MAX_VCPU = 8;
 
 interface NewRequestFormProps {
   userRole: Role;
@@ -53,15 +59,14 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
     null,
   );
   const [cpus, setCpus] = useState(2);
-  const [memoryGB, setMemoryGB] = useState(STUDENT_REQUEST_MAX_MEMORY_GB);
+  const [memoryMB, setMemoryMB] = useState(512);
   const [diskGB, setDiskGB] = useState(STUDENT_REQUEST_DISK_GB);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const maxMemoryGB =
-    userRole === "STUDENT" ? STUDENT_REQUEST_MAX_MEMORY_GB : 16;
-  const maxDiskGB = userRole === "STUDENT" ? STUDENT_REQUEST_DISK_GB : 64;
-  const minDiskGB = userRole === "STUDENT" ? STUDENT_REQUEST_DISK_GB : 16;
-  const maxVcpu = userRole === "STUDENT" ? STUDENT_REQUEST_MAX_VCPU : 8;
+  const { data: currentSemester, isPending: isCurrentSemesterLoading } =
+    api.useQuery("get", "/api/academic/semesters/current");
+  const isSemesterBreakForStudent =
+    userRole === "STUDENT" && !isCurrentSemesterLoading && !currentSemester;
 
   // Use autocomplete hook for course offerings
   const courseOfferingsAutocomplete = useAutocomplete({
@@ -75,8 +80,52 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
     limit: 20,
   });
 
+  const selectedCourseOffering = useMemo(
+    () =>
+      courseOfferingsAutocomplete.options.find(
+        (option) => option.id === selectedCourseOfferingId,
+      ) ?? null,
+    [courseOfferingsAutocomplete.options, selectedCourseOfferingId],
+  );
+
+  const isStudentProjectCourse =
+    userRole === "STUDENT" && selectedCourseOffering?.isProjectBased === true;
+
+  const maxMemoryMB =
+    userRole === "STUDENT"
+      ? isStudentProjectCourse
+        ? PROJECT_REQUEST_MAX_MEMORY_MB
+        : STUDENT_REQUEST_MAX_MEMORY_MB
+      : 16 * 1024;
+  const maxDiskGB =
+    userRole === "STUDENT"
+      ? isStudentProjectCourse
+        ? PROJECT_REQUEST_DISK_GB
+        : STUDENT_REQUEST_DISK_GB
+      : 64;
+  const maxVcpu =
+    userRole === "STUDENT"
+      ? isStudentProjectCourse
+        ? PROJECT_REQUEST_MAX_VCPU
+        : STUDENT_REQUEST_MAX_VCPU
+      : 8;
+
+  useEffect(() => {
+    setCpus((prev) => Math.min(prev, maxVcpu));
+    setMemoryMB((prev) => Math.min(prev, maxMemoryMB));
+    setDiskGB((prev) => Math.min(Math.max(prev, 8), maxDiskGB));
+  }, [maxDiskGB, maxMemoryMB, maxVcpu]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSemesterBreakForStudent) {
+      toast.error(
+        "Semester Break: students cannot create new instance requests right now.",
+      );
+      return;
+    }
+
     if (
       !selectedCourseOfferingId ||
       !selectedTemplateId ||
@@ -93,8 +142,8 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
           description,
           courseOfferingId: selectedCourseOfferingId,
           cpus: Math.min(cpus, maxVcpu),
-          memoryMB: Math.min(memoryGB, maxMemoryGB) * 1024,
-          diskGB: Math.min(Math.max(diskGB, minDiskGB), maxDiskGB),
+          memoryMB: Math.min(memoryMB, maxMemoryMB),
+          diskGB: Math.min(diskGB, maxDiskGB),
           pveTemplateId: selectedTemplateId,
         },
       })
@@ -111,7 +160,9 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
     }
 
     if (result.error) {
-      toast.error(getApiErrorMessage(result.error) ?? "Failed to create request");
+      toast.error(
+        getApiErrorMessage(result.error) ?? "Failed to create request",
+      );
       return;
     }
 
@@ -229,7 +280,9 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
                 Instance Specifications
               </CardTitle>
               <CardDescription>
-                Configure the resources for your virtual machine
+                {isStudentProjectCourse
+                  ? "Project-based course selected: higher student limits are enabled"
+                  : "Configure the resources for your virtual machine"}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -264,21 +317,21 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
                       <MemoryStick className="size-4 text-muted-foreground" />
                       <FieldLabel>Memory</FieldLabel>
                     </div>
-                    <span className="font-semibold">{memoryGB} GB</span>
+                    <span className="font-semibold">{memoryMB} MB</span>
                   </div>
                   <Slider
-                    value={[memoryGB]}
+                    value={[memoryMB]}
                     onValueChange={(values: number[]) =>
-                      setMemoryGB(Math.min(values[0], maxMemoryGB))
+                      setMemoryMB(Math.min(values[0], maxMemoryMB))
                     }
-                    min={1}
-                    max={maxMemoryGB}
-                    step={1}
+                    min={MIN_MEMORY_MB}
+                    max={maxMemoryMB}
+                    step={MEMORY_STEP_MB}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>1 GB</span>
-                    <span>{maxMemoryGB} GB</span>
+                    <span>512 MB</span>
+                    <span>{maxMemoryMB} MB</span>
                   </div>
                 </Field>
 
@@ -294,16 +347,16 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
                     value={[diskGB]}
                     onValueChange={(values: number[]) =>
                       setDiskGB(
-                        Math.min(Math.max(values[0], minDiskGB), maxDiskGB),
+                        Math.min(Math.max(values[0], 8), maxDiskGB),
                       )
                     }
-                    min={minDiskGB}
+                    min={8}
                     max={maxDiskGB}
-                    step={4}
+                    step={1}
                     className="mt-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{minDiskGB} GB</span>
+                    <span>8 GB</span>
                     <span>{maxDiskGB} GB</span>
                   </div>
                 </Field>
@@ -326,7 +379,7 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Memory</span>
-                  <span className="font-medium">{memoryGB} GB</span>
+                  <span className="font-medium">{memoryMB} MB</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Disk</span>
@@ -341,6 +394,7 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
               type="submit"
               className="w-full"
               disabled={
+                isSemesterBreakForStudent ||
                 !title ||
                 !selectedCourseOfferingId ||
                 !selectedTemplateId ||
@@ -348,7 +402,11 @@ export function NewRequestForm({ userRole }: NewRequestFormProps) {
                 isSubmitting
               }
             >
-              {isSubmitting ? "Submitting..." : "Submit Request"}
+              {isSubmitting
+                ? "Submitting..."
+                : isSemesterBreakForStudent
+                  ? "Semester Break"
+                  : "Submit Request"}
             </Button>
             <Button
               type="button"

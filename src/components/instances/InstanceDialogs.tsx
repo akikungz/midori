@@ -7,7 +7,10 @@ import {
   ExternalLink,
   History,
   LoaderCircle,
+  Info,
+  Copy,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { fetchClient } from "@midori/lib/api";
 import { useAutocomplete } from "@midori/hooks/useAutocomplete";
@@ -619,10 +622,12 @@ function ReverseProxyItem({
   proxy,
   onDelete,
 }: ReverseProxyItemProps) {
+  const endpoint = `p${proxy.targetPort}-${hostname}.fitm.cloud`;
+
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="flex items-center gap-3">
-        {proxy.type === "HTTP" ? (
+        {proxy.type === "TCP" ? (
           <ExternalLink className="size-4 mt-0.5 text-muted-foreground" />
         ) : (
           <Globe className="size-4 mt-0.5 text-muted-foreground" />
@@ -631,14 +636,17 @@ function ReverseProxyItem({
           <p className="font-medium">Port {proxy.targetPort}</p>
           <p className="text-sm text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">
             {proxy.type} {proxy.description ? `• ${proxy.description} ` : ""}-{" "}
-            {`p${proxy.targetPort}-${hostname}.fitm.cloud`}
+            {endpoint}
           </p>
         </div>
       </div>
       <div className="flex gap-2">
+        {proxy.type === "TCP" ? (
+          <TcpServiceConnectDialog endpoint={endpoint} />
+        ) : null}
         {proxy.type === "HTTP" && (
           <a
-            href={`https://p${proxy.targetPort}-${hostname}.fitm.cloud`}
+            href={`https://${endpoint}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -671,6 +679,82 @@ function ReverseProxyItem({
         </AlertDialog>
       </div>
     </div>
+  );
+}
+
+interface TcpServiceConnectDialogProps {
+  endpoint: string;
+}
+
+function TcpServiceConnectDialog({ endpoint }: TcpServiceConnectDialogProps) {
+  const [open, setOpen] = useState(false);
+
+  const port = endpoint.split("-")[0].replace("p", "");
+  const tunnelCommand = `ncat -l 127.0.0.1 ${port} --sh-exec "ncat --ssl ${endpoint} 7443"`;
+
+  const copyCommand = async (command: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(command);
+      toast.success(`${label} copied`);
+    } catch {
+      toast.error(`Failed to copy ${label.toLowerCase()}`);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={() => setOpen(true)}
+      >
+        <Info className="size-4" />
+        <span className="sr-only">TCP connection guide</span>
+      </Button>
+      <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl overflow-x-hidden">
+        <DialogHeader>
+          <DialogTitle>Connect to TCP Service</DialogTitle>
+          <DialogDescription>
+            Use these commands to reach your TCP proxy endpoint over TLS.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="min-w-0 space-y-4 text-sm">
+          <div>
+            <p className="font-medium">Endpoint</p>
+            <p className="text-muted-foreground break-all">{endpoint}:7443</p>
+          </div>
+
+          <div>
+            <p className="font-medium">
+              Connect with a local TLS tunnel and access locally on port {port}
+            </p>
+            <div className="relative mt-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-2 z-10 size-7 border bg-background/70"
+                onClick={() =>
+                  void copyCommand(tunnelCommand, "Tunnel command")
+                }
+              >
+                <Copy className="size-4" />
+                <span className="sr-only">Copy tunnel command</span>
+              </Button>
+              <pre className="w-full max-w-full overflow-x-auto rounded-md border bg-muted p-3 pr-14 text-xs">
+                <code>{tunnelCommand}</code>
+              </pre>
+            </div>
+            <p className="text-muted-foreground mt-1">
+              Keep the tunnel terminal running and connect your client to
+              <code> 127.0.0.1:{port}</code>.
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

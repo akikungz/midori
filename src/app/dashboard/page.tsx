@@ -4,6 +4,7 @@ import {
   createServerApiClient,
   getServerSession,
 } from "@midori/lib/server-api";
+import { buildSemesterInstanceNotice } from "@midori/lib/semester-notice";
 import { DashboardCards } from "@midori/components/dashboard/DashboardCards";
 
 export default async function DashboardPage() {
@@ -17,6 +18,21 @@ export default async function DashboardPage() {
   }
 
   const proxmoxOverviewPromise = api.GET("/api/monitoring/proxmox/overview");
+  const semesterNoticePromise =
+    user.role === "STUDENT"
+      ? Promise.all([
+          api.GET("/api/academic/semesters/current"),
+          api.GET("/api/academic/semesters", {
+            params: {
+              query: {
+                page: 1,
+                pageSize: 100,
+              },
+            },
+          }),
+        ])
+      : Promise.resolve(null);
+
   const dashboardCountsPromise =
     user.role === "STUDENT"
       ? Promise.all([
@@ -81,10 +97,20 @@ export default async function DashboardPage() {
           ])
         : Promise.resolve(null);
 
-  const [{ data: proxmoxOverview }, dashboardCounts] = await Promise.all([
-    proxmoxOverviewPromise,
-    dashboardCountsPromise,
-  ]);
+  const [{ data: proxmoxOverview }, dashboardCounts, semesterNoticeData] =
+    await Promise.all([
+      proxmoxOverviewPromise,
+      dashboardCountsPromise,
+      semesterNoticePromise,
+    ]);
+
+  const semesterInstanceNotice =
+    user.role === "STUDENT" && semesterNoticeData
+      ? buildSemesterInstanceNotice({
+          currentSemester: semesterNoticeData[0].data,
+          semesters: semesterNoticeData[1].data?.values,
+        })
+      : null;
 
   const dashboardSummary =
     user.role === "STUDENT" && dashboardCounts
@@ -129,6 +155,7 @@ export default async function DashboardPage() {
       user={user}
       proxmoxOverview={proxmoxOverview}
       dashboardSummary={dashboardSummary}
+      semesterInstanceNotice={semesterInstanceNotice}
     />
   );
 }

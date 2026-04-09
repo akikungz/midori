@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Plus, Edit, Check, Trash2, Star } from "lucide-react";
+import { CalendarDays, Plus, Edit, Trash2 } from "lucide-react";
 
 import type { Semester } from "@midori/types/admin";
 import { formatDate } from "@midori/lib/format";
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@midori/components/ui/card";
-import { Badge } from "@midori/components/ui/badge";
+// import { Badge } from "@midori/components/ui/badge";
 import {
   Empty,
   EmptyContent,
@@ -26,7 +26,7 @@ interface SemesterCardProps {
   semester: Semester;
   onEdit: (semester: Semester) => void;
   onDelete: (semester: Semester) => void;
-  onSetAsCurrent: (semester: Semester) => void;
+  // onSetAsCurrent: (semester: Semester) => void;
 }
 
 /**
@@ -36,7 +36,7 @@ export function SemesterCard({
   semester,
   onEdit,
   onDelete,
-  onSetAsCurrent,
+  // onSetAsCurrent,
 }: SemesterCardProps) {
   return (
     <Card className="transition-colors hover:border-primary/50">
@@ -48,12 +48,12 @@ export function SemesterCard({
               {formatDate(semester.startDate)} - {formatDate(semester.endDate)}
             </CardDescription>
           </div>
-          {semester.isCurrent && (
+          {/* {semester.isCurrent && (
             <Badge variant="default">
               <Check className="mr-1 size-3" />
               Current
             </Badge>
-          )}
+          )} */}
         </div>
       </CardHeader>
       <CardContent>
@@ -62,7 +62,7 @@ export function SemesterCard({
             <Edit className="mr-1.5 size-3.5" />
             Edit
           </Button>
-          {!semester.isCurrent && (
+          {/* {!semester.isCurrent && (
             <Button
               variant="outline"
               size="sm"
@@ -71,7 +71,7 @@ export function SemesterCard({
               <Star className="mr-1.5 size-3.5" />
               Set Current
             </Button>
-          )}
+          )} */}
           <Button
             variant="outline"
             size="sm"
@@ -92,7 +92,7 @@ interface SemestersGridProps {
   searchQuery: string;
   onEdit: (semester: Semester) => void;
   onDelete: (semester: Semester) => void;
-  onSetAsCurrent: (semester: Semester) => void;
+  // onSetAsCurrent: (semester: Semester) => void;
   onAdd: () => void;
 }
 
@@ -104,7 +104,7 @@ export function SemestersGrid({
   searchQuery,
   onEdit,
   onDelete,
-  onSetAsCurrent,
+  // onSetAsCurrent,
   onAdd,
 }: SemestersGridProps) {
   if (semesters.length === 0) {
@@ -139,7 +139,7 @@ export function SemestersGrid({
           semester={semester}
           onEdit={onEdit}
           onDelete={onDelete}
-          onSetAsCurrent={onSetAsCurrent}
+          // onSetAsCurrent={onSetAsCurrent}
         />
       ))}
     </div>

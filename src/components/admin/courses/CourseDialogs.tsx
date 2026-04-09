@@ -7,6 +7,7 @@ import { useAutocomplete } from "@midori/hooks/useAutocomplete";
 import { Button } from "@midori/components/ui/button";
 import { Input } from "@midori/components/ui/input";
 import { Label } from "@midori/components/ui/label";
+import { Switch } from "@midori/components/ui/switch";
 import { Textarea } from "@midori/components/ui/textarea";
 import {
   Dialog,
@@ -33,9 +34,11 @@ interface AddCourseDialogProps {
   formCode: string;
   formTitle: string;
   formDescription: string;
+  formIsProjectBased: boolean;
   onFormCodeChange: (value: string) => void;
   onFormTitleChange: (value: string) => void;
   onFormDescriptionChange: (value: string) => void;
+  onFormIsProjectBasedChange: (value: boolean) => void;
   onSubmit: () => void;
   isSubmitting: boolean;
 }
@@ -46,9 +49,11 @@ export function AddCourseDialog({
   formCode,
   formTitle,
   formDescription,
+  formIsProjectBased,
   onFormCodeChange,
   onFormTitleChange,
   onFormDescriptionChange,
+  onFormIsProjectBasedChange,
   onSubmit,
   isSubmitting,
 }: AddCourseDialogProps) {
@@ -94,6 +99,19 @@ export function AddCourseDialog({
               rows={3}
             />
           </div>
+          <div className="flex items-start justify-between gap-4 rounded-md border p-3">
+            <div className="space-y-1">
+              <Label htmlFor="is-project-based">Project-based course</Label>
+              <p className="text-sm text-muted-foreground">
+                Enable higher student request limits for this course.
+              </p>
+            </div>
+            <Switch
+              id="is-project-based"
+              checked={formIsProjectBased}
+              onCheckedChange={onFormIsProjectBasedChange}
+            />
+          </div>
         </div>
         <DialogFooter>
           <Button
@@ -124,9 +142,11 @@ interface EditCourseDialogProps {
   formCode: string;
   formTitle: string;
   formDescription: string;
+  formIsProjectBased: boolean;
   onFormCodeChange: (value: string) => void;
   onFormTitleChange: (value: string) => void;
   onFormDescriptionChange: (value: string) => void;
+  onFormIsProjectBasedChange: (value: boolean) => void;
   onSubmit: () => void;
   isSubmitting: boolean;
   isLoadingDetails: boolean;
@@ -144,9 +164,11 @@ export function EditCourseDialog({
   formCode,
   formTitle,
   formDescription,
+  formIsProjectBased,
   onFormCodeChange,
   onFormTitleChange,
   onFormDescriptionChange,
+  onFormIsProjectBasedChange,
   onSubmit,
   isSubmitting,
   isLoadingDetails,
@@ -219,6 +241,21 @@ export function EditCourseDialog({
                   value={formDescription}
                   onChange={(e) => onFormDescriptionChange(e.target.value)}
                   rows={3}
+                />
+              </div>
+              <div className="flex items-start justify-between gap-4 rounded-md border p-3">
+                <div className="space-y-1">
+                  <Label htmlFor="edit-is-project-based">
+                    Project-based course
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Enable higher student request limits for this course.
+                  </p>
+                </div>
+                <Switch
+                  id="edit-is-project-based"
+                  checked={formIsProjectBased}
+                  onCheckedChange={onFormIsProjectBasedChange}
                 />
               </div>
             </TabsContent>

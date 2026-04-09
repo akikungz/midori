@@ -95,8 +95,10 @@ export function DashboardHeader() {
         <span className="sr-only">Toggle theme</span>
       </Button>
 
-      {!isPending && currentSemester && (
-        <Badge variant="vm-blue">{currentSemester.name}</Badge>
+      {!isPending && (
+        <Badge variant={ currentSemester ? "vm-blue" : "destructive" }>
+          {currentSemester?.name || "Semester Break"}
+        </Badge>
       )}
 
       <DropdownMenu>

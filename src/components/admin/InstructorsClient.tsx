@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { api, fetchClient, getApiErrorMessage } from "@midori/lib/api";
+import { useSession } from "@midori/hooks/useSession";
 import {
   usePagination,
   useDebounce,
@@ -25,6 +26,7 @@ import {
 
 export function InstructorsClient() {
   const queryClient = useQueryClient();
+  const { user: currentUser } = useSession();
   const { page, pageSize, goToPage, resetPage } = usePagination(1, 10);
   const [inputValue, setInputValue] = useState("");
   const searchQuery = useDebounce(inputValue, 300);
@@ -123,6 +125,15 @@ export function InstructorsClient() {
   const handleEditSubmit = useCallback(async () => {
     if (!selectedInstructor) return;
 
+    const isEditingSelf = currentUser?.id === selectedInstructor.id;
+    const isChangingOwnRole =
+      isEditingSelf && editRole !== selectedInstructor.role;
+
+    if (isChangingOwnRole) {
+      toast.error("You cannot change your own role");
+      return;
+    }
+
     setIsSubmitting(true);
     const result = await fetchClient
       .PATCH("/api/academic/instructors/{instructorId}", {
@@ -162,7 +173,13 @@ export function InstructorsClient() {
     setEditDialogOpen(false);
     setSelectedInstructor(null);
     courseSelection.clear();
-  }, [selectedInstructor, editRole, courseSelection, queryClient]);
+  }, [
+    selectedInstructor,
+    currentUser?.id,
+    editRole,
+    courseSelection,
+    queryClient,
+  ]);
 
   const handleOpenPromoteDialog = useCallback((instructor: Instructor) => {
     setInstructorToPromote(instructor);
@@ -184,7 +201,9 @@ export function InstructorsClient() {
       })
       .catch((error) => {
         console.error("Failed to promote instructor:", error);
-        toast.error(getApiErrorMessage(error) ?? "Failed to promote instructor");
+        toast.error(
+          getApiErrorMessage(error) ?? "Failed to promote instructor",
+        );
         return null;
       });
 
@@ -255,6 +274,7 @@ export function InstructorsClient() {
         instructor={selectedInstructor}
         editRole={editRole}
         onRoleChange={setEditRole}
+        isRoleLocked={currentUser?.id === selectedInstructor?.id}
         selectedCourseIds={courseSelection.selected}
         onToggleCourse={courseSelection.toggle}
         onSubmit={handleEditSubmit}

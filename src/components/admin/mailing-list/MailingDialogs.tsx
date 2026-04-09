@@ -32,7 +32,8 @@ export function AddEmailDialog({
   onSubmit,
   isSubmitting,
 }: AddEmailDialogProps) {
-  const isValidEmail = email?.includes("@");
+  const trimmedEmail = email.trim();
+  const isValidEmail = trimmedEmail.length > 0 && !trimmedEmail.startsWith("@");
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -53,6 +54,10 @@ export function AddEmailDialog({
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
             />
+            <p className="text-xs text-muted-foreground">
+              Tip: if you enter only username, we&apos;ll auto-append
+              @itm.kmutnb.ac.th.
+            </p>
           </Field>
           <Button
             className="w-full"

@@ -183,10 +183,10 @@ export function InstanceDetailClient({
     },
   ) as {
     data:
-    | {
-      values: InstanceExtendedRequest[];
-    }
-    | undefined;
+      | {
+          values: InstanceExtendedRequest[];
+        }
+      | undefined;
   };
 
   const { data: auditLogs } = api.useQuery(
@@ -208,7 +208,7 @@ export function InstanceDetailClient({
     ) ?? null;
   const activeExtensionRequestStatus =
     activeExtensionRequest?.status === "PENDING" ||
-      activeExtensionRequest?.status === "APPROVED"
+    activeExtensionRequest?.status === "APPROVED"
       ? activeExtensionRequest.status
       : null;
 
@@ -295,7 +295,8 @@ export function InstanceDetailClient({
       const resultError = (result as { error?: unknown }).error;
       if (resultError) {
         toast.error(
-          getApiErrorMessage(resultError) ?? "Failed to submit extension request",
+          getApiErrorMessage(resultError) ??
+            "Failed to submit extension request",
         );
         return;
       }
@@ -437,14 +438,19 @@ export function InstanceDetailClient({
         <TabsContent value="overview" className="space-y-4">
           {instance.vmDetails && (
             <VmDetailsCard
+              instanceId={instance.id}
               vmDetails={instance.vmDetails}
               showCredentials={canViewDefaultCredentials}
               defaultUser={instance.defaultUser}
               defaultPassword={instance.defaultPassword}
+              reverseProxies={reverseProxies}
             />
           )}
           {instance.courseOffering && (
-            <CourseInfoCard courseOffering={instance.courseOffering} workSemester={instance.semester} />
+            <CourseInfoCard
+              courseOffering={instance.courseOffering}
+              workSemester={instance.semester}
+            />
           )}
         </TabsContent>
 

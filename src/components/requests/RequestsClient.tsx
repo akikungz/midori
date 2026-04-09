@@ -38,12 +38,17 @@ type ExtendedRequestsResponse =
 interface RequestsClientProps {
   userRole: Role;
   isStudent: boolean;
+  canCreateRequest: boolean;
 }
 
 /**
  * Main requests client component
  */
-export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
+export function RequestsClient({
+  userRole,
+  isStudent,
+  canCreateRequest,
+}: RequestsClientProps) {
   const queryClient = useQueryClient();
   const pagination = usePagination(1, ITEMS_PER_PAGE);
 
@@ -81,7 +86,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
   );
 
   const canReview = can("REVIEW_REQUEST") || can("REVIEW_EXTENDED_REQUEST");
-  const canCreateRequest = can("CREATE_REQUEST");
+  const canCreateByRole = can("CREATE_REQUEST");
 
   // Build query params
   const getQueryParams = useCallback(
@@ -477,7 +482,8 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
       const resultError = (result as { error?: unknown }).error;
       if (resultError) {
         toast.error(
-          getApiErrorMessage(resultError) ?? "Failed to update extended request",
+          getApiErrorMessage(resultError) ??
+            "Failed to update extended request",
         );
         return;
       }
@@ -766,7 +772,7 @@ export function RequestsClient({ userRole, isStudent }: RequestsClientProps) {
           {instanceRequests.length === 0 ? (
             <EmptyInstanceRequests
               isStudent={isStudent}
-              canCreateRequest={canCreateRequest}
+              canCreateRequest={canCreateRequest && canCreateByRole}
             />
           ) : filteredInstanceRequests.length === 0 ? (
             <NoMatchingRequests query={searchTerm} />

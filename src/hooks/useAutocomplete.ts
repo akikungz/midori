@@ -15,6 +15,7 @@ type AutocompleteEndpoint =
 interface AutocompleteOption {
   id: number;
   label: string;
+  isProjectBased?: boolean;
 }
 
 interface UseAutocompleteOptions {
