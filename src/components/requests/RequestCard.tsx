@@ -409,7 +409,7 @@ interface DetailMetaItemProps {
   value?: string;
 }
 
-function DetailMetaItem({ label, value }: DetailMetaItemProps) {
+function _DetailMetaItem({ label, value }: DetailMetaItemProps) {
   if (!value) {
     return null;
   }
@@ -424,7 +424,7 @@ function DetailMetaItem({ label, value }: DetailMetaItemProps) {
   );
 }
 
-function formatDateValue(value?: string | number | Record<string, never>) {
+function _formatDateValue(value?: string | number | Record<string, never>) {
   if (typeof value !== "string" && typeof value !== "number") {
     return undefined;
   }
