@@ -3185,7 +3185,7 @@ export interface components {
       /** @description Unique identifier for the instance */
       id: number;
       /** @enum {string} */
-      status: "PENDING" | "ACTIVE" | "PROMOTED" | "INACTIVE" | "DELETED";
+      status: "RUNNING" | "STOPPED" | "SUSPENDED";
       /** @description Success message */
       message: string;
     };

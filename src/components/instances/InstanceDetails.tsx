@@ -4,7 +4,10 @@ import {
   Copy,
   LoaderCircle,
   RefreshCw,
+  Play,
+  Square,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -54,9 +57,15 @@ export function VmDetailsCard({
 }: VmDetailsCardProps) {
   const [isSshGuideOpen, setIsSshGuideOpen] = useState(false);
   const [isMonitoringLoading, setIsMonitoringLoading] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState<{
+    start: boolean;
+    stop: boolean;
+    restart: boolean;
+  }>({ start: false, stop: false, restart: false });
   const [monitoringError, setMonitoringError] = useState<string | null>(null);
   const [monitoringData, setMonitoringData] =
     useState<InstanceMonitoring | null>(null);
+  const queryClient = useQueryClient();
 
   const sshUser = defaultUser || "<your-user>";
   const sshHost = vmDetails.hostname || vmDetails.ip || "<instance-host>";
@@ -178,6 +187,81 @@ export function VmDetailsCard({
                 <Terminal className="mr-2 size-4" />
                 SSH Connect
               </Button>
+              {vmDetails.vmStatus && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setIsActionLoading((s) => ({ ...s, start: true }));
+                      const result = await fetchClient.POST(
+                        "/api/instances/{instanceId}/start",
+                        { params: { path: { instanceId } } },
+                      ).catch((e) => e);
+                      setIsActionLoading((s) => ({ ...s, start: false }));
+                      if (!result || (result as any).error) {
+                        toast.error(getApiErrorMessage((result as any).error) || "Failed to start instance");
+                        return;
+                      }
+                      toast.success("Start request submitted");
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}"] });
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}/monitoring"] });
+                    }}
+                    disabled={isActionLoading.start}
+                  >
+                    <Play className="mr-2 size-4" />
+                    Start
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setIsActionLoading((s) => ({ ...s, stop: true }));
+                      const result = await fetchClient.POST(
+                        "/api/instances/{instanceId}/stop",
+                        { params: { path: { instanceId } } },
+                      ).catch((e) => e);
+                      setIsActionLoading((s) => ({ ...s, stop: false }));
+                      if (!result || (result as any).error) {
+                        toast.error(getApiErrorMessage((result as any).error) || "Failed to stop instance");
+                        return;
+                      }
+                      toast.success("Stop request submitted");
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}"] });
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}/monitoring"] });
+                    }}
+                    disabled={isActionLoading.stop}
+                  >
+                    <Square className="mr-2 size-4" />
+                    Stop
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setIsActionLoading((s) => ({ ...s, restart: true }));
+                      const result = await fetchClient.POST(
+                        "/api/instances/{instanceId}/restart",
+                        { params: { path: { instanceId } } },
+                      ).catch((e) => e);
+                      setIsActionLoading((s) => ({ ...s, restart: false }));
+                      if (!result || (result as any).error) {
+                        toast.error(getApiErrorMessage((result as any).error) || "Failed to restart instance");
+                        return;
+                      }
+                      toast.success("Restart request submitted");
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}"] });
+                      void queryClient.invalidateQueries({ queryKey: ["get", "/api/instances/{instanceId}/monitoring"] });
+                    }}
+                    disabled={isActionLoading.restart}
+                  >
+                    <RefreshCw className="mr-2 size-4" />
+                    Restart
+                  </Button>
+                </>
+              )}
               <Button
                 variant="outline"
                 size="sm"

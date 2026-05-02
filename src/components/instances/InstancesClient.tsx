@@ -241,6 +241,81 @@ export function InstancesClient({
     [queryClient, listQueryKey],
   );
 
+    const handleStart = useCallback(
+      async (instanceId: number) => {
+        try {
+          const { error } = await fetchClient.POST(
+            "/api/instances/{instanceId}/start",
+            {
+              params: { path: { instanceId } },
+            },
+          );
+
+          if (error) {
+            toast.error(getApiErrorMessage(error) ?? "Failed to start instance");
+            return;
+          }
+
+          toast.success("Start request submitted");
+          queryClient.invalidateQueries({ queryKey: listQueryKey });
+        } catch (error) {
+          console.error("Failed to start instance:", error);
+          toast.error(getApiErrorMessage(error) ?? "Failed to start instance");
+        }
+      },
+      [queryClient, listQueryKey],
+    );
+
+    const handleStop = useCallback(
+      async (instanceId: number) => {
+        try {
+          const { error } = await fetchClient.POST(
+            "/api/instances/{instanceId}/stop",
+            {
+              params: { path: { instanceId } },
+            },
+          );
+
+          if (error) {
+            toast.error(getApiErrorMessage(error) ?? "Failed to stop instance");
+            return;
+          }
+
+          toast.success("Stop request submitted");
+          queryClient.invalidateQueries({ queryKey: listQueryKey });
+        } catch (error) {
+          console.error("Failed to stop instance:", error);
+          toast.error(getApiErrorMessage(error) ?? "Failed to stop instance");
+        }
+      },
+      [queryClient, listQueryKey],
+    );
+
+    const handleRestart = useCallback(
+      async (instanceId: number) => {
+        try {
+          const { error } = await fetchClient.POST(
+            "/api/instances/{instanceId}/restart",
+            {
+              params: { path: { instanceId } },
+            },
+          );
+
+          if (error) {
+            toast.error(getApiErrorMessage(error) ?? "Failed to restart instance");
+            return;
+          }
+
+          toast.success("Restart request submitted");
+          queryClient.invalidateQueries({ queryKey: listQueryKey });
+        } catch (error) {
+          console.error("Failed to restart instance:", error);
+          toast.error(getApiErrorMessage(error) ?? "Failed to restart instance");
+        }
+      },
+      [queryClient, listQueryKey],
+    );
+
   const handlePromote = useCallback(
     async (instanceId: number) => {
       try {
@@ -347,6 +422,9 @@ export function InstancesClient({
           onReprovision={handleReprovision}
           onPromote={handlePromote}
           onDelete={handleDelete}
+          onStart={handleStart}
+          onStop={handleStop}
+          onRestart={handleRestart}
         />
       )}
 

@@ -6,6 +6,7 @@ import {
   ArrowUpCircle,
   User,
 } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@midori/components/ui/button";
@@ -131,6 +132,9 @@ interface InstanceCardProps {
   onReprovision?: (instanceId: number) => void;
   onPromote?: (instanceId: number) => void;
   onDelete?: (instanceId: number) => void;
+  onStart?: (instanceId: number) => void;
+  onStop?: (instanceId: number) => void;
+  onRestart?: (instanceId: number) => void;
 }
 
 /**
@@ -144,6 +148,9 @@ export function InstanceCard({
   onReprovision,
   onPromote,
   onDelete,
+  onStart,
+  onStop,
+  onRestart,
 }: InstanceCardProps) {
   const ownerDisplay = getOwnerDisplay(instance);
 
@@ -225,6 +232,28 @@ export function InstanceCard({
                 </DropdownMenuItem>
               </>
             )}
+            {/* VM control actions */}
+            {instance.vmDetails?.vmStatus && (
+              <>
+                <DropdownMenuSeparator />
+                {instance.vmDetails.vmStatus === "STOPPED" && (
+                  <DropdownMenuItem onSelect={handleMenuAction(onStart)} disabled={!onStart}>
+                    <ArrowUpCircle className="mr-2 size-4" />
+                    Start
+                  </DropdownMenuItem>
+                )}
+                {instance.vmDetails.vmStatus === "RUNNING" && (
+                  <DropdownMenuItem onSelect={handleMenuAction(onStop)} disabled={!onStop}>
+                    <ArrowUpCircle className="mr-2 size-4" />
+                    Stop
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onSelect={handleMenuAction(onRestart)} disabled={!onRestart}>
+                  <RefreshCw className="mr-2 size-4" />
+                  Restart
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
@@ -290,6 +319,9 @@ interface InstancesGridProps {
   onReprovision?: (instanceId: number) => void;
   onPromote?: (instanceId: number) => void;
   onDelete?: (instanceId: number) => void;
+  onStart?: (instanceId: number) => void;
+  onStop?: (instanceId: number) => void;
+  onRestart?: (instanceId: number) => void;
 }
 
 /**
@@ -303,6 +335,9 @@ export function InstancesGrid({
   onReprovision,
   onPromote,
   onDelete,
+  onStart,
+  onStop,
+  onRestart,
 }: InstancesGridProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -316,6 +351,9 @@ export function InstancesGrid({
           onReprovision={onReprovision}
           onPromote={onPromote}
           onDelete={onDelete}
+          onStart={onStart}
+          onStop={onStop}
+          onRestart={onRestart}
         />
       ))}
     </div>
